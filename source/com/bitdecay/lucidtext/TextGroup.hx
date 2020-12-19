@@ -1,26 +1,49 @@
 package com.bitdecay.lucidtext;
 
+import misc.FlxTextFactory;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
 
 class TextGroup extends FlxSpriteGroup {
-	public function new(?X:Float, ?Y:Float, text:String) {
-		super(X, Y, text.length);
-		var spacingMod = -2;
 
-		var tags = Parser.parseText(text);
-		var strippedText = Parser.getStrippedText(text);
+	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
+
+	public function new(?X:Float, ?Y:Float, text:String, size:Int = 24) {
+		super(X, Y, text.length);
+
+
+		// this may be based on the default size of the font (is it 6 for the default font?)
+		var spacingMod = -(size/6.0);
+
+
+		trace('Spacing for font size ${size} is ${spacingMod}');
+
+		spacingMod = -4;
+
+		var parser = new Parser(text);
+		parser.parse();
+		var strippedText = parser.getStrippedText();
 
 		var x = 0.0;
 		for (i in 0...strippedText.length) {
-			var letter = new FlxText(x, 0, text.charAt(i), 24);
+			if (textMakerFunc == null) {
+				textMakerFunc = (text, x, y, size) -> {
+					return new FlxText(x, y, text, size);
+				}
+			}
+			var letter = textMakerFunc(strippedText.charAt(i), x, 0, size);
 			letter.update(0.1);
 			x += letter.width + spacingMod;
+
+			for (fx in parser.effects) {
+				if (fx.impacts(i)) {
+					fx.effect.apply(letter, i);
+				}
+			}
+
 			add(letter);
-			// FlxTween.linearMotion(letter, letter.x, letter.y, letter.x, letter.y + 30, 0.8,
-			// 	{ type: FlxTweenType.PINGPONG, ease: FlxEase.sineInOut, startDelay: i * 0.2 });
 		}
 	}
 }
