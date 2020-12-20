@@ -1,6 +1,7 @@
 package com.bitdecay.lucidtext.effect;
 
 import flixel.text.FlxText;
+import com.bitdecay.lucidtext.properties.Setters.PropSetterFunc;
 
 /**
  * An interface for simple effect logic. Implement this interface
@@ -10,7 +11,7 @@ interface Effect {
 	/**
 	 * Get all expected user-defined properties for an effect
 	**/
-	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc>;
+	public function getUserProperties():Map<String, PropSetterFunc>;
 
 	/**
 	 * Applies the effect to the given FlxText object

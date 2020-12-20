@@ -1,7 +1,8 @@
-package com.bitdecay.lucidtext.effect;
+package com.bitdecay.lucidtext.effect.builtin;
 
 import flixel.FlxObject;
 import flixel.text.FlxText;
+import com.bitdecay.lucidtext.properties.Setters;
 
 /**
  * Allows setting the size of characters
@@ -11,8 +12,8 @@ class Size implements Effect {
 
 	public function new() {}
 
-	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc> {
-		return ["s" => PropertySetters.setInt];
+	public function getUserProperties():Map<String, PropSetterFunc> {
+		return ["s" => Setters.setInt];
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {

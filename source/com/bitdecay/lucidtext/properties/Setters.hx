@@ -1,8 +1,8 @@
-package com.bitdecay.lucidtext;
+package com.bitdecay.lucidtext.properties;
 
-typedef PropertySetterFunc = (Dynamic, String, String) -> Void;
+typedef PropSetterFunc = (Dynamic, String, String) -> Void;
 
-class PropertySetters {
+class Setters {
 	public static function setIfTrueBool(obj:Dynamic, propName:String, val:String) {
 		if (val == null) {
 			return;

@@ -1,8 +1,8 @@
-package com.bitdecay.lucidtext.effect;
+package com.bitdecay.lucidtext.effect.builtin;
 
-import com.bitdecay.lucidtext.PropertySetters.PropertySetterFunc;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
+import com.bitdecay.lucidtext.properties.Setters;
 
 /**
  * A sine wave motion for the affected characters
@@ -21,12 +21,12 @@ class Wave implements Effect {
 
 	public function new() {}
 
-	public function getUserProperties():Map<String, PropertySetterFunc> {
+	public function getUserProperties():Map<String, PropSetterFunc> {
 		var fields:Map<String, (Dynamic, String, String) -> Void> = [
-			"height" => PropertySetters.setFloat,
-			"speed" => PropertySetters.setFloat,
-			"offset" => PropertySetters.setFloat,
-			"reverse" => PropertySetters.setIfTrueBool
+			"height" => Setters.setFloat,
+			"speed" => Setters.setFloat,
+			"offset" => Setters.setFloat,
+			"reverse" => Setters.setIfTrueBool
 		];
 
 		return fields;

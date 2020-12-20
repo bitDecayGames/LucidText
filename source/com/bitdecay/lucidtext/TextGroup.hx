@@ -1,8 +1,6 @@
 package com.bitdecay.lucidtext;
 
-import misc.FlxTextFactory;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
+import com.bitdecay.lucidtext.parse.Parser;
 import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
 

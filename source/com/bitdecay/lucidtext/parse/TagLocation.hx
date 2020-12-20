@@ -1,4 +1,4 @@
-package com.bitdecay.lucidtext;
+package com.bitdecay.lucidtext.parse;
 
 class TagLocation {
 	public var position:Int;

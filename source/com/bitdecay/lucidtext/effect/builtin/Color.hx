@@ -1,6 +1,7 @@
-package com.bitdecay.lucidtext.effect;
+package com.bitdecay.lucidtext.effect.builtin;
 
 import flixel.text.FlxText;
+import com.bitdecay.lucidtext.properties.Setters;
 
 /**
  * Allows setting the color of characters.
@@ -13,8 +14,8 @@ class Color implements Effect {
 
 	public function new() {}
 
-	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc> {
-		return ["c" => PropertySetters.setInt];
+	public function getUserProperties():Map<String, PropSetterFunc> {
+		return ["c" => Setters.setInt];
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {

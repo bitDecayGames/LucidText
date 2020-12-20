@@ -1,8 +1,9 @@
-package com.bitdecay.lucidtext.effect;
+package com.bitdecay.lucidtext.effect.builtin;
 
 import flixel.math.FlxPoint;
 import flixel.FlxG;
 import flixel.text.FlxText;
+import com.bitdecay.lucidtext.properties.Setters;
 
 /**
  * Adds shake to the affected characters
@@ -12,8 +13,8 @@ class Shake implements Effect {
 
 	public function new() {}
 
-	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc> {
-		return ["size" => PropertySetters.setFloat,];
+	public function getUserProperties():Map<String, PropSetterFunc> {
+		return ["size" => Setters.setFloat,];
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {

@@ -1,10 +1,9 @@
-package com.bitdecay.lucidtext;
+package com.bitdecay.lucidtext.effect;
 
-import com.bitdecay.lucidtext.effect.Effect;
-import com.bitdecay.lucidtext.effect.Color;
-import com.bitdecay.lucidtext.effect.Shake;
-import com.bitdecay.lucidtext.effect.Size;
-import com.bitdecay.lucidtext.effect.Wave;
+import com.bitdecay.lucidtext.effect.builtin.Color;
+import com.bitdecay.lucidtext.effect.builtin.Shake;
+import com.bitdecay.lucidtext.effect.builtin.Size;
+import com.bitdecay.lucidtext.effect.builtin.Wave;
 
 class EffectRegistry {
 	private static var registry:Map<String, () -> Effect> = [

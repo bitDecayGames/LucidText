@@ -1,11 +1,8 @@
-package com.bitdecay.lucidtext;
-
-import com.bitdecay.lucidtext.effect.Effect;
+package com.bitdecay.lucidtext.effect;
 
 class EffectRange {
 	public var startIndex:Int;
 	public var endIndex:Int;
-	// This is a stand-in until I figure out what I want to represent this as
 	public var effect:Effect;
 
 	public function new(start:Int, end:Int, fx:Effect) {
