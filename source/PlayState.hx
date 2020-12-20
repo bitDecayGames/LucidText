@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import misc.FlxTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
@@ -12,6 +13,8 @@ class PlayState extends FlxState {
 
 		FlxTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
+
+		FlxG.autoPause = false;
 
 		helloText = new TextGroup(100, 100, "<color c=0xFF0000><wave>hello</color> Stephanie...</wave> How <shake size=3>are you?</shake>", 24);
 		add(helloText);

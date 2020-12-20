@@ -24,7 +24,8 @@ interface Effect {
 	 *          that need to apply differently to each letter
 	 *          (Such as a sine wave through a word)
 	 *
-	 * @return An active effect object to be updated
+	 * @return An active effect object to be updated, or `null`
+	 *         if no updates are needed for the effect
 	 */
 	public function apply(o:FlxText, i:Int):ActiveFX;
 }
