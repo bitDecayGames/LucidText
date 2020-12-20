@@ -2,6 +2,10 @@ package com.bitdecay.lucidtext.effect;
 
 import flixel.text.FlxText;
 
+/**
+ * An interface for simple effect logic. Implement this interface
+ * and register the new Effect with the EffectRegistry
+**/
 interface Effect {
 	/**
 	 * Pass in properties the effect may need

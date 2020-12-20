@@ -2,6 +2,12 @@ package com.bitdecay.lucidtext.effect;
 
 import flixel.text.FlxText;
 
+/**
+ * Allows setting the color of characters.
+ *
+ * Currently only supports colors as integer, most usefully
+ * in the hexidecimal form 0xRRGGBB
+**/
 class Color implements Effect {
 	var color:Int;
 

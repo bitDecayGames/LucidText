@@ -1,37 +1,44 @@
 package com.bitdecay.lucidtext.effect;
 
-import flixel.FlxG;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.text.FlxText;
 
+/**
+ * A sine wave motion for the affected characters
+ *
+ * Supports the following properties:
+ *   * `height` - the amplitude of the sine path
+ *   * `speed`  - the frequency of the sine path
+ *   * `timing` - the timing offset between characters in seconds
+**/
 class Wave implements Effect {
 	var height:Float = 0.0;
 	var speed:Float = 0.0;
-	var timing:Float = 0.0;
+	var offset:Float = 0.0;
 
 	public function new() {}
 
 	public function setProperties(props:Dynamic) {
 		height = Std.parseFloat(props.height);
 		speed = Std.parseFloat(props.speed);
-		timing = Std.parseFloat(props.offset);
+		offset = Std.parseFloat(props.offset);
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {
 		var myVars = {
-			offset: height,
+			myHeight: height,
 			tweenTo: -height,
 		};
 
-		FlxTween.tween(myVars, {offset: myVars.tweenTo}, speed, {
+		FlxTween.tween(myVars, {myHeight: myVars.tweenTo}, speed, {
 			type: FlxTweenType.PINGPONG,
 			ease: FlxEase.linear,
 			onUpdate: (t) -> {
-				o.y += myVars.offset;
+				o.y += myVars.myHeight;
 			},
 			// Not using startDelay makes this very tricky to get right
-			startDelay: i * timing,
+			startDelay: i * offset,
 		});
 
 		// NOTE: These are useful calculations that might come in handy if we

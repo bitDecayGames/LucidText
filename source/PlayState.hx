@@ -14,7 +14,7 @@ class PlayState extends FlxState {
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
 
 		helloText = new TextGroup(100, 100,
-			"<color c=0xFF0000><wave height=1 speed=2 offset=0.1>hello</color> Stephanie...</wave> How <shake size=1>are you?</shake>", 24);
+			"<color c=0xFF0000><wave height=1 speed=2 offset=0.1>hello</color> Stephanie...</wave> How <shake size=3>are you?</shake>", 24);
 		add(helloText);
 		var other = FlxTextFactory.make("hello Stephanie... How are you?", 100, 130, 24);
 		add(other);
@@ -34,5 +34,6 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+		helloText.y += 100 * elapsed;
 	}
 }

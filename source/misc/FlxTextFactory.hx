@@ -29,7 +29,7 @@ class FlxTextFactory {
 	public static var defaultAlign:FlxTextAlign = FlxTextAlign.LEFT;
 
 	/**
-	 * Creates a FlxText object with the project defaults
+	 * Creates a FlxText object
 	 *
 	 * @param text  The text to display
 	 * @param x     The X position of the new FlxText

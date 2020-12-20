@@ -4,6 +4,9 @@ import flixel.math.FlxPoint;
 import flixel.FlxG;
 import flixel.text.FlxText;
 
+/**
+ * Adds shake to the affected characters
+ */
 class Shake implements Effect {
 	var size:Float = 5;
 
@@ -15,15 +18,21 @@ class Shake implements Effect {
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {
-		var initialPos = FlxPoint.get(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY);
 		var offset = FlxPoint.get();
+		var tempPosition = FlxPoint.get();
 		return new ActiveFX(o, (delta:Float) -> {
-			if (initialPos.x == Math.NEGATIVE_INFINITY && initialPos.y == Math.NEGATIVE_INFINITY) {
-				o.getPosition().copyTo(initialPos);
-			}
+			o.getPosition(tempPosition);
+
+			// undo our previous offset;
+			tempPosition.subtractPoint(offset);
+
+			// then calculate our new offset and add it to the working temp position
 			offset.set(FlxG.random.float(0, size), 0);
 			offset.rotate(FlxPoint.weak(), FlxG.random.int(0, 360));
-			o.setPosition(initialPos.x + offset.x, initialPos.y + offset.y);
+			tempPosition.addPoint(offset);
+
+			// set our position
+			o.setPosition(tempPosition.x, tempPosition.y);
 		});
 		return null;
 	}
