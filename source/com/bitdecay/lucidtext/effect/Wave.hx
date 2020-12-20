@@ -1,51 +1,62 @@
 package com.bitdecay.lucidtext.effect;
 
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
+import com.bitdecay.lucidtext.PropertySetters.PropertySetterFunc;
+import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 
 /**
  * A sine wave motion for the affected characters
  *
  * Supports the following properties:
- *   * `height` - the amplitude of the sine path
- *   * `speed`  - the frequency of the sine path
- *   * `timing` - the timing offset between characters in seconds
+ *   * `height`  - the amplitude of the sine path
+ *   * `speed`   - the frequency of the sine path
+ *   * `offset`  - the timing offset between characters in seconds
+ *   * `reverse` - control if the sine waves travel in reverse
 **/
 class Wave implements Effect {
-	var height:Float = 0.0;
-	var speed:Float = 0.0;
-	var offset:Float = 0.0;
+	public var height:Float = 10.0;
+	public var speed:Float = 2.0;
+	public var offset:Float = 0.1;
+	public var reverse:Bool = false;
 
 	public function new() {}
 
-	public function setProperties(props:Dynamic) {
-		height = Std.parseFloat(props.height);
-		speed = Std.parseFloat(props.speed);
-		offset = Std.parseFloat(props.offset);
+	public function getUserProperties():Map<String, PropertySetterFunc> {
+		var fields:Map<String, (Dynamic, String, String) -> Void> = [
+			"height" => PropertySetters.setFloat,
+			"speed" => PropertySetters.setFloat,
+			"offset" => PropertySetters.setFloat,
+			"reverse" => PropertySetters.setIfTrueBool
+		];
+
+		return fields;
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {
-		var myVars = {
-			myHeight: height,
-			tweenTo: -height,
-		};
+		var posOffset = FlxPoint.get();
+		var tempPosition = FlxPoint.get();
 
-		FlxTween.tween(myVars, {myHeight: myVars.tweenTo}, speed, {
-			type: FlxTweenType.PINGPONG,
-			ease: FlxEase.linear,
-			onUpdate: (t) -> {
-				o.y += myVars.myHeight;
-			},
-			// Not using startDelay makes this very tricky to get right
-			startDelay: i * offset,
+		var timer = i * offset;
+
+		return new ActiveFX(o, (delta:Float) -> {
+			if (reverse) {
+				timer += delta;
+			} else {
+				// Personal preference: This direction looks better to be the 'default'
+				timer -= delta;
+			}
+
+			o.getPosition(tempPosition);
+
+			// undo our previous offset;
+			tempPosition.subtractPoint(posOffset);
+
+			// then calculate our new offset and add it to the working temp position
+			posOffset.y = Math.sin(timer * speed) * height;
+			tempPosition.addPoint(posOffset);
+
+			// set our position
+			o.setPosition(tempPosition.x, tempPosition.y);
 		});
-
-		// NOTE: These are useful calculations that might come in handy if we
-		//       try to rework how the 'startDelay' works
-		// var maxHeight = (2.5*height*12*speed)/2;
-		// trace(Math.sin(0.5) * maxHeight);
-
-		return null;
 	}
 }

@@ -9,16 +9,16 @@ import flixel.text.FlxText;
  * in the hexidecimal form 0xRRGGBB
 **/
 class Color implements Effect {
-	var color:Int;
+	var c:Int;
 
 	public function new() {}
 
-	public function setProperties(props:Dynamic) {
-		color = Std.parseInt(props.c);
+	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc> {
+		return ["c" => PropertySetters.setInt,];
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {
-		o.color = color;
+		o.color = c;
 		return null;
 	}
 }

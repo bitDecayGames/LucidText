@@ -8,9 +8,9 @@ import flixel.text.FlxText;
 **/
 interface Effect {
 	/**
-	 * Pass in properties the effect may need
-	 */
-	public function setProperties(props:Dynamic):Void;
+	 * Get all expected user-defined properties for an effect
+	**/
+	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc>;
 
 	/**
 	 * Applies the effect to the given FlxText object

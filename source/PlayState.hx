@@ -13,14 +13,13 @@ class PlayState extends FlxState {
 		FlxTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
 
-		helloText = new TextGroup(100, 100,
-			"<color c=0xFF0000><wave height=1 speed=2 offset=0.1>hello</color> Stephanie...</wave> How <shake size=3>are you?</shake>", 24);
+		helloText = new TextGroup(100, 100, "<color c=0xFF0000><wave>hello</color> Stephanie...</wave> How <shake size=3>are you?</shake>", 24);
 		add(helloText);
 		var other = FlxTextFactory.make("hello Stephanie... How are you?", 100, 130, 24);
 		add(other);
 
 		var smaller = new TextGroup(100, 200,
-			"<color c=0xFF0000><wave height=1 speed=2 offset=0.1>hello</color> Stephanie...</wave> How <shake size=1>are you?</shake>", 16);
+			"<color c=0xFF0000><wave height=10 speed=20 offset=0.1>hello</color> Stephanie...</wave> How <shake size=1>are you?</shake>", 16);
 		add(smaller);
 		var otherSmaller = FlxTextFactory.make("hello Stephanie... How are you?", 100, 230, 16);
 		add(otherSmaller);
@@ -34,6 +33,6 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		helloText.y += 100 * elapsed;
+		helloText.y += 10 * elapsed;
 	}
 }

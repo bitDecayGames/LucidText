@@ -12,9 +12,8 @@ class Shake implements Effect {
 
 	public function new() {}
 
-	public function setProperties(props:Dynamic) {
-		size = Std.parseFloat(props.size);
-		trace('Size: ${size}');
+	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc> {
+		return ["size" => PropertySetters.setFloat,];
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {
@@ -34,6 +33,5 @@ class Shake implements Effect {
 			// set our position
 			o.setPosition(tempPosition.x, tempPosition.y);
 		});
-		return null;
 	}
 }

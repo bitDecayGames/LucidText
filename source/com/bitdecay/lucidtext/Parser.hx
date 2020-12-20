@@ -60,7 +60,8 @@ class Parser {
 							break;
 						}
 						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, EffectRegistry.get(rawTags[i].tag)());
-						fx.effect.setProperties(parseOptions(rawTags[i].options));
+						var options = parseOptions(rawTags[i].options);
+						setProperties(fx.effect, options);
 						effects.push(fx);
 						break;
 					} else {
@@ -143,11 +144,40 @@ class Parser {
 
 	private function parseOptions(raw:String):Dynamic {
 		var allOps:haxe.DynamicAccess<Dynamic> = {};
-		for (op in raw.split(" ")) {
-			var splits = op.split("=");
-			allOps.set(splits[0], splits[1]);
+
+		raw = StringTools.trim(raw);
+		if (raw.length > 0) {
+			for (op in raw.split(" ")) {
+				var splits = op.split("=");
+				allOps.set(splits[0], splits[1]);
+			}
 		}
-		// trace("Our dynamic object: " + allOps);
 		return allOps;
+	}
+
+	public function setProperties(o:Effect, props:Dynamic) {
+		var fields = o.getUserProperties();
+		var options:haxe.DynamicAccess<Dynamic> = props;
+
+		var keys = options.keys();
+		if (keys.length > 0) {
+			// Check that all passed props are valid fields
+			for (opKey in options.keys()) {
+				if (!fields.exists(opKey)) {
+					trace('Option Keys: "${options.keys()}"');
+					trace('Option Keys: "${options.get("height")}"');
+					throw 'Effect ${o} does not have property "${opKey}"';
+				}
+			}
+		}
+
+		for (prop in fields.keys()) {
+			// Check that all fields are valid for this object
+			if (Reflect.field(o, prop) == null) {
+				throw 'Class ${o} does not have field "${prop}". This is a dev issue';
+			}
+
+			fields[prop](o, prop, options.get(prop));
+		}
 	}
 }
