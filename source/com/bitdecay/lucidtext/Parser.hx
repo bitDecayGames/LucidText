@@ -9,11 +9,6 @@ class Parser {
 	private static inline var TAG_CLOSE = ">";
 	private static inline var TAG_END = "/";
 
-	private static var fxMap:Map<String, ()->Effect> = [
-		"color" => () -> return new Color(),
-		"wave" => () -> return new Wave(),
-	];
-
 	/**
 	 * The position in the current text
 	 */
@@ -57,20 +52,20 @@ class Parser {
 				// we only scan for opening tags in the top loop
 				continue;
 			}
-			for (k in i+1...rawTags.length) {
+			for (k in i + 1...rawTags.length) {
 				if (rawTags[k].tag == rawTags[i].tag) {
 					if (rawTags[k].close) {
-						if (!fxMap.exists(rawTags[i].tag)) {
-							trace("NO EFFECT EXISTS CALLED: " + rawTags[i].tag + ". This will be ignored");
+						var fxMaker = EffectRegistry.get(rawTags[i].tag);
+						if (fxMaker == null) {
 							break;
 						}
-						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, fxMap.get(rawTags[i].tag)());
+						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, EffectRegistry.get(rawTags[i].tag)());
 						fx.effect.setProperties(parseOptions(rawTags[i].options));
 						effects.push(fx);
 						break;
 					} else {
-						throw "Currently this library doesn't handle nested tags with the same effect. Found tag '" +
-								rawTags[k].tag + "' at position " + rawTags[k].rawPosition;
+						throw "Currently this library doesn't handle nested tags with the same effect. Found tag '"
+							+ rawTags[k].tag + "' at position " + rawTags[k].rawPosition;
 					}
 				}
 			}
@@ -132,9 +127,9 @@ class Parser {
 			if (stripped.charAt(position) == "<") {
 				for (k in position...stripped.length) {
 					if (stripped.charAt(k) == ">") {
-						trace("Stripping: '" + stripped.substring(position, k+1));
+						// trace("Stripping: '" + stripped.substring(position, k+1));
 						stripped = stripped.substring(0, position) + stripped.substr(k + 1);
-						trace("left with: '" + stripped + "'");
+						// trace("left with: '" + stripped + "'");
 						break;
 					}
 				}
@@ -152,7 +147,7 @@ class Parser {
 			var splits = op.split("=");
 			allOps.set(splits[0], splits[1]);
 		}
-		trace("Our dynamic object: " + allOps);
+		// trace("Our dynamic object: " + allOps);
 		return allOps;
 	}
 }

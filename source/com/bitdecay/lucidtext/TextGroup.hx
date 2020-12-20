@@ -7,20 +7,16 @@ import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
 
 class TextGroup extends FlxSpriteGroup {
-
 	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
+
+	private var activeEffects:Array<ActiveFX> = new Array<ActiveFX>();
 
 	public function new(?X:Float, ?Y:Float, text:String, size:Int = 24) {
 		super(X, Y, text.length);
 
-
-		// this may be based on the default size of the font (is it 6 for the default font?)
-		var spacingMod = -(size/6.0);
-
-
-		trace('Spacing for font size ${size} is ${spacingMod}');
-
-		spacingMod = -4;
+		// It seems that there is a 2-pixel buffer on each side, so we will shave off 4 pixels of each
+		// letter to account for that tested and working with various fonts and font sizes
+		var spacingMod = -4;
 
 		var parser = new Parser(text);
 		parser.parse();
@@ -33,17 +29,33 @@ class TextGroup extends FlxSpriteGroup {
 					return new FlxText(x, y, text, size);
 				}
 			}
+
 			var letter = textMakerFunc(strippedText.charAt(i), x, 0, size);
-			letter.update(0.1);
+			// autoSize is why all the alignment works, so we need this enabled for this lib to work
+			letter.autoSize = true;
+
+			letter.wordWrap = false;
 			x += letter.width + spacingMod;
 
+			var active:ActiveFX;
 			for (fx in parser.effects) {
 				if (fx.impacts(i)) {
-					fx.effect.apply(letter, i);
+					active = fx.effect.apply(letter, i);
+					if (active != null) {
+						activeEffects.push(active);
+					}
 				}
 			}
 
+			// Note that groups appear to store members in an array, so this should already be ordered
 			add(letter);
+		}
+	}
+
+	override public function update(delta:Float) {
+		super.update(delta);
+		for (fx in activeEffects) {
+			fx.update(delta);
 		}
 	}
 }
