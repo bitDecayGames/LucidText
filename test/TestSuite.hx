@@ -1,7 +1,7 @@
 import massive.munit.TestSuite;
 
-import ExampleTest;
 import com.bitdecay.lucidtext.parse.ParserTest;
+import com.bitdecay.lucidtext.parse.TextIteratorTest;
 
 /**
  * Auto generated Test Suite for MassiveUnit.
@@ -13,7 +13,7 @@ class TestSuite extends massive.munit.TestSuite
 	{
 		super();
 
-		add(ExampleTest);
 		add(ParserTest);
+		add(TextIteratorTest);
 	}
 }

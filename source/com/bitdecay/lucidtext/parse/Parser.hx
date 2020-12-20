@@ -8,33 +8,19 @@ import com.bitdecay.lucidtext.effect.EffectRegistry;
  * Handles parsing a string with HTML-style effect tags
 **/
 class Parser {
-	private static inline var TAG_OPEN = "<";
-	private static inline var TAG_CLOSE = ">";
-	private static inline var TAG_END = "/";
-
-	/**
-	 * The position in the current text
-	 */
-	private var cursor:Int;
-
-	/**
-	 * The effective render position of the cursor only counting visible characters
-	 */
-	private var renderCursor:Int;
-
-	var text:String;
+	private var originalText:String;
+	private var iter:TextIterator;
 
 	public var rawTags:Array<TagLocation> = [];
 	public var effects:Array<EffectRange> = [];
 
 	public function new(text:String) {
-		this.text = text;
-		renderCursor = 0;
-		cursor = 0;
+		originalText = text;
+		iter = new TextIterator(text);
 	}
 
 	public function parse() {
-		trace("parsing : '" + text + "'");
+		trace("parsing : '" + originalText + "'");
 		trace("stripped: '" + getStrippedText() + "'");
 		trace("           0    -    1    -    2    -    3");
 
@@ -84,56 +70,28 @@ class Parser {
 	private function getRawTags():Array<TagLocation> {
 		var allTags = new Array<TagLocation>();
 
-		var tag:TagLocation = getNextTag();
+		var test = 0;
+		var tag:TagLocation = iter.getNextTag();
 		while (tag != null) {
+			test++;
+			if (test > 10) {
+				throw "Big boom";
+			}
 			allTags.push(tag);
-			tag = getNextTag();
+			tag = iter.getNextTag();
 		}
 
 		return allTags;
 	}
 
-	private function getNextTag():TagLocation {
-		for (i in cursor...text.length) {
-			if (text.charAt(i) == TAG_OPEN) {
-				for (k in i...text.length) {
-					if (text.charAt(k) == TAG_CLOSE) {
-						cursor = k + 1;
-						var tagText = text.substr(i + 1, k - i - 1);
-						var options = "";
-						var closer = false;
-						if (tagText.indexOf(" ") > 0) {
-							options = tagText.substr(tagText.indexOf(" ") + 1);
-							tagText = tagText.substring(0, tagText.indexOf(" "));
-						}
-						if (tagText.charAt(0) == TAG_END) {
-							// TODO: We should go close our other open tags instead of creating a new one
-							tagText = tagText.substr(1);
-							closer = true;
-						}
-						// if this is a closing tag, subtract 1 to account for '<'
-						return new TagLocation(renderCursor + (closer ? -1 : 0), i, tagText, options, closer);
-					}
-				}
-			} else {
-				// not dealing with a tag, move our render cursor
-				renderCursor++;
-			}
-		}
-		cursor = text.length;
-		return null;
-	}
-
 	public function getStrippedText():String {
-		var stripped = new String(text);
+		var stripped = new String(originalText);
 		var position = 0;
 		while (position < stripped.length) {
-			if (stripped.charAt(position) == "<") {
+			if (stripped.charAt(position) == TagDelimiters.TAG_OPEN) {
 				for (k in position...stripped.length) {
-					if (stripped.charAt(k) == ">") {
-						// trace("Stripping: '" + stripped.substring(position, k+1));
+					if (stripped.charAt(k) == TagDelimiters.TAG_CLOSE) {
 						stripped = stripped.substring(0, position) + stripped.substr(k + 1);
-						// trace("left with: '" + stripped + "'");
 						break;
 					}
 				}
@@ -150,8 +108,8 @@ class Parser {
 
 		raw = StringTools.trim(raw);
 		if (raw.length > 0) {
-			for (op in raw.split(" ")) {
-				var splits = op.split("=");
+			for (op in raw.split(TagDelimiters.TAG_OPTION_DELIMITER)) {
+				var splits = op.split(TagDelimiters.TAG_OPTION_NAME_SEPARATOR);
 				allOps.set(splits[0], splits[1]);
 			}
 		}
