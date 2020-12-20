@@ -19,7 +19,7 @@ class PlayState extends FlxState {
 		add(other);
 
 		var smaller = new TextGroup(100, 200,
-			"<color c=0xFF0000><wave height=10 speed=20 offset=0.1>hello</color> Stephanie...</wave> How <shake size=1>are you?</shake>", 16);
+			"<color c=0xFF0000><wave height=10 speed=20 offset=0.1>hello</color> Stephanie...</wave> How <size s=24>are</size>  <size s=48>you?</size>", 16);
 		add(smaller);
 		var otherSmaller = FlxTextFactory.make("hello Stephanie... How are you?", 100, 230, 16);
 		add(otherSmaller);

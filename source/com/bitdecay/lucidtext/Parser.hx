@@ -1,8 +1,6 @@
 package com.bitdecay.lucidtext;
 
 import com.bitdecay.lucidtext.effect.Effect;
-import com.bitdecay.lucidtext.effect.Wave;
-import com.bitdecay.lucidtext.effect.Color;
 
 class Parser {
 	private static inline var TAG_OPEN = "<";

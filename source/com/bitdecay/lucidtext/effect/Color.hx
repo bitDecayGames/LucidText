@@ -14,7 +14,7 @@ class Color implements Effect {
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropertySetters.PropertySetterFunc> {
-		return ["c" => PropertySetters.setInt,];
+		return ["c" => PropertySetters.setInt];
 	}
 
 	public function apply(o:FlxText, i:Int):ActiveFX {

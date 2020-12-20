@@ -35,7 +35,6 @@ class TextGroup extends FlxSpriteGroup {
 			letter.autoSize = true;
 
 			letter.wordWrap = false;
-			x += letter.width + spacingMod;
 
 			var active:ActiveFX;
 			for (fx in parser.effects) {
@@ -46,6 +45,9 @@ class TextGroup extends FlxSpriteGroup {
 					}
 				}
 			}
+
+			// Adjust spacing after all effects are applied
+			x += letter.width + spacingMod;
 
 			// Note that groups appear to store members in an array, so this should already be ordered
 			add(letter);
