@@ -1,9 +1,13 @@
 package com.bitdecay.lucidtext;
 
-import com.bitdecay.lucidtext.parse.Parser;
 import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
+import com.bitdecay.lucidtext.parse.Parser;
 
+/**
+ * A group that holds all FlxText objects. This handles parsing the user
+ * string and applying all effects to the appropriate characters
+**/
 class TextGroup extends FlxSpriteGroup {
 	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
 

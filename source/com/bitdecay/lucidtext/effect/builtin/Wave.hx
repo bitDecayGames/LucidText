@@ -6,18 +6,12 @@ import com.bitdecay.lucidtext.properties.Setters;
 
 /**
  * A sine wave motion for the affected characters
- *
- * Supports the following properties:
- *   * `height`  - the amplitude of the sine path
- *   * `speed`   - the frequency of the sine path
- *   * `offset`  - the timing offset between characters in seconds
- *   * `reverse` - control if the sine waves travel in reverse
 **/
 class Wave implements Effect {
-	public var height:Float = 10.0;
-	public var speed:Float = 2.0;
-	public var offset:Float = 0.1;
-	public var reverse:Bool = false;
+	var height:Float = 10.0;
+	var speed:Float = 2.0;
+	var offset:Float = 0.1;
+	var reverse:Bool = false;
 
 	public function new() {}
 

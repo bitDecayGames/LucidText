@@ -5,7 +5,10 @@ import com.bitdecay.lucidtext.properties.Setters.PropSetterFunc;
 
 /**
  * An interface for simple effect logic. Implement this interface
- * and register the new Effect with the EffectRegistry
+ * and register the new Effect with the EffectRegistry.
+ *
+ * Note: All instance fields can be made editable if there is an
+ *       appropriate `PropSetterFunc` for its type
 **/
 interface Effect {
 	/**

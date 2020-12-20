@@ -5,6 +5,9 @@ import com.bitdecay.lucidtext.effect.builtin.Shake;
 import com.bitdecay.lucidtext.effect.builtin.Size;
 import com.bitdecay.lucidtext.effect.builtin.Wave;
 
+/**
+ * Registry to hold all valid effects. New effects can be registered easily
+**/
 class EffectRegistry {
 	private static var registry:Map<String, () -> Effect> = [
 		"color" => () -> return new Color(),

@@ -4,6 +4,9 @@ import com.bitdecay.lucidtext.effect.Effect;
 import com.bitdecay.lucidtext.effect.EffectRange;
 import com.bitdecay.lucidtext.effect.EffectRegistry;
 
+/**
+ * Handles parsing a string with HTML-style effect tags
+**/
 class Parser {
 	private static inline var TAG_OPEN = "<";
 	private static inline var TAG_CLOSE = ">";
@@ -78,7 +81,7 @@ class Parser {
 		}
 	}
 
-	public function getRawTags():Array<TagLocation> {
+	private function getRawTags():Array<TagLocation> {
 		var allTags = new Array<TagLocation>();
 
 		var tag:TagLocation = getNextTag();
@@ -90,7 +93,7 @@ class Parser {
 		return allTags;
 	}
 
-	public function getNextTag():TagLocation {
+	private function getNextTag():TagLocation {
 		for (i in cursor...text.length) {
 			if (text.charAt(i) == TAG_OPEN) {
 				for (k in i...text.length) {
@@ -155,7 +158,7 @@ class Parser {
 		return allOps;
 	}
 
-	public function setProperties(o:Effect, props:Dynamic) {
+	private function setProperties(o:Effect, props:Dynamic) {
 		var fields = o.getUserProperties();
 		var options:haxe.DynamicAccess<Dynamic> = props;
 

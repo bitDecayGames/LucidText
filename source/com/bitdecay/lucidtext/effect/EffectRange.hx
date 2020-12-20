@@ -1,5 +1,8 @@
 package com.bitdecay.lucidtext.effect;
 
+/**
+ * Ties an Effect to a given range of characters
+**/
 class EffectRange {
 	public var startIndex:Int;
 	public var endIndex:Int;
