@@ -1,6 +1,4 @@
-# LucidText
-
-![Title IMage](assets/images/ludic.gif?raw=true "Title")
+![LucidTest](assets/images/ludic.gif?raw=true "LucidText")
 
 LucidText is a HaxeFlixel library designed to give easy access to juicy text boxes in the style of games like Animal Crossing and Celeste
 
@@ -46,7 +44,7 @@ This library comes with various generic style tags, a few of which are:
 If the built-in tags are insufficient for a project's needs, custom tags can be eaily added:
 
 1. Create a class that implements the `Effect` interface
-1. Register the effect with the `EffectRegistry` via the `EffectRegistry.register(...)` function
+1. Register the effect with via the `EffectRegistry.register(...)` function
 
 ### Testing
 
@@ -61,7 +59,7 @@ haxelib install hamcrest
 
 #### **Running Tests**
 
-From the `test/` directory, simply run `lime test neko` and the tests will be executed
+From the `test/` directory, simply run `lime test neko` and the tests will be executed. 
 
 #### **Adding Tests**
 
