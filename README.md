@@ -31,13 +31,20 @@ Tags follow an HTML style and are contained directly in the input strings.
 
 The title image at the top of this readme is created by specifying:
 
-`Hello <wave>LucidText</wave> user!`
+`Welcome to <wave>LucidText!</wave>`
 
 This library comes with various generic style tags, a few of which are:
 
 * `wave` - A sine wave that moves through the text
 * `color` - Set the color of the text
 * `shake` - Adds a random shake to the text
+
+Tags can also have various options set. The `wave`, for example, effect has `speed` and `height` (among others). Using these options looks like:
+```
+Welcome to <wave height=30 speed=5>LucidText!</wave>
+```
+Which would render as:
+![LucidTest](assets/images/lucid_options.gif?raw=true "LucidText")
 
 ### Custom Tags
 

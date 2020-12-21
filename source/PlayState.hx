@@ -13,7 +13,7 @@ class PlayState extends FlxState {
 		super.create();
 		bgColor = FlxColor.WHITE;
 
-		FlxTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
+		// FlxTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
 		FlxTextFactory.defaultColor = FlxColor.BLACK;
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
 
@@ -24,7 +24,7 @@ class PlayState extends FlxState {
 		// add(other);
 
 		// no effects
-		helloText = new TextGroup(50, 175, "<color c=0x000000>Welcome to <wave>LucidText!</wave></color>", 36);
+		helloText = new TextGroup(50, 175, "Welcome to <wave height=30 speed=5>LucidText!</wave>", 36);
 		add(helloText);
 
 		// with smaller
