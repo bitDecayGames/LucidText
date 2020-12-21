@@ -16,26 +16,28 @@ class PlayState extends FlxState {
 
 		FlxG.autoPause = false;
 
-		helloText = new TextGroup(100, 100, "<color c=0xFF0000><wave>hello</color> Stephanie...</wave> How <shake size=3>are you?</shake>", 24);
-		add(helloText);
-		var other = FlxTextFactory.make("hello Stephanie... How are you?", 100, 130, 24);
+		// control. just a FlxText object with everything
+		var other = FlxTextFactory.make("Am I sounding quiet now?", 50, 150, 24);
 		add(other);
 
-		var smaller = new TextGroup(100, 200,
-			"<color c=0xFF0000><wave height=10 speed=20 offset=0.1>hello</color> Stephanie...</wave> How <size s=24>are</size>  <size s=48>you?</size>", 16);
-		add(smaller);
-		var otherSmaller = FlxTextFactory.make("hello Stephanie... How are you?", 100, 230, 16);
-		add(otherSmaller);
+		// no effects
+		helloText = new TextGroup(50, 175, "Am I sounding quiet now?", 24);
+		add(helloText);
 
-		var smallest = new TextGroup(100, 300,
-			"<color c=0xFF0000><wave height=1 speed=2 offset=0.1>hello</color> Stephanie...</wave> How <shake size=1>are you?</shake>", 8);
-		add(smallest);
-		var otherSmallest = FlxTextFactory.make("hello Stephanie... How are you?", 100, 330, 8);
-		add(otherSmallest);
+		// with smaller
+		var sizingTest = new TextGroup(50, 200, "Am I <smaller>sounding quiet now?</smaller>", 48);
+		add(sizingTest);
+
+		// with bigger
+		var sizingBiggerTest = new TextGroup(50, 275, "Am I <bigger>sounding quiet now?</bigger>", 48);
+		add(sizingBiggerTest);
+
+		var sizingTest = new TextGroup(50, 350, "Am I <size mod=1.5>now</size> <size mod=2>much</size> <size mod=3>shout</size>", 24);
+		add(sizingTest);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		helloText.y += 10 * elapsed;
+		// helloText.y += 10 * elapsed;
 	}
 }

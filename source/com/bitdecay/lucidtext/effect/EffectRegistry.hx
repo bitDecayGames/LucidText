@@ -1,7 +1,9 @@
 package com.bitdecay.lucidtext.effect;
 
+import com.bitdecay.lucidtext.effect.builtin.Bigger;
 import com.bitdecay.lucidtext.effect.builtin.Color;
 import com.bitdecay.lucidtext.effect.builtin.Shake;
+import com.bitdecay.lucidtext.effect.builtin.Smaller;
 import com.bitdecay.lucidtext.effect.builtin.Size;
 import com.bitdecay.lucidtext.effect.builtin.Wave;
 
@@ -14,6 +16,8 @@ class EffectRegistry {
 		"wave" => () -> return new Wave(),
 		"shake" => () -> return new Shake(),
 		"size" => () -> return new Size(),
+		"bigger" => () -> return new Bigger(),
+		"smaller" => () -> return new Smaller(),
 	];
 
 	public static function register(name:String, makerFunc:() -> Effect) {
