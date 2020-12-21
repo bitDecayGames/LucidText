@@ -24,7 +24,7 @@ class PlayState extends FlxState {
 		// add(other);
 
 		// no effects
-		helloText = new TextGroup(50, 175, "Welcome to <wave height=30 speed=5>LucidText!</wave>", 36);
+		helloText = new TextGroup(50, 175, "Welcome to <wave height=30 speed=5><shake>LucidText!</shake></wave>", 36);
 		add(helloText);
 
 		// with smaller
