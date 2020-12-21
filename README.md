@@ -1,6 +1,6 @@
 ![LucidTest](assets/images/ludic.gif?raw=true "LucidText")
 
-LucidText is a HaxeFlixel library designed to give easy access to juicy text boxes in the style of games like Animal Crossing and Celeste
+LucidText is a HaxeFlixel library designed to give easy access to juicy text in the style of games like Paper Mario, Animal Crossing, and Celeste.
 
 ## Table of Contents
 
@@ -59,7 +59,7 @@ haxelib install hamcrest
 
 #### **Running Tests**
 
-From the `test/` directory, simply run `lime test neko` and the tests will be executed. 
+From the `test/` directory, simply run `lime test neko` and the tests will be executed.
 
 #### **Adding Tests**
 
