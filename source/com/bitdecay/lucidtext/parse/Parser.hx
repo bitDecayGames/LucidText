@@ -20,11 +20,12 @@ class Parser {
 	}
 
 	public function parse() {
+		rawTags = getRawTags();
+
+		#if lucid_debug
 		trace("parsing : '" + originalText + "'");
 		trace("stripped: '" + getStrippedText() + "'");
 		trace("           0    -    1    -    2    -    3");
-
-		rawTags = getRawTags();
 
 		for (tag in rawTags) {
 			trace("found raw tag: " + tag.tag);
@@ -33,6 +34,7 @@ class Parser {
 			trace("   with opts : " + tag.options);
 			trace("   closer    : " + tag.close);
 		}
+		#end
 
 		effects = new Array<EffectRange>();
 
@@ -61,22 +63,19 @@ class Parser {
 			}
 		}
 
+		#if lucid_debug
 		for (fx in effects) {
 			trace("Effect: " + fx.effect);
 			trace("   applies to range    : " + fx.startIndex + " -> " + fx.endIndex);
 		}
+		#end
 	}
 
 	private function getRawTags():Array<TagLocation> {
 		var allTags = new Array<TagLocation>();
 
-		var test = 0;
 		var tag:TagLocation = iter.getNextTag();
 		while (tag != null) {
-			test++;
-			if (test > 10) {
-				throw "Big boom";
-			}
 			allTags.push(tag);
 			tag = iter.getNextTag();
 		}
@@ -87,13 +86,20 @@ class Parser {
 	public function getStrippedText():String {
 		var stripped = new String(originalText);
 		var position = 0;
+		var foundClose = false;
 		while (position < stripped.length) {
 			if (stripped.charAt(position) == TagDelimiters.TAG_OPEN) {
-				for (k in position...stripped.length) {
+				foundClose = false;
+				for (k in position + 1...stripped.length) {
 					if (stripped.charAt(k) == TagDelimiters.TAG_CLOSE) {
 						stripped = stripped.substring(0, position) + stripped.substr(k + 1);
+						foundClose = true;
 						break;
 					}
+				}
+
+				if (!foundClose) {
+					throw 'getStrippedText: Expected \'${TagDelimiters.TAG_CLOSE}\' but reached end of string';
 				}
 			} else {
 				// only increment position if we aren't dealing with a tag
@@ -103,7 +109,7 @@ class Parser {
 		return stripped;
 	}
 
-	private function parseOptions(raw:String):Dynamic {
+	public function parseOptions(raw:String):Dynamic {
 		var allOps:haxe.DynamicAccess<Dynamic> = {};
 
 		raw = StringTools.trim(raw);

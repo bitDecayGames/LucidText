@@ -8,7 +8,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  * Allows setting the size of characters
 **/
 class Size implements Effect {
-	var s:Int;
+	public var s:Int;
 
 	public function new() {}
 

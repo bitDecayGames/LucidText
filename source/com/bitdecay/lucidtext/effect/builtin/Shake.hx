@@ -9,7 +9,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  * Adds shake to the affected characters
  */
 class Shake implements Effect {
-	var size:Float = 5;
+	public var size:Float = 5;
 
 	public function new() {}
 

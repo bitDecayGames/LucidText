@@ -22,10 +22,9 @@ class TextIterator {
 	public function getNextTag():TagLocation {
 		for (i in cursor...text.length) {
 			if (text.charAt(i) == TagDelimiters.TAG_OPEN) {
-				for (k in i+1...text.length) {
+				for (k in i + 1...text.length) {
 					if (text.charAt(k) == TagDelimiters.TAG_OPEN) {
-						throw 'Unexpected \'${TagDelimiters.TAG_OPEN}\' found at position ' +
-							  '${i + k} while searching for \'${TagDelimiters.TAG_CLOSE}\'';
+						throw 'Unexpected \'${TagDelimiters.TAG_OPEN}\' found at position ' + '${i + k} while searching for \'${TagDelimiters.TAG_CLOSE}\'';
 					}
 					if (text.charAt(k) == TagDelimiters.TAG_CLOSE) {
 						cursor = k + 1;

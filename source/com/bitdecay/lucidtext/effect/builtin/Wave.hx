@@ -8,10 +8,10 @@ import com.bitdecay.lucidtext.properties.Setters;
  * A sine wave motion for the affected characters
 **/
 class Wave implements Effect {
-	var height:Float = 10.0;
-	var speed:Float = 2.0;
-	var offset:Float = 0.1;
-	var reverse:Bool = false;
+	public var height:Float = 10.0;
+	public var speed:Float = 2.0;
+	public var offset:Float = 0.1;
+	public var reverse:Bool = false;
 
 	public function new() {}
 

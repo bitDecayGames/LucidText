@@ -36,8 +36,10 @@
 	<haxelib name="flixel" />
 
 	<!-- These are here so we can dev on the unit tests from the parent project -->
-	<haxelib name="munit" />
-	<haxelib name="hamcrest" />
+	<!-- Uncomment these two lines while dev'ing on tests -->
+	<!-- COMMENT THEM OUT OTHERWISE THE MAIN PROJECT WONT RENDER CORRECTLY -->
+	<!-- <haxelib name="munit" />
+	<haxelib name="hamcrest" /> -->
 
 	<!--In case you want to use the addons package-->
 	<!--<haxelib name="flixel-addons" />-->

@@ -10,7 +10,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  * in the hexidecimal form 0xRRGGBB
 **/
 class Color implements Effect {
-	var c:Int;
+	public var c:Int;
 
 	public function new() {}
 
