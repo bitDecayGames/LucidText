@@ -44,6 +44,7 @@ Tags can also have various options set. The `wave`, for example, effect has `spe
 Welcome to <wave height=30 speed=5>LucidText!</wave>
 ```
 Which would render as:
+
 ![LucidTest](assets/images/lucid_options.gif?raw=true "LucidText")
 
 ### Custom Tags
