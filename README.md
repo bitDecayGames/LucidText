@@ -24,6 +24,7 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 	* There are two main types of Effects:
 		1. One time change such as `color` or `size`
 		1. Actively updated Effects such as `wave` and `shake`
+	* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
 
 ### Tagging
 
