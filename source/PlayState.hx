@@ -1,10 +1,12 @@
 package;
 
+import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import misc.FlxTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
+import com.bitdecay.lucidtext.TypingGroup;
 
 class PlayState extends FlxState {
 	var helloText:TextGroup;
@@ -24,19 +26,36 @@ class PlayState extends FlxState {
 		// add(other);
 
 		// no effects
-		helloText = new TextGroup(50, 175, "Welcome to <wave height=30 speed=5><shake>LucidText!</shake></wave>", 36);
+		helloText = new TypingGroup(FlxRect.get(50, 175, 100, 75), "<scrub>Welcome</scrub> to <wave speed=10>LucidText!</wave>", 16);
 		add(helloText);
 
 		// with smaller
-		// var sizingTest = new TextGroup(50, 200, "Am I <smaller>sounding quiet now?</smaller>", 48);
-		// add(sizingTest);
+		var sizingTest = new TextGroup(50, 50, "Defaults: <scrub>Welcome</scrub>", 24);
+		add(sizingTest);
 
-		// // with bigger
-		// var sizingBiggerTest = new TextGroup(50, 275, "Am I <bigger>sounding quiet now?</bigger>", 48);
-		// add(sizingBiggerTest);
+		var two = new TextGroup(50, 100, "Speed 20: <scrub speed=20 offset=0.05>Welcome</scrub>", 24);
+		add(two);
 
-		// var sizingTest = new TextGroup(50, 350, "Am I <size mod=1.5>now</size> <size mod=2>much</size> <size mod=3>shout</size>", 24);
-		// add(sizingTest);
+		var three = new TextGroup(50, 150, "Offset 0.3: <scrub offset=0.3>Welcome</scrub>", 24);
+		add(three);
+
+		var four = new TextGroup(50, 200, "Height 16: <scrub height=16>Welcome</scrub>", 24);
+		add(four);
+
+		var four = new TextGroup(50, 250, "Height 32: <scrub height=32>Welcome</scrub>", 24);
+		add(four);
+
+		var five = new TextGroup(50, 300, "Offset 0: <scrub offset=0.0>Welcome</scrub>", 24);
+		add(five);
+
+		var six = new TextGroup(50, 350, "y_mod 3: <scrub y_mod=3>Welcome</scrub>", 24);
+		add(six);
+
+		var sev = new TextGroup(50, 390, "x_mod 0: <scrub height=30 x_mod=0>Welcome</scrub>", 24);
+		add(sev);
+
+		var sev = new TextGroup(50, 425, "wave   : <wave speed=10 height=15>Welcome</wave>", 24);
+		add(sev);
 	}
 
 	override public function update(elapsed:Float):Void {
