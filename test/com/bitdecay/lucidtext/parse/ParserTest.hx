@@ -1,5 +1,8 @@
 package com.bitdecay.lucidtext.parse;
 
+import massive.haxe.log.Log;
+import com.bitdecay.lucidtext.effect.builtin.Scrub;
+import com.bitdecay.lucidtext.effect.EffectRegistry;
 import com.bitdecay.lucidtext.effect.builtin.Wave;
 import massive.munit.Assert;
 import com.bitdecay.lucidtext.parse.Parser;
@@ -28,11 +31,47 @@ class ParserTest {
 		Assert.isTrue(StringTools.contains(except, "shake"));
 	}
 
+	// TODO: This should be an error situation
+	// @Test
+	// public function testMissingOpenTag() {
+	// 	var text = "</shake>Shaking";
+	// 	var parser = new Parser(text);
+	// 	var except = Assert.throws(String, parser.parse);
+	// 	Assert.isTrue(StringTools.contains(except, "found closing tag with no opening tag"), 'got except: ${except}');
+	// 	Assert.isTrue(StringTools.contains(except, "/shake"), 'got except: ${except}');
+	// }
+
 	@Test
 	public function testGetStrippedText() {
 		var text = "<shake>Shaking World</shake";
 		var parser = new Parser(text);
 		var except = Assert.throws(String, parser.getStrippedText);
 		Assert.isTrue(StringTools.contains(except, "Expected '>' but reached end of string"), 'Expected "${except} to match');
+	}
+
+	@Test
+	public function testBadTagThrows() {
+		var text = "<badTag>Hi</badTag>";
+		var parser = new Parser(text);
+		var except = Assert.throws(String, parser.parse);
+		Assert.isTrue(StringTools.contains(except, "no registered effect with name 'badTag'"), 'got exception ${except}');
+	}
+
+	@Test
+	public function testDefaultsApplied() {
+		EffectRegistry.register("defaultTest", () -> return new Scrub());
+		EffectRegistry.registerDefault("defaultTest",
+		{
+			height: "1234",
+			reverse: "true",
+		});
+
+		var text = "<defaultTest>Hi</defaultTest>";
+		var parser = new Parser(text);
+		parser.parse();
+		Assert.areEqual(1, parser.effects.length);
+		var fx:Scrub = cast(parser.effects[0].effect, Scrub);
+		Assert.areEqual(1234, fx.height);
+		Assert.areEqual(true, fx.reverse);
 	}
 }

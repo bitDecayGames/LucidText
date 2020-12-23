@@ -41,6 +41,8 @@ class Parser {
 		for (i in 0...rawTags.length) {
 			if (rawTags[i].close) {
 				// we only scan for opening tags in the top loop
+				// TODO: We want to throw in the case where we have a closing tag with no opening tag. Not sure where that logic should live
+				// throw 'error parsing  ${originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
 				continue;
 			}
 			for (k in i + 1...rawTags.length) {
@@ -48,11 +50,19 @@ class Parser {
 					if (rawTags[k].close) {
 						var fxMaker = EffectRegistry.get(rawTags[i].tag);
 						if (fxMaker == null) {
+							throw 'error parsing ${originalText}:${rawTags[i].position}->${rawTags[k].position} - no registered effect with name \'${rawTags[i].tag}\'';
 							break;
 						}
 						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, EffectRegistry.get(rawTags[i].tag)());
+
+						var defaults = EffectRegistry.getDefaults(rawTags[i].tag);
+						if (defaults != null) {
+							// Set defaults first, if we have them
+							Options.setAll(fx.effect, defaults);
+						}
+
 						var options = Options.parse(rawTags[i].options);
-						setProperties(fx.effect, options);
+						Options.setAll(fx.effect, options);
 						effects.push(fx);
 						break;
 					} else {
@@ -99,31 +109,5 @@ class Parser {
 			}
 		}
 		return stripped;
-	}
-
-	private function setProperties(o:Effect, props:Dynamic) {
-		var fields = o.getUserProperties();
-		var options:haxe.DynamicAccess<Dynamic> = props;
-
-		var keys = options.keys();
-		if (keys.length > 0) {
-			// Check that all passed props are valid fields
-			for (opKey in options.keys()) {
-				if (!fields.exists(opKey)) {
-					trace('Option Keys: "${options.keys()}"');
-					trace('Option Keys: "${options.get("height")}"');
-					throw 'Effect ${o} does not have property "${opKey}"';
-				}
-			}
-		}
-
-		for (prop in fields.keys()) {
-			// Check that all fields are valid for this object
-			if (Reflect.field(o, prop) == null) {
-				throw 'Class ${o} does not have field "${prop}". This is a dev issue';
-			}
-
-			fields[prop](o, prop, options.get(prop));
-		}
 	}
 }

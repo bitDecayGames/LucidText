@@ -1,5 +1,8 @@
 package com.bitdecay.lucidtext.effect;
 
+import haxe.DynamicAccess;
+import com.bitdecay.lucidtext.parse.Options;
+import com.bitdecay.lucidtext.properties.Setters;
 import com.bitdecay.lucidtext.effect.builtin.Bigger;
 import com.bitdecay.lucidtext.effect.builtin.Color;
 import com.bitdecay.lucidtext.effect.builtin.Shake;
@@ -22,6 +25,8 @@ class EffectRegistry {
 		"scrub" => () -> return new Scrub(),
 	];
 
+	private static var defaults:Map<String, Dynamic> = [];
+
 	public static function register(name:String, makerFunc:() -> Effect) {
 		if (registry.exists(name)) {
 			trace('lucidtext effect ${name} (${registry.get(name)}) being overwritten by ${makerFunc}');
@@ -29,12 +34,22 @@ class EffectRegistry {
 		registry.set(name, makerFunc);
 	}
 
+	public static function registerDefault(name, allOpts:Dynamic) {
+		if (!registry.exists(name)) {
+			throw 'cannot set defaults: no registered effect with name \'${name}\'';
+		}
+		defaults.set(name, allOpts);
+	}
+
 	public static function get(name:String):() -> Effect {
 		if (registry.exists(name)) {
 			return registry.get(name);
 		} else {
-			trace('NO EFFECT EXISTS CALLED: "${name}". This will be ignored');
 			return null;
 		}
+	}
+
+	public static function getDefaults(name:String):Dynamic {
+		return defaults.get(name);
 	}
 }

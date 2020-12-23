@@ -20,7 +20,7 @@ class Wave implements Effect {
 			"height" => Setters.setFloat,
 			"speed" => Setters.setFloat,
 			"offset" => Setters.setFloat,
-			"reverse" => Setters.setIfTrueBool
+			"reverse" => Setters.setBool
 		];
 
 		return fields;

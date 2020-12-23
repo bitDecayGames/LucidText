@@ -3,13 +3,15 @@ package com.bitdecay.lucidtext.properties;
 typedef PropSetterFunc = (Dynamic, String, String) -> Void;
 
 class Setters {
-	public static function setIfTrueBool(obj:Dynamic, propName:String, val:String) {
+	public static function setBool(obj:Dynamic, propName:String, val:String) {
 		if (val == null) {
 			return;
 		}
 		var fx:haxe.DynamicAccess<Dynamic> = obj;
 		if ("true" == val) {
 			fx.set(propName, true);
+		} else {
+			fx.set(propName, false);
 		}
 	}
 
@@ -33,5 +35,23 @@ class Setters {
 		if (num != null) {
 			fx.set(propName, num);
 		}
+	}
+
+	public static function setBoolDefault(defVal:String) {
+		return (obj, prop, s) -> {
+			setBool(obj, prop, defVal);
+		};
+	}
+
+	public static function setIntDefault(defVal:String) {
+		return (obj, prop, s) -> {
+			setInt(obj, prop, defVal);
+		};
+	}
+
+	public static function setFloatDefault(defVal:String) {
+		return (obj, prop, s) -> {
+			setFloat(obj, prop, defVal);
+		};
 	}
 }

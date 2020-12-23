@@ -22,7 +22,7 @@ class Scrub implements Effect {
 			"height" => Setters.setFloat,
 			"speed" => Setters.setFloat,
 			"offset" => Setters.setFloat,
-			"reverse" => Setters.setIfTrueBool,
+			"reverse" => Setters.setBool,
 			"x_mod" => Setters.setFloat,
 			"y_mod" => Setters.setFloat,
 		];
