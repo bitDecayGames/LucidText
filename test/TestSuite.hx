@@ -2,7 +2,7 @@ import massive.munit.TestSuite;
 
 import com.bitdecay.lucidtext.parse.OptionsTest;
 import com.bitdecay.lucidtext.parse.ParserTest;
-import com.bitdecay.lucidtext.parse.TextIteratorTest;
+import com.bitdecay.lucidtext.parse.TextParserTest;
 import com.bitdecay.lucidtext.effect.EffectRegistryTest;
 
 /**
@@ -16,7 +16,7 @@ class TestSuite extends massive.munit.TestSuite
 		super();
 
 		add(ParserTest);
-		add(TextIteratorTest);
+		add(TextParserTest);
 		add(OptionsTest);
 		add(EffectRegistryTest);
 	}

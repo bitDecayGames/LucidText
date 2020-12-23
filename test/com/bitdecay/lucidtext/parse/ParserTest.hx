@@ -42,14 +42,6 @@ class ParserTest {
 	// }
 
 	@Test
-	public function testGetStrippedText() {
-		var text = "<shake>Shaking World</shake";
-		var parser = new Parser(text);
-		var except = Assert.throws(String, parser.getStrippedText);
-		Assert.isTrue(StringTools.contains(except, "Expected '>' but reached end of string"), 'Expected "${except} to match');
-	}
-
-	@Test
 	public function testBadTagThrows() {
 		var text = "<badTag>Hi</badTag>";
 		var parser = new Parser(text);

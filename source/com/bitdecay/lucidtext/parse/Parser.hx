@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.parse;
 
+import com.bitdecay.lucidtext.parse.TextParser;
 import com.bitdecay.lucidtext.effect.Effect;
 import com.bitdecay.lucidtext.effect.EffectRange;
 import com.bitdecay.lucidtext.effect.EffectRegistry;
@@ -8,23 +9,19 @@ import com.bitdecay.lucidtext.effect.EffectRegistry;
  * Handles parsing a string with HTML-style effect tags
 **/
 class Parser {
-	private var originalText:String;
-	private var iter:TextIterator;
-
-	public var rawTags:Array<TagLocation> = [];
+	public var results:TextParser;
 	public var effects:Array<EffectRange> = [];
 
 	public function new(text:String) {
-		originalText = text;
-		iter = new TextIterator(text);
+		results = TextParser.parseString(text);
 	}
 
 	public function parse() {
-		rawTags = iter.getAllTags();
+		var rawTags = results.tags;
 
 		#if lucid_debug
-		trace("parsing : '" + originalText + "'");
-		trace("stripped: '" + getStrippedText() + "'");
+		trace("parsing : '" + results.originalText + "'");
+		trace("stripped: '" + results.renderText + "'");
 		trace("           0    -    1    -    2    -    3");
 
 		for (tag in rawTags) {
@@ -50,7 +47,7 @@ class Parser {
 					if (rawTags[k].close) {
 						var fxMaker = EffectRegistry.get(rawTags[i].tag);
 						if (fxMaker == null) {
-							throw 'error parsing ${originalText}:${rawTags[i].position}->${rawTags[k].position} - no registered effect with name \'${rawTags[i].tag}\'';
+							throw 'error parsing ${results.originalText}:${rawTags[i].position}->${rawTags[k].position} - no registered effect with name \'${rawTags[i].tag}\'';
 							break;
 						}
 						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, EffectRegistry.get(rawTags[i].tag)());
@@ -82,32 +79,10 @@ class Parser {
 	}
 
 	private function getRawTags():Array<TagLocation> {
-		return rawTags;
+		return results.tags;
 	}
 
 	public function getStrippedText():String {
-		var stripped = new String(originalText);
-		var position = 0;
-		var foundClose = false;
-		while (position < stripped.length) {
-			if (stripped.charAt(position) == TagDelimiters.TAG_OPEN) {
-				foundClose = false;
-				for (k in position + 1...stripped.length) {
-					if (stripped.charAt(k) == TagDelimiters.TAG_CLOSE) {
-						stripped = stripped.substring(0, position) + stripped.substr(k + 1);
-						foundClose = true;
-						break;
-					}
-				}
-
-				if (!foundClose) {
-					throw 'getStrippedText: Expected \'${TagDelimiters.TAG_CLOSE}\' but reached end of string';
-				}
-			} else {
-				// only increment position if we aren't dealing with a tag
-				position++;
-			}
-		}
-		return stripped;
+		return results.renderText;
 	}
 }
