@@ -19,6 +19,18 @@ class TextIterator {
 		renderCursor = 0;
 	}
 
+	public function getAllTags():Array<TagLocation> {
+		var allTags = new Array<TagLocation>();
+
+		var tag:TagLocation = getNextTag();
+		while (tag != null) {
+			allTags.push(tag);
+			tag = getNextTag();
+		}
+
+		return allTags;
+	}
+
 	public function getNextTag():TagLocation {
 		for (i in cursor...text.length) {
 			if (text.charAt(i) == TagDelimiters.TAG_OPEN) {
@@ -40,8 +52,7 @@ class TextIterator {
 							tagText = tagText.substr(1);
 							closer = true;
 						}
-						// if this is a closing tag, subtract 1 to account for '<'
-						return new TagLocation(renderCursor + (closer ? -1 : 0), i, tagText, options, closer);
+						return new TagLocation(renderCursor, i, tagText, options, closer);
 					}
 				}
 				// Reached the end of the string and never found our tag closer

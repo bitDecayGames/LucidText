@@ -20,7 +20,7 @@ class Parser {
 	}
 
 	public function parse() {
-		rawTags = getRawTags();
+		rawTags = iter.getAllTags();
 
 		#if lucid_debug
 		trace("parsing : '" + originalText + "'");
@@ -51,7 +51,7 @@ class Parser {
 							break;
 						}
 						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, EffectRegistry.get(rawTags[i].tag)());
-						var options = parseOptions(rawTags[i].options);
+						var options = Options.parse(rawTags[i].options);
 						setProperties(fx.effect, options);
 						effects.push(fx);
 						break;
@@ -72,15 +72,7 @@ class Parser {
 	}
 
 	private function getRawTags():Array<TagLocation> {
-		var allTags = new Array<TagLocation>();
-
-		var tag:TagLocation = iter.getNextTag();
-		while (tag != null) {
-			allTags.push(tag);
-			tag = iter.getNextTag();
-		}
-
-		return allTags;
+		return rawTags;
 	}
 
 	public function getStrippedText():String {
@@ -107,19 +99,6 @@ class Parser {
 			}
 		}
 		return stripped;
-	}
-
-	public function parseOptions(raw:String):Dynamic {
-		var allOps:haxe.DynamicAccess<Dynamic> = {};
-
-		raw = StringTools.trim(raw);
-		if (raw.length > 0) {
-			for (op in raw.split(TagDelimiters.TAG_OPTION_DELIMITER)) {
-				var splits = op.split(TagDelimiters.TAG_OPTION_NAME_SEPARATOR);
-				allOps.set(splits[0], splits[1]);
-			}
-		}
-		return allOps;
 	}
 
 	private function setProperties(o:Effect, props:Dynamic) {

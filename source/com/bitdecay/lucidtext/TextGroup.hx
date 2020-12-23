@@ -12,7 +12,7 @@ class TextGroup extends FlxSpriteGroup {
 	// It seems that there is a 2-pixel buffer on each side, so we will shave off 4 pixels of each
 	// letter to account for that tested and working with various fonts and font sizes
 	static inline var spacingMod = -4;
-	
+
 	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
 
 	private var activeEffects:Array<ActiveFX> = new Array<ActiveFX>();

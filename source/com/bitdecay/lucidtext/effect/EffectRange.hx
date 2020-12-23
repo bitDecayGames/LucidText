@@ -15,6 +15,6 @@ class EffectRange {
 	}
 
 	public function impacts(i:Int):Bool {
-		return i >= startIndex && i <= endIndex;
+		return i >= startIndex && i < endIndex;
 	}
 }
