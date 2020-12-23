@@ -15,10 +15,7 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 
 * User Input
 	* This library is designed to allow a user to customize in-game text without needing to touch the code.
-	* This is achieved by expecting styling directives to be part of the text strings in the form of HTML-style tagging. See [Tagging](#tagging) for more information.
-* Parsing
-	* The current implementation imposes some restrictions on how tags can be used in string
-		* Tags of the same name cannot be nested
+	* This is achieved by expecting styling directives to be part of the text strings in the form of HTML-style tags. See [Tagging](#tagging) for more information.
 * Effects
 	* An effect is a change made to one or more character in a string
 	* There are two main types of Effects:
