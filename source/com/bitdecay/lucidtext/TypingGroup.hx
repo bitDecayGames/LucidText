@@ -6,7 +6,6 @@ import flixel.math.FlxRect;
 
 class TypingGroup extends TextGroup {
 	var position:Int = 0;
-	var typeSpeed:Float = 20;
 
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
@@ -22,13 +21,11 @@ class TypingGroup extends TextGroup {
 
 	public function new(box:FlxRect, text:String, size:Int) {
 		super(box.left, box.top, text, size);
-
-		calcedTimePerChar = 1 / typeSpeed;
+		bounds = box;
+		setTypeSpeed(20);
 
 		var backing = new FlxSprite(0, 0);
 		backing.makeGraphic(Std.int(box.width), Std.int(box.height), new FlxColor(0xFFAAAAFF));
-
-		bounds = box;
 
 		for (m in members) {
 			m.visible = false;
@@ -77,8 +74,11 @@ class TypingGroup extends TextGroup {
 	}
 
 	public function setTypeSpeed(charPerSec:Float) {
-		typeSpeed = charPerSec;
-		calcedTimePerChar = 1 / typeSpeed;
+		if (charPerSec <= 0) {
+			calcedTimePerChar = 0;
+		} else {
+			calcedTimePerChar = 1 / charPerSec;
+		}
 	}
 
 	override public function update(delta:Float) {
