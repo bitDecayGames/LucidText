@@ -26,14 +26,14 @@ class PlayState extends FlxState {
 		// add(other);
 
 		// no effects
-		helloText = new TypingGroup(FlxRect.get(50, 175, 100, 75), "<scrub>Welcome</scrub> to <wave speed=10>LucidText!</wave>", 16);
-		add(helloText);
+		// helloText = new TypingGroup(FlxRect.get(50, 175, 100, 75), "<scrub>Welcome</scrub> to <wave speed=10>LucidText!</wave>", 16);
+		// add(helloText);
 
 		// with smaller
 		var sizingTest = new TextGroup(50, 50, "Defaults: <scrub>Welcome</scrub>", 24);
 		add(sizingTest);
 
-		var two = new TextGroup(50, 100, "Speed 20: <scrub speed=20 offset=0.05>Welcome</scrub>", 24);
+		var two = new TextGroup(50, 100, "Speed 20: <scrub speed=20>Welcome</scrub>", 24);
 		add(two);
 
 		var three = new TextGroup(50, 150, "Offset 0.3: <scrub offset=0.3>Welcome</scrub>", 24);

@@ -6,7 +6,10 @@ import misc.FlxTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
-class SpacingCompareState extends FlxState {
+class EffectExamplesState extends FlxState {
+	var yCoord = 100.0;
+	var spacingBuffer = 20;
+
 	override public function create():Void {
 		super.create();
 		bgColor = FlxColor.WHITE;
@@ -17,19 +20,18 @@ class SpacingCompareState extends FlxState {
 
 		FlxG.autoPause = false;
 
-		var y = 100.0;
-		for (i in 1...7) {
-			y = makeSpacingTest(i * 6, y);
-		}
+		makeExampleTest("<scrub>Scrub</scrub>");
+		makeExampleTest("<wave>Wave</wave>");
+		makeExampleTest("<color c=0xFF4400>Color</color>");
+		makeExampleTest("<shake>Shake</shake>");
+		makeExampleTest("<smaller>Smaller</smaller>");
+		makeExampleTest("<bigger>Bigger</bigger>");
 	}
 
-	private function makeSpacingTest(size:Int, yCoord:Float) {
-		var textRef = FlxTextFactory.make('Welcome to LucidText! size ${size} (FlxText)', 30, yCoord, size);
-		add(textRef);
-		yCoord += textRef.height;
-		var lucid = new TextGroup(30, yCoord, 'Welcome to <wave>LucidText!</wave> size ${size} (Lucid)', size);
+	private function makeExampleTest(text:String) {
+		var lucid = new TextGroup(30, yCoord, text, 24);
 		add(lucid);
-		return yCoord + lucid.height;
+		yCoord += lucid.height + spacingBuffer;
 	}
 
 	override public function update(elapsed:Float):Void {
