@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext;
 
+import com.bitdecay.lucidtext.parse.Regex;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
@@ -18,6 +19,7 @@ class TypingGroup extends TextGroup {
 
 	public var letterCallback:() -> Void;
 	public var wordCallback:() -> Void;
+	public var finishCallback:() -> Void;
 
 	public function new(box:FlxRect, text:String, size:Int) {
 		super(box.left, box.top, text, size);
@@ -43,7 +45,7 @@ class TypingGroup extends TextGroup {
 	}
 
 	private function organizeTextToRect() {
-		var wordMatcher:EReg = ~/\b\w+\b/g;
+		var wordMatcher = new EReg(Regex.WORD_REGEX, "g");
 		wordMatcher.map(renderText, (m) -> {
 			wordStarts.push(m.matchedPos().pos);
 			wordLengths.set(m.matchedPos().pos, m.matchedPos().len);
@@ -97,6 +99,13 @@ class TypingGroup extends TextGroup {
 				if (wordCallback != null) {
 					wordCallback();
 				}
+			}
+		}
+
+		if (position == members.length) {
+			position++;
+			if (finishCallback != null) {
+				finishCallback();
 			}
 		}
 	}
