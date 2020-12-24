@@ -1,5 +1,6 @@
 package;
 
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import misc.FlxTextFactory;
@@ -21,6 +22,13 @@ class SpacingCompareState extends FlxState {
 		for (i in 1...7) {
 			y = makeSpacingTest(i * 6, y);
 		}
+
+		var button = new FlxButton(0, 0, "Back");
+		button.onUp.callback = function() {
+			FlxG.switchState(new MainMenuState());
+		};
+		button.y = FlxG.height - button.height;
+		add(button);
 	}
 
 	private function makeSpacingTest(size:Int, yCoord:Float) {

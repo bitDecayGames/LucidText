@@ -53,7 +53,7 @@ class TextGroup extends FlxSpriteGroup {
 				}
 			}
 
-			// Adjust spacing after all effects are applied
+			// Adjust spacing only after all effects are applied
 			x += letter.width + spacingMod;
 
 			add(letter);

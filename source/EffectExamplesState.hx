@@ -1,5 +1,6 @@
 package;
 
+import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import misc.FlxTextFactory;
@@ -26,6 +27,13 @@ class EffectExamplesState extends FlxState {
 		makeExampleTest("<shake>Shake</shake>");
 		makeExampleTest("<smaller>Smaller</smaller>");
 		makeExampleTest("<bigger>Bigger</bigger>");
+
+		var button = new FlxButton(0, 0, "Back");
+		button.onUp.callback = function() {
+			FlxG.switchState(new MainMenuState());
+		};
+		button.y = FlxG.height - button.height;
+		add(button);
 	}
 
 	private function makeExampleTest(text:String) {

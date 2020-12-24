@@ -19,6 +19,7 @@ class MainMenuState extends FlxState {
 		var menuItems = [
 			"Samples" => () -> FlxG.switchState(new EffectExamplesState()),
 			"Spacing" => () -> FlxG.switchState(new SpacingCompareState()),
+			"Typing" => () -> FlxG.switchState(new TypingState()),
 		];
 
 		var yCoord = FlxG.height / 2;
