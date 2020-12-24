@@ -11,7 +11,7 @@ import com.bitdecay.lucidtext.parse.Parser;
 class TextGroup extends FlxSpriteGroup {
 	// It seems that there is a 2-pixel buffer on each side, so we will shave off 4 pixels of each
 	// letter to account for that tested and working with various fonts and font sizes
-	static inline var spacingMod = -4;
+	public static inline var spacingMod = -4;
 
 	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
 
@@ -20,12 +20,8 @@ class TextGroup extends FlxSpriteGroup {
 	var rawText:String;
 	var renderText:String;
 
-	var allObjects:Array<FlxText>;
-
 	public function new(?X:Float, ?Y:Float, text:String, size:Int = 24) {
 		super(X, Y, text.length);
-
-		allObjects = new Array<FlxText>();
 
 		rawText = text;
 
@@ -61,7 +57,6 @@ class TextGroup extends FlxSpriteGroup {
 			x += letter.width + spacingMod;
 
 			add(letter);
-			allObjects.push(letter);
 		}
 	}
 
