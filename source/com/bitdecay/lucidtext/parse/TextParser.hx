@@ -13,7 +13,7 @@ class TextParser {
 
 	public static function parseString(text:String):TextParser {
 		var allTags = new Array<TagLocation>();
-		var regexp = new EReg(Regex.TAG_REGEX, "g");
+		var regexp = new EReg(Regex.TAG_REGEX, Regex.GLOBAL_MODE);
 		var removedCharacters = 0;
 		var renderText = regexp.map(text, (reg) -> {
 			if (StringTools.contains(reg.matched(2), "<") || StringTools.contains(reg.matched(3), "<")) {

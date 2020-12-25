@@ -41,7 +41,7 @@ class TypingState extends FlxState {
 		txt.letterCallback = letterBeepCallback;
 		txt.wordCallback = wordBeepCallback;
 		txt.finishCallback = () -> {
-			var secondTxt = new TypingGroup(FlxRect.get(50, 200, 400, 120),
+			var secondTxt = new TypingGroup(FlxRect.get(50, 200, 250, 250),
 				"A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system", 16);
 			add(secondTxt);
 

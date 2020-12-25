@@ -1,5 +1,7 @@
 package com.bitdecay.lucidtext;
 
+import openfl.geom.Rectangle;
+import flixel.addons.ui.FlxUI9SliceSprite;
 import com.bitdecay.lucidtext.parse.Regex;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
@@ -12,7 +14,8 @@ class TypingGroup extends TextGroup {
 	var calcedTimePerChar:Float = 0.0;
 
 	var bounds:FlxRect;
-	var margin:Float = 5.0;
+	var margin:Float = 10.0;
+	var window:FlxSprite;
 
 	var wordStarts:Array<Int> = [];
 	var wordLengths:Map<Int, Int> = [];
@@ -26,8 +29,8 @@ class TypingGroup extends TextGroup {
 		bounds = box;
 		setTypeSpeed(20);
 
-		var backing = new FlxSprite(0, 0);
-		backing.makeGraphic(Std.int(box.width), Std.int(box.height), new FlxColor(0xFFAAAAFF));
+		var window = new FlxUI9SliceSprite(0, 0, AssetPaths.slice__png, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
+		window.resize(box.width, box.height);
 
 		for (m in members) {
 			m.visible = false;
@@ -38,14 +41,14 @@ class TypingGroup extends TextGroup {
 		organizeTextToRect();
 
 		// We want the preAdd stuff of the FlxSpriteGroup...
-		add(backing);
+		add(window);
 		// ...but we also want the backing to be at index zero
-		members.remove(backing);
-		members.insert(0, backing);
+		members.remove(window);
+		members.insert(0, window);
 	}
 
 	private function organizeTextToRect() {
-		var wordMatcher = new EReg(Regex.WORD_REGEX, "g");
+		var wordMatcher = new EReg(Regex.WORD_REGEX, Regex.GLOBAL_MODE);
 		wordMatcher.map(renderText, (m) -> {
 			wordStarts.push(m.matchedPos().pos);
 			wordLengths.set(m.matchedPos().pos, m.matchedPos().len);
