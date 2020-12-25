@@ -20,8 +20,9 @@ class TextParser {
 				// indicates bad formatting
 				throw 'unexpected \'<\' found while parsing contents for tag at position: ${reg.matchedPos().pos}';
 			}
+
 			allTags.push(new TagLocation(reg.matchedPos().pos - removedCharacters, reg.matchedPos().pos, reg.matched(2), reg.matched(3),
-				reg.matched(1).length > 0));
+				reg.matched(1).length > 0, reg.matched(4).length > 0));
 			removedCharacters += reg.matchedPos().len;
 			return "";
 		});

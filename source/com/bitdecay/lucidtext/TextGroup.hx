@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext;
 
+import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
 import com.bitdecay.lucidtext.parse.Parser;
@@ -15,17 +16,21 @@ class TextGroup extends FlxSpriteGroup {
 
 	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
 
-	private var activeEffects:Array<ActiveFX> = new Array<ActiveFX>();
+	var parser:Parser;
+
+	private var activeEffects:Array<EffectUpdater> = new Array<EffectUpdater>();
 
 	var rawText:String;
 	var renderText:String;
+
+	var effectUpdateSuccess:Bool = true;
 
 	public function new(?X:Float, ?Y:Float, text:String, size:Int = 24) {
 		super(X, Y, text.length);
 
 		rawText = text;
 
-		var parser = new Parser(text);
+		parser = new Parser(text);
 		parser.parse();
 		renderText = parser.getStrippedText();
 
@@ -43,7 +48,7 @@ class TextGroup extends FlxSpriteGroup {
 
 			letter.wordWrap = false;
 
-			var active:ActiveFX;
+			var active:EffectUpdater;
 			for (fx in parser.effects) {
 				if (fx.impacts(i)) {
 					active = fx.effect.apply(letter, i);
@@ -62,8 +67,11 @@ class TextGroup extends FlxSpriteGroup {
 
 	override public function update(delta:Float) {
 		super.update(delta);
-		for (fx in activeEffects) {
-			fx.update(delta);
+		effectUpdateSuccess = true;
+		for (updater in activeEffects) {
+			if (!updater(delta)) {
+				effectUpdateSuccess = false;
+			}
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
+import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters;
 
@@ -15,7 +16,7 @@ class Size implements Effect {
 		return ["mod" => Setters.setFloat];
 	}
 
-	public function apply(o:FlxText, i:Int):ActiveFX {
+	public function apply(o:FlxText, i:Int):EffectUpdater {
 		var preHeight = o.size;
 		var botCenterPoint = o.getPosition().add(0, o.height);
 		o.size = Std.int(o.size * mod);
@@ -28,4 +29,8 @@ class Size implements Effect {
 
 		return null;
 	}
+
+	public function begin(ops:TypeOptions) {}
+
+	public function end(ops:TypeOptions) {}
 }

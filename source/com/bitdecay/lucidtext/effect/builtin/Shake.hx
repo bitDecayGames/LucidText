@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
+import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -17,10 +18,10 @@ class Shake implements Effect {
 		return ["size" => Setters.setFloat,];
 	}
 
-	public function apply(o:FlxText, i:Int):ActiveFX {
+	public function apply(o:FlxText, i:Int):EffectUpdater {
 		var offset = FlxPoint.get();
 		var tempPosition = FlxPoint.get();
-		return new ActiveFX(o, (delta:Float) -> {
+		return (delta:Float) -> {
 			o.getPosition(tempPosition);
 
 			// undo our previous offset;
@@ -33,6 +34,12 @@ class Shake implements Effect {
 
 			// set our position
 			o.setPosition(tempPosition.x, tempPosition.y);
-		});
+
+			return true;
+		};
 	}
+
+	public function begin(ops:TypeOptions) {}
+
+	public function end(ops:TypeOptions) {}
 }

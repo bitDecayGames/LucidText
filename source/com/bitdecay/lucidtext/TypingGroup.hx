@@ -87,6 +87,11 @@ class TypingGroup extends TextGroup {
 	override public function update(delta:Float) {
 		super.update(delta);
 
+		if (!effectUpdateSuccess) {
+			// wait till all effects are success before continuing
+			return;
+		}
+
 		if (options.charsPerSecond <= 0) {
 			calcedTimePerChar = 0;
 		} else {
@@ -98,6 +103,18 @@ class TypingGroup extends TextGroup {
 			elapsed -= calcedTimePerChar;
 			members[position].visible = true;
 			position++;
+
+			// TODO: This should be done via map accesses instead of looping
+			for (fxRange in parser.effects) {
+				if (fxRange.startIndex == position - 1) {
+					fxRange.effect.begin(options);
+				}
+
+				if (fxRange.endIndex == position - 1) {
+					fxRange.effect.end(options);
+				}
+			}
+
 			if (letterCallback != null) {
 				letterCallback();
 			}

@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
+import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.math.FlxPoint;
 import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters;
@@ -26,13 +27,13 @@ class Wave implements Effect {
 		return fields;
 	}
 
-	public function apply(o:FlxText, i:Int):ActiveFX {
+	public function apply(o:FlxText, i:Int):EffectUpdater {
 		var posOffset = FlxPoint.get();
 		var tempPosition = FlxPoint.get();
 
 		var timer = i * offset;
 
-		return new ActiveFX(o, (delta:Float) -> {
+		return (delta) -> {
 			if (reverse) {
 				timer += delta;
 			} else {
@@ -51,6 +52,12 @@ class Wave implements Effect {
 
 			// set our position
 			o.setPosition(tempPosition.x, tempPosition.y);
-		});
+
+			return true;
+		};
 	}
+
+	public function begin(ops:TypeOptions) {}
+
+	public function end(ops:TypeOptions) {}
 }

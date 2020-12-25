@@ -5,23 +5,30 @@ import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters;
 
 /**
- * Allows setting the color of characters.
+ * Allows inserting a dynamic pause into a typed string of text.
  *
- * Currently only supports colors as integer, most usefully
- * in the hexidecimal form 0xRRGGBB
+ * NOTE: This effect renders the character AFTER the tag, and
+ *       pauses once that character has been rendered
 **/
-class Color implements Effect {
-	public var c:Int;
+class Pause implements Effect {
+	private var t:Float = 1.0;
 
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropSetterFunc> {
-		return ["c" => Setters.setInt];
+		return ["t" => Setters.setFloat];
 	}
 
 	public function apply(o:FlxText, i:Int):EffectUpdater {
-		o.color = c;
-		return null;
+		var countdown = t;
+		return (delta) -> {
+			if (!o.visible) {
+				return true;
+			}
+
+			countdown -= delta;
+			return countdown <= 0;
+		}
 	}
 
 	public function begin(ops:TypeOptions) {}

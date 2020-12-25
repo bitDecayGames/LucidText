@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.parse;
 
+import com.bitdecay.lucidtext.effect.builtin.Pause;
 import massive.haxe.log.Log;
 import com.bitdecay.lucidtext.effect.builtin.Scrub;
 import com.bitdecay.lucidtext.effect.EffectRegistry;
@@ -20,6 +21,48 @@ class ParserTest {
 		Assert.areEqual(543, wave.height);
 		Assert.areEqual(54, wave.speed);
 		Assert.areEqual(0.123, wave.offset);
+	}
+
+	@Test
+	public function testVoidCloserTagFails() {
+		var text = "VoidCloser <wave>Test</wave />";
+		var parser = new Parser(text);
+		var except = Assert.throws(String, parser.parse);
+		Assert.isTrue(StringTools.contains(except, "closing tags cannot also be void tags"), except);
+		Assert.isTrue(StringTools.contains(except, "21"), except);
+	}
+
+	@Test
+	public function testVoidTag() {
+		var text = "Pause<pause /> test";
+		var parser = new Parser(text);
+		parser.parse();
+
+		Assert.areEqual(1, parser.effects.length);
+
+		var fx = parser.effects[0];
+		Assert.isType(fx.effect, Pause);
+		Assert.areEqual(5, fx.startIndex);
+		Assert.areEqual(5, fx.endIndex);
+	}
+
+	@Test
+	public function testMultipleVoidTag() {
+		var text = "Do<pause /> two<pause /> pauses";
+		var parser = new Parser(text);
+		parser.parse();
+
+		Assert.areEqual(2, parser.effects.length);
+
+		var fx = parser.effects[0];
+		Assert.isType(fx.effect, Pause);
+		Assert.areEqual(2, fx.startIndex);
+		Assert.areEqual(2, fx.endIndex);
+
+		fx = parser.effects[1];
+		Assert.isType(fx.effect, Pause);
+		Assert.areEqual(6, fx.startIndex);
+		Assert.areEqual(6, fx.endIndex);
 	}
 
 	@Test

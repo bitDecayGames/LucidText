@@ -1,6 +1,5 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
-import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters;
 
 /**
@@ -9,14 +8,10 @@ import com.bitdecay.lucidtext.properties.Setters;
 class Bigger extends Size {
 	public function new() {
 		super();
+		mod = 1.5;
 	}
 
 	override public function getUserProperties():Map<String, PropSetterFunc> {
 		return [];
-	}
-
-	override public function apply(o:FlxText, i:Int):ActiveFX {
-		mod = 1.5;
-		return super.apply(o, i);
 	}
 }

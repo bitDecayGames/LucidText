@@ -3,9 +3,9 @@ package com.bitdecay.lucidtext.effect.builtin;
 import com.bitdecay.lucidtext.properties.Setters;
 
 /**
- * Sets characters to be 50% smaller than their current size
+ * Sets typing to be 50% of the current speed
 **/
-class Smaller extends Size {
+class Slower extends Speed {
 	public function new() {
 		super();
 		mod = 0.5;

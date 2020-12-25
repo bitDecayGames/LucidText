@@ -36,6 +36,13 @@ class Parser {
 		effects = new Array<EffectRange>();
 
 		for (i in 0...rawTags.length) {
+			if (rawTags[i].void) {
+				if (rawTags[i].close) {
+					throw 'closing tags cannot also be void tags (tag at position: ${rawTags[i].rawPosition})';
+				}
+				buildTagRange(rawTags[i], rawTags[i]);
+				continue;
+			}
 			if (rawTags[i].close) {
 				// we only scan for opening tags in the top loop
 				// TODO: We want to throw in the case where we have a closing tag with no opening tag. Not sure where that logic should live
@@ -45,22 +52,7 @@ class Parser {
 			for (k in i + 1...rawTags.length) {
 				if (rawTags[k].tag == rawTags[i].tag) {
 					if (rawTags[k].close) {
-						var fxMaker = EffectRegistry.get(rawTags[i].tag);
-						if (fxMaker == null) {
-							throw 'error parsing ${results.originalText}:${rawTags[i].position}->${rawTags[k].position} - no registered effect with name \'${rawTags[i].tag}\'';
-							break;
-						}
-						var fx = new EffectRange(rawTags[i].position, rawTags[k].position, EffectRegistry.get(rawTags[i].tag)());
-
-						var defaults = EffectRegistry.getDefaults(rawTags[i].tag);
-						if (defaults != null) {
-							// Set defaults first, if we have them
-							Options.setAll(fx.effect, defaults);
-						}
-
-						var options = Options.parse(rawTags[i].options);
-						Options.setAll(fx.effect, options);
-						effects.push(fx);
+						buildTagRange(rawTags[i], rawTags[k]);
 						break;
 					} else {
 						throw "Currently this library doesn't handle nested tags with the same effect. Found tag '"
@@ -76,6 +68,25 @@ class Parser {
 			trace("   applies to range    : " + fx.startIndex + " -> " + fx.endIndex);
 		}
 		#end
+	}
+
+	private function buildTagRange(openTag:TagLocation, closeTag:TagLocation) {
+		var fxMaker = EffectRegistry.get(openTag.tag);
+		if (fxMaker == null) {
+			throw 'error parsing ${results.originalText}:${openTag.position}->${closeTag.position} - no registered effect with name \'${openTag.tag}\'';
+			return;
+		}
+		var fx = new EffectRange(openTag.position, closeTag.position, EffectRegistry.get(openTag.tag)());
+
+		var defaults = EffectRegistry.getDefaults(openTag.tag);
+		if (defaults != null) {
+			// Set defaults first, if we have them
+			Options.setAll(fx.effect, defaults);
+		}
+
+		var options = Options.parse(openTag.options);
+		Options.setAll(fx.effect, options);
+		effects.push(fx);
 	}
 
 	private function getRawTags():Array<TagLocation> {

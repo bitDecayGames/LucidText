@@ -113,8 +113,9 @@ class TextParserTest {
 	@Test
 	public function testRegexMatchingSimpleTag() {
 		var out = TextParser.parseString("<tag>");
-		Assert.areEqual(1, out.tags.length);
 		Assert.areEqual("", out.renderText);
+		Assert.areEqual(1, out.tags.length);
+
 		var m = out.tags[0];
 		Assert.areEqual(0, m.position);
 		Assert.areEqual("tag", m.tag);
@@ -129,8 +130,9 @@ class TextParserTest {
 	@Test
 	public function testRegexMatchingSimpleCloseTag() {
 		var out = TextParser.parseString("</tag>");
-		Assert.areEqual(1, out.tags.length);
 		Assert.areEqual("", out.renderText);
+		Assert.areEqual(1, out.tags.length);
+
 		var m = out.tags[0];
 		Assert.areEqual(0, m.position);
 		// Assert.areEqual(6, m.len);
@@ -141,8 +143,8 @@ class TextParserTest {
 	@Test
 	public function testRegexTagWithinText() {
 		var out = TextParser.parseString("tag <within>string");
-		Assert.areEqual(1, out.tags.length);
 		Assert.areEqual("tag string", out.renderText);
+		Assert.areEqual(1, out.tags.length);
 		var m = out.tags[0];
 		Assert.areEqual(4, m.position);
 		Assert.areEqual(4, m.rawPosition);
@@ -154,8 +156,8 @@ class TextParserTest {
 	@Test
 	public function testRegexMultiTag() {
 		var out = TextParser.parseString("tag <start>multi</start> string");
-		Assert.areEqual(2, out.tags.length);
 		Assert.areEqual("tag multi string", out.renderText);
+		Assert.areEqual(2, out.tags.length);
 
 		var m1 = out.tags[0];
 		Assert.areEqual(4, m1.position);
@@ -175,14 +177,68 @@ class TextParserTest {
 	@Test
 	public function testRegexTagWithOptions() {
 		var out = TextParser.parseString("tag <withOps op1=one op2=two>string");
-		Assert.areEqual(1, out.tags.length);
 		Assert.areEqual("tag string", out.renderText);
+		Assert.areEqual(1, out.tags.length);
 		var m = out.tags[0];
 		Assert.areEqual(4, m.position);
 		Assert.areEqual(4, m.rawPosition);
 		Assert.isFalse(m.close);
 		Assert.areEqual("withOps", m.tag);
 		Assert.areEqual("op1=one op2=two", m.options);
+	}
+
+	@Test
+	public function testTrailingSpaceNoOptions() {
+		var out = TextParser.parseString("tag <noOpts >string");
+		Assert.areEqual("tag string", out.renderText);
+		Assert.areEqual(1, out.tags.length);
+		var m = out.tags[0];
+		Assert.areEqual(4, m.position);
+		Assert.areEqual(4, m.rawPosition);
+		Assert.isFalse(m.close);
+		Assert.isFalse(m.void);
+		Assert.areEqual("noOpts", m.tag);
+	}
+
+	@Test
+	public function testTrailingSpaceWithOptions() {
+		var out = TextParser.parseString("tag <withOps op1=test >string");
+		Assert.areEqual("tag string", out.renderText);
+		Assert.areEqual(1, out.tags.length);
+		var m = out.tags[0];
+		Assert.areEqual(4, m.position);
+		Assert.areEqual(4, m.rawPosition);
+		Assert.isFalse(m.close);
+		Assert.isFalse(m.void);
+		Assert.areEqual("withOps", m.tag);
+		Assert.areEqual("op1=test", m.options);
+
+	}
+
+	@Test
+	public function testVoidTagsNoSpace() {
+		var out = TextParser.parseString("short<pause/> pause");
+		Assert.areEqual("short pause", out.renderText);
+		Assert.areEqual(1, out.tags.length);
+		var m = out.tags[0];
+		Assert.areEqual(5, m.position);
+		Assert.areEqual(5, m.rawPosition);
+		Assert.isFalse(m.close);
+		Assert.isTrue(m.void);
+		Assert.areEqual("pause", m.tag);
+	}
+
+	@Test
+	public function testVoidTagsWithSpace() {
+		var out = TextParser.parseString("short<pause /> pause");
+		Assert.areEqual("short pause", out.renderText);
+		Assert.areEqual(1, out.tags.length);
+		var m = out.tags[0];
+		Assert.areEqual(5, m.position);
+		Assert.areEqual(5, m.rawPosition);
+		Assert.isFalse(m.close);
+		Assert.isTrue(m.void);
+		Assert.areEqual("pause", m.tag);
 	}
 
 	public function testGetAllTags() {

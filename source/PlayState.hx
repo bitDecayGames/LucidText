@@ -23,9 +23,12 @@ class PlayState extends FlxState {
 
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 		helloText = new TypingGroup(FlxRect.get(50, 175, 400, 75),
-			"Welcome to <wave speed=10>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
+			"Can I<pause /> pause<pause /> between<pause /> words?<pause /> This is a <scrub>fairly long</scrub> <faster>but easily sped up</faster> or <speed mod=0.2>slowed way down</speed> while text typing <smaller>Patent pending</smaller>",
 			options);
 		add(helloText);
+
+		var speedTest = new TextGroup(0, 0, "This should <faster>have no impact</faster>", 24);
+		add(speedTest);
 	}
 
 	override public function update(elapsed:Float):Void {
