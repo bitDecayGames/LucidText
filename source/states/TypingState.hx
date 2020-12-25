@@ -1,5 +1,6 @@
 package states;
 
+import com.bitdecay.lucidtext.TypeOptions;
 import flixel.math.FlxRect;
 import com.bitdecay.lucidtext.TypingGroup;
 import flixel.ui.FlxButton;
@@ -18,10 +19,15 @@ class TypingState extends FlxState {
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
 		FlxG.autoPause = false;
 
+		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+
 		var txt = new TypingGroup(FlxRect.get(50, 50, 400, 120),
 			"Welcome to <wave speed=10>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
-			16);
+			options);
 		add(txt);
+
+		var secondTxt = new TypingGroup(FlxRect.get(50, 200, 250, 250),
+			"A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system", options);
 
 		var letterSound = FlxG.sound.load(AssetPaths.letter_blip__wav);
 		letterSound.volume = 0.05;
@@ -41,13 +47,12 @@ class TypingState extends FlxState {
 		txt.letterCallback = letterBeepCallback;
 		txt.wordCallback = wordBeepCallback;
 		txt.finishCallback = () -> {
-			var secondTxt = new TypingGroup(FlxRect.get(50, 200, 250, 250),
-				"A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system", 16);
+			// add our 'response' text to the state
 			add(secondTxt);
-
-			secondTxt.letterCallback = letterBeepCallback;
-			secondTxt.wordCallback = wordBeepCallback;
 		}
+
+		secondTxt.letterCallback = letterBeepCallback;
+		secondTxt.wordCallback = wordBeepCallback;
 
 		var button = new FlxButton(0, 0, "Back");
 		button.onUp.callback = function() {

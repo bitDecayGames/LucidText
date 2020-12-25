@@ -8,13 +8,13 @@ import flixel.FlxSprite;
 import flixel.math.FlxRect;
 
 class TypingGroup extends TextGroup {
-	var position:Int = 0;
+	var options:TypeOptions;
 
+	var position:Int = 0;
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
 
 	var bounds:FlxRect;
-	var margin:Float = 10.0;
 	var window:FlxSprite;
 
 	var wordStarts:Array<Int> = [];
@@ -24,18 +24,24 @@ class TypingGroup extends TextGroup {
 	public var wordCallback:() -> Void;
 	public var finishCallback:() -> Void;
 
-	public function new(box:FlxRect, text:String, size:Int) {
-		super(box.left, box.top, text, size);
-		bounds = box;
-		setTypeSpeed(20);
+	public function new(box:FlxRect, text:String, ops:TypeOptions) {
+		options = ops;
+		super(box.left, box.top, text, options.fontSize);
 
-		var window = new FlxUI9SliceSprite(0, 0, AssetPaths.slice__png, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
-		window.resize(box.width, box.height);
+		bounds = box;
+
+		if (options.slice9 != null) {
+			var window9Slice = new FlxUI9SliceSprite(0, 0, AssetPaths.slice__png, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
+			window9Slice.resize(box.width, box.height);
+			window = window9Slice;
+		} else {
+			window = new FlxSprite(options.windowAsset);
+		}
 
 		for (m in members) {
 			m.visible = false;
-			m.y += margin;
-			m.x += margin;
+			m.y += options.margins;
+			m.x += options.margins;
 		}
 
 		organizeTextToRect();
@@ -57,7 +63,7 @@ class TypingGroup extends TextGroup {
 
 		for (start in wordStarts) {
 			for (k in start...start + wordLengths[start]) {
-				if (members[k].x + members[k].width > bounds.right - margin) {
+				if (members[k].x + members[k].width > bounds.right - options.margins) {
 					shuffleMembersNextRow(start);
 					break;
 				}
@@ -66,7 +72,7 @@ class TypingGroup extends TextGroup {
 	}
 
 	private function shuffleMembersNextRow(begin:Int) {
-		var xCoord = x + margin;
+		var xCoord = x + options.margins;
 		// this likely isn't a great value to use, we want the "base" line size for the font
 		// Namely, if  line break happens on a 'bigger' or 'smaller' character, this value
 		// is not correct.
@@ -78,16 +84,14 @@ class TypingGroup extends TextGroup {
 		}
 	}
 
-	public function setTypeSpeed(charPerSec:Float) {
-		if (charPerSec <= 0) {
-			calcedTimePerChar = 0;
-		} else {
-			calcedTimePerChar = 1 / charPerSec;
-		}
-	}
-
 	override public function update(delta:Float) {
 		super.update(delta);
+
+		if (options.charsPerSecond <= 0) {
+			calcedTimePerChar = 0;
+		} else {
+			calcedTimePerChar = 1 / options.charsPerSecond;
+		}
 
 		elapsed += delta;
 		while (elapsed > calcedTimePerChar && position < members.length) {

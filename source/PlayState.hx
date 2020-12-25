@@ -1,5 +1,6 @@
 package;
 
+import com.bitdecay.lucidtext.TypeOptions;
 import flixel.math.FlxRect;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -20,9 +21,10 @@ class PlayState extends FlxState {
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
 		FlxG.autoPause = false;
 
+		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 		helloText = new TypingGroup(FlxRect.get(50, 175, 400, 75),
 			"Welcome to <wave speed=10>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
-			16);
+			options);
 		add(helloText);
 	}
 
