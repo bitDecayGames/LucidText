@@ -10,7 +10,7 @@ import misc.FlxTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
-class TypingState extends FlxState {
+class TypeWindowState extends FlxState {
 	override public function create():Void {
 		super.create();
 		bgColor = FlxColor.WHITE;
