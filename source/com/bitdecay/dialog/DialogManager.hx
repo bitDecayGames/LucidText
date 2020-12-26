@@ -10,9 +10,7 @@ import flixel.FlxCamera;
 import flixel.input.keyboard.FlxKey;
 import flixel.FlxState;
 
-
 class DialogManager extends FlxBasic {
-
 	static inline final FontSize = 10;
 
 	var currentDialogIndex:Int = -1;
@@ -26,6 +24,7 @@ class DialogManager extends FlxBasic {
 
 	var dialogMap:Map<String, Array<String>>;
 	var progressionKey:FlxKey;
+
 	public var typeText:TypingGroup;
 	public var opts:TypeOptions;
 
@@ -45,7 +44,8 @@ class DialogManager extends FlxBasic {
 	var autoProgressTimer:Timer = new Timer(1000);
 	var manuallyProgressTimer:Timer = new Timer(1000);
 
-	public function new(_dialogMap:Map<String, Array<String>>, _parentState:FlxState, _camera:FlxCamera, ?_progressionKey:FlxKey = FlxKey.NONE, ?_onTypingBegin:() -> Void = null, ?_onTypingEnd:() -> Void = null, ?_onTypingSpeedUp:() -> Void = null) {
+	public function new(_dialogMap:Map<String, Array<String>>, _parentState:FlxState, _camera:FlxCamera, ?_progressionKey:FlxKey = FlxKey.NONE,
+			?_onTypingBegin:() -> Void = null, ?_onTypingEnd:() -> Void = null, ?_onTypingSpeedUp:() -> Void = null) {
 		super();
 
 		dialogMap = _dialogMap;
@@ -57,13 +57,13 @@ class DialogManager extends FlxBasic {
 		// Position the text to be roughly centered toward the top of the screen
 
 		opts = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
-		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width-40, 200), "", opts, 24);
+		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 200), "", opts, 24);
 		typeText.scrollFactor.set(0, 0);
 		typeText.cameras = [_camera];
 		_parentState.add(typeText);
 	}
 
-	public function loadDialog(id:String){
+	public function loadDialog(id:String) {
 		if (dialogMap[id] == null) {
 			trace("id (" + id + ") not found in dialog map");
 			return;
@@ -111,7 +111,7 @@ class DialogManager extends FlxBasic {
 		typeText.finishCallback = () -> {
 			typing = false;
 
-			if (onTypingEnd != null){
+			if (onTypingEnd != null) {
 				onTypingEnd();
 			}
 
@@ -126,7 +126,7 @@ class DialogManager extends FlxBasic {
 			}, NextPageInputDelayMs);
 		};
 
-		if (onTypingBegin != null){
+		if (onTypingBegin != null) {
 			onTypingBegin();
 		}
 	}
@@ -154,11 +154,11 @@ class DialogManager extends FlxBasic {
 		super.update(delta);
 
 		// Update loop exclusively handles user input
-		if(progressionKey != FlxKey.NONE){
-			if (typing && !fastTyping && FlxG.keys.anyJustPressed([progressionKey])){
+		if (progressionKey != FlxKey.NONE) {
+			if (typing && !fastTyping && FlxG.keys.anyJustPressed([progressionKey])) {
 				fastTyping = true;
 				opts.charsPerSecond *= 2;
-				if (onTypingSpeedUp != null){
+				if (onTypingSpeedUp != null) {
 					onTypingSpeedUp();
 				}
 			}

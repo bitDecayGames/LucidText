@@ -27,14 +27,12 @@ class TypeEffectsState extends FlxState {
 			options, 24);
 		add(speedTxt);
 
-		var pauseText = new TypingGroup(FlxRect.get(50, 250, 400, 120),
-			"Pauses<pause /> can also be added<pause /> for dramatic<pause /> impact",
-			options, 24);
+		var pauseText = new TypingGroup(FlxRect.get(50, 250, 400, 120), "Pauses<pause /> can also be added<pause /> for dramatic<pause /> impact", options,
+			24);
 
 		speedTxt.finishCallback = () -> {
 			add(pauseText);
 		}
-
 
 		var button = new FlxButton(0, 0, "Back");
 		button.onUp.callback = function() {
