@@ -22,7 +22,7 @@ class TypeWindowState extends FlxState {
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 
 		var txt = new TypingGroup(FlxRect.get(50, 50, 400, 120),
-			"Welcome to <wave speed=10>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
+			"Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
 			options);
 		add(txt);
 

@@ -10,25 +10,38 @@ import com.bitdecay.lucidtext.properties.Setters;
  * Adds shake to the affected characters
  */
 class Shake implements Effect {
-	public var size:Float = 5;
+	public var dist:Float = 3;
+	public var perSec:Int = 30;
 
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropSetterFunc> {
-		return ["size" => Setters.setFloat,];
+		return [
+			"dist" => Setters.setFloat,
+			"perSec" => Setters.setInt,
+		];
 	}
 
 	public function apply(o:FlxText, i:Int):EffectUpdater {
 		var offset = FlxPoint.get();
 		var tempPosition = FlxPoint.get();
+
+		var localDelay = 1 / Math.max(1, perSec);
+		var timer = 0.0;
 		return (delta:Float) -> {
+			timer -= delta;
+			if (timer > 0) {
+				return true;
+			}
+
+			timer += localDelay;
 			o.getPosition(tempPosition);
 
 			// undo our previous offset;
 			tempPosition.subtractPoint(offset);
 
 			// then calculate our new offset and add it to the working temp position
-			offset.set(FlxG.random.float(0, size), 0);
+			offset.set(FlxG.random.float(0, dist), 0);
 			offset.rotate(FlxPoint.weak(), FlxG.random.int(0, 360));
 			tempPosition.addPoint(offset);
 

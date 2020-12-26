@@ -21,12 +21,12 @@ class EffectExamplesState extends FlxState {
 
 		FlxG.autoPause = false;
 
-		makeExampleTest("<scrub>Scrub</scrub>");
-		makeExampleTest("<wave>Wave</wave>");
-		makeExampleTest("<color c=0xFF4400>Color</color>");
-		makeExampleTest("<shake>Shake</shake>");
-		makeExampleTest("<smaller>Smaller</smaller>");
-		makeExampleTest("<bigger>Bigger</bigger>");
+		makeExampleTest("<scrub>Scrub Effect</scrub>");
+		makeExampleTest("<wave>Wave Effect</wave>");
+		makeExampleTest("<color rgb=0xAA2222>Color</color> <color rgb=0x222288>Effect</color>");
+		makeExampleTest("<shake>Shake Effect</shake>");
+		makeExampleTest("Text of <smaller>smaller</smaller> size");
+		makeExampleTest("Text of <bigger>bigger</bigger> size");
 
 		var button = new FlxButton(0, 0, "Back");
 		button.onUp.callback = function() {

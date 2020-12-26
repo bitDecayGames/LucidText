@@ -11,16 +11,16 @@ import com.bitdecay.lucidtext.properties.Setters;
  * in the hexidecimal form 0xRRGGBB
 **/
 class Color implements Effect {
-	public var c:Int;
+	public var rgb:Int;
 
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropSetterFunc> {
-		return ["c" => Setters.setInt];
+		return ["rgb" => Setters.setInt];
 	}
 
 	public function apply(o:FlxText, i:Int):EffectUpdater {
-		o.color = c;
+		o.color = rgb;
 		return null;
 	}
 
