@@ -8,6 +8,7 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 * [Tagging](#tagging)
 * [Custom Tags](#custom-tags)
 * [Testing](#testing)
+* [Formatting](#formatting)
 
 ### Design Principals
 
@@ -71,3 +72,17 @@ From the `test/` directory, simply run `lime test neko` and the tests will be ex
 
 Tests should be put into a class that groups relevant tests together. If these tests are added to a new class, it must be added to the `TestSuite.hx` for it to be seen and run by MUnit.
 * In `TestSuite.hx`, add a new line to add a class to the test suite with `add(<Class with tests>);`
+
+### Formatting
+
+This project uses the `formatter` library ([this repo](https://github.com/HaxeCheckstyle/haxe-formatter)) for all formatting.
+
+To install the formatter, run:
+```
+haxelib install formatter
+```
+
+To format the source code, run:
+```
+haxelib run formatter -s source/
+```
