@@ -1,5 +1,7 @@
 package com.bitdecay.lucidtext;
 
+import flixel.util.FlxArrayUtil;
+import flixel.text.FlxText;
 import openfl.geom.Rectangle;
 import flixel.addons.ui.FlxUI9SliceSprite;
 import com.bitdecay.lucidtext.parse.Regex;
@@ -24,24 +26,30 @@ class TypingGroup extends TextGroup {
 	public var wordCallback:() -> Void;
 	public var finishCallback:() -> Void;
 
-	public function new(box:FlxRect, text:String, ops:TypeOptions) {
+	public function new(box:FlxRect, text:String, ops:TypeOptions, fontSize:Int) {
 		options = ops;
-		super(box.left, box.top, text, options.fontSize);
-
 		bounds = box;
+		super(box.left, box.top, text, fontSize);
+	}
+
+	override public function loadText(text:String) {
+		super.loadText(text);
+		position = 0;
+		elapsed = 0;
+		FlxArrayUtil.clearArray(wordStarts);
 
 		if (options.slice9 != null) {
 			var window9Slice = new FlxUI9SliceSprite(0, 0, AssetPaths.slice__png, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
-			window9Slice.resize(box.width, box.height);
+			window9Slice.resize(bounds.width, bounds.height);
 			window = window9Slice;
 		} else {
 			window = new FlxSprite(options.windowAsset);
 		}
 
-		for (m in members) {
-			m.visible = false;
-			m.y += options.margins;
-			m.x += options.margins;
+		for (c in allChars) {
+			c.visible = false;
+			c.y += options.margins;
+			c.x += options.margins;
 		}
 
 		organizeTextToRect();
@@ -63,24 +71,24 @@ class TypingGroup extends TextGroup {
 
 		for (start in wordStarts) {
 			for (k in start...start + wordLengths[start]) {
-				if (members[k].x + members[k].width > bounds.right - options.margins) {
-					shuffleMembersNextRow(start);
+				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
+					shuffleCharactersToNextRow(start);
 					break;
 				}
 			}
 		}
 	}
 
-	private function shuffleMembersNextRow(begin:Int) {
+	private function shuffleCharactersToNextRow(begin:Int) {
 		var xCoord = x + options.margins;
 		// this likely isn't a great value to use, we want the "base" line size for the font
 		// Namely, if  line break happens on a 'bigger' or 'smaller' character, this value
 		// is not correct.
-		var yCoordOffset = members[begin].height;
-		for (i in begin...members.length) {
-			members[i].x = xCoord;
-			members[i].y += yCoordOffset;
-			xCoord += members[i].width + TextGroup.spacingMod;
+		var yCoordOffset = allChars[begin].height;
+		for (i in begin...allChars.length) {
+			allChars[i].x = xCoord;
+			allChars[i].y += yCoordOffset;
+			xCoord += allChars[i].width + TextGroup.spacingMod;
 		}
 	}
 
@@ -99,9 +107,9 @@ class TypingGroup extends TextGroup {
 		}
 
 		elapsed += delta;
-		while (elapsed > calcedTimePerChar && position < members.length) {
+		while (elapsed > calcedTimePerChar && position < allChars.length) {
 			elapsed -= calcedTimePerChar;
-			members[position].visible = true;
+			allChars[position].visible = true;
 			position++;
 
 			// TODO: This should be done via map accesses instead of looping
@@ -126,7 +134,7 @@ class TypingGroup extends TextGroup {
 			}
 		}
 
-		if (position == members.length) {
+		if (position == allChars.length) {
 			position++;
 			if (finishCallback != null) {
 				finishCallback();

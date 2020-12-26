@@ -23,11 +23,11 @@ class TypeWindowState extends FlxState {
 
 		var txt = new TypingGroup(FlxRect.get(50, 50, 400, 120),
 			"Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
-			options);
+			options, 24);
 		add(txt);
 
 		var secondTxt = new TypingGroup(FlxRect.get(50, 200, 250, 250),
-			"A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system", options);
+			"A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system", options, 24);
 
 		var letterSound = FlxG.sound.load(AssetPaths.letter_blip__wav);
 		letterSound.volume = 0.05;

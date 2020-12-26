@@ -24,12 +24,12 @@ class TypeEffectsState extends FlxState {
 
 		var speedTxt = new TypingGroup(FlxRect.get(50, 50, 400, 150),
 			"Text speed can be modified dynamically <faster>either to be typed at a much faster rate,</faster> <speed mod=10>(as fast as anybody could need)</speed> or <slower>to be typed slower</slower> <speed mod=0.25>(sluggish, even).</speed>",
-			options);
+			options, 24);
 		add(speedTxt);
 
 		var pauseText = new TypingGroup(FlxRect.get(50, 250, 400, 120),
 			"Pauses<pause /> can also be added<pause /> for dramatic<pause /> impact",
-			options);
+			options, 24);
 
 		speedTxt.finishCallback = () -> {
 			add(pauseText);

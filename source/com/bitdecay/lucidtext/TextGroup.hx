@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext;
 
+import flixel.util.FlxArrayUtil;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
@@ -19,14 +20,27 @@ class TextGroup extends FlxSpriteGroup {
 	var parser:Parser;
 
 	private var activeEffects:Array<EffectUpdater> = new Array<EffectUpdater>();
+	var allChars:Array<FlxText>;
 
 	var rawText:String;
 	var renderText:String;
 
+	var fontSize:Int;
+
 	var effectUpdateSuccess:Bool = true;
 
-	public function new(?X:Float, ?Y:Float, text:String, size:Int = 24) {
-		super(X, Y, text.length);
+	public function new(?X:Float, ?Y:Float, text:String, fontSize:Int) {
+		super(X, Y);
+		this.fontSize = fontSize;
+
+		allChars = new Array<FlxText>();
+		loadText(text);
+	}
+
+	public function loadText(text:String) {
+		// TODO: Do we have to worry about this? Likely better to have a pool instead of a complete refresh
+		clear();
+		FlxArrayUtil.clearArray(allChars);
 
 		rawText = text;
 
@@ -37,12 +51,12 @@ class TextGroup extends FlxSpriteGroup {
 		var x = 0.0;
 		for (i in 0...renderText.length) {
 			if (textMakerFunc == null) {
-				textMakerFunc = (text, x, y, size) -> {
-					return new FlxText(x, y, text, size);
+				textMakerFunc = (text, x, y, fontSize) -> {
+					return new FlxText(x, y, text, fontSize);
 				}
 			}
 
-			var letter = textMakerFunc(renderText.charAt(i), x, 0, size);
+			var letter = textMakerFunc(renderText.charAt(i), x, 0, fontSize);
 			// autoSize is why all the alignment works, so we need this enabled for this lib to work
 			letter.autoSize = true;
 
@@ -61,6 +75,7 @@ class TextGroup extends FlxSpriteGroup {
 			// Adjust spacing only after all effects are applied
 			x += letter.width + spacingMod;
 
+			allChars.push(letter);
 			add(letter);
 		}
 	}
