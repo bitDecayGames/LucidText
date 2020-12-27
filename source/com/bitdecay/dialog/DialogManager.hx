@@ -28,8 +28,8 @@ class DialogManager extends FlxBasic {
 	public var typeText:TypingGroup;
 	public var opts:TypeOptions;
 
-	var pages:Array<String>;
-	var currentPage:Int = 0;
+	var textItems:Array<String>;
+	var currentIndex:Int = 0;
 	var typing:Bool;
 	var fastTyping:Bool = false;
 	var canManuallyTriggerNextPage:Bool;
@@ -57,7 +57,7 @@ class DialogManager extends FlxBasic {
 		// Position the text to be roughly centered toward the top of the screen
 
 		opts = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
-		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 200), "", opts, 24);
+		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100), "", opts, 24);
 		typeText.scrollFactor.set(0, 0);
 		typeText.cameras = [_camera];
 		_parentState.add(typeText);
@@ -68,33 +68,9 @@ class DialogManager extends FlxBasic {
 			trace("id (" + id + ") not found in dialog map");
 			return;
 		}
-		pages = parseTextIntoPages(dialogMap[id].copy());
-		startTyping(pages[0]);
+		textItems = dialogMap[id].copy();
+		startTyping(textItems[0]);
 		currentDialogId = id;
-	}
-
-	private function parseTextIntoPages(_textList:Array<String>):Array<String> {
-		// TODO: This needs to take tags into account to avoid page breaks in weird places
-		// var pageArray = new Array<String>();
-		// var currentPageBuffer:StringBuf;
-
-		// for(text in _textList){
-		// 	currentPageBuffer = new StringBuf();
-		// 	for (i in 0...text.length) {
-		// 		if (i % CharactersPerTextBox == 0 && i != 0){
-		// 			pageArray.push(currentPageBuffer.toString());
-		// 			currentPageBuffer = new StringBuf();
-		// 		}
-		// 		currentPageBuffer.add(text.charAt(i));
-
-		// 		if (i == text.length-1){
-		// 			pageArray.push(currentPageBuffer.toString());
-		// 		}
-		// 	}
-		// }
-
-		// return pageArray;
-		return _textList;
 	}
 
 	public function startTyping(text:String):Void {
@@ -107,6 +83,8 @@ class DialogManager extends FlxBasic {
 		autoProgressTimer.stop();
 		manuallyProgressTimer.stop();
 
+		typeText.pageCallback = () -> {};
+
 		// Set onComplete function in-line
 		typeText.finishCallback = () -> {
 			typing = false;
@@ -117,7 +95,7 @@ class DialogManager extends FlxBasic {
 
 			// After NextPageDelayMs, the next page of text will be loaded
 			autoProgressTimer = Timer.delay(() -> {
-				continueToNextPage();
+				continueToNextItem();
 			}, NextPageDelayMs);
 
 			// After NextPageInputDelayMs, the user can press a button to continue to the next page instead of waiting
@@ -131,13 +109,13 @@ class DialogManager extends FlxBasic {
 		}
 	}
 
-	public function continueToNextPage():Void {
-		currentPage++;
+	public function continueToNextItem():Void {
+		currentIndex++;
 		// When there is no more text to display, transition to completed state
-		if (currentPage >= pages.length) {
+		if (currentIndex >= textItems.length) {
 			completeDialog();
 		} else {
-			startTyping(pages[currentPage]);
+			startTyping(textItems[currentIndex]);
 		}
 	}
 
@@ -153,18 +131,20 @@ class DialogManager extends FlxBasic {
 	override public function update(delta:Float):Void {
 		super.update(delta);
 
+		if (typeText.waitingForConfirm) {}
+
 		// Update loop exclusively handles user input
 		if (progressionKey != FlxKey.NONE) {
 			if (typing && !fastTyping && FlxG.keys.anyJustPressed([progressionKey])) {
 				fastTyping = true;
-				opts.charsPerSecond *= 2;
+				opts.modOps.charsPerSecond *= 2;
 				if (onTypingSpeedUp != null) {
 					onTypingSpeedUp();
 				}
 			}
 
 			if (canManuallyTriggerNextPage && FlxG.keys.anyJustPressed([progressionKey])) {
-				continueToNextPage();
+				continueToNextItem();
 			}
 		}
 	}

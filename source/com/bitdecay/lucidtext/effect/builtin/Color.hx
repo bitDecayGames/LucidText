@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
+import com.bitdecay.lucidtext.ModifiableOptions;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters;
@@ -24,7 +25,7 @@ class Color implements Effect {
 		return null;
 	}
 
-	public function begin(ops:TypeOptions) {}
+	public function begin(ops:ModifiableOptions) {}
 
-	public function end(ops:TypeOptions) {}
+	public function end(ops:ModifiableOptions) {}
 }

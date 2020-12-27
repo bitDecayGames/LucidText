@@ -22,12 +22,12 @@ class Speed implements Effect {
 		return null;
 	}
 
-	public function begin(ops:TypeOptions) {
+	public function begin(ops:ModifiableOptions) {
 		restoreSpeed = ops.charsPerSecond;
 		ops.charsPerSecond *= mod;
 	}
 
-	public function end(ops:TypeOptions) {
+	public function end(ops:ModifiableOptions) {
 		ops.charsPerSecond = restoreSpeed;
 	}
 }

@@ -52,7 +52,7 @@ class Shake implements Effect {
 		};
 	}
 
-	public function begin(ops:TypeOptions) {}
+	public function begin(ops:ModifiableOptions) {}
 
-	public function end(ops:TypeOptions) {}
+	public function end(ops:ModifiableOptions) {}
 }

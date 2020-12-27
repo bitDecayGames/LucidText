@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext;
 
+import flixel.util.FlxPool;
 import flixel.util.FlxArrayUtil;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.text.FlxText;
@@ -40,7 +41,9 @@ class TextGroup extends FlxSpriteGroup {
 	public function loadText(text:String) {
 		// TODO: Do we have to worry about this? Likely better to have a pool instead of a complete refresh
 		clear();
-		FlxArrayUtil.clearArray(allChars);
+		while (allChars.length > 0) {
+			allChars.pop();
+		}
 
 		rawText = text;
 

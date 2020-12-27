@@ -1,11 +1,10 @@
 package com.bitdecay.lucidtext;
 
-import flixel.util.FlxArrayUtil;
 import flixel.text.FlxText;
+import flixel.FlxG;
 import openfl.geom.Rectangle;
 import flixel.addons.ui.FlxUI9SliceSprite;
 import com.bitdecay.lucidtext.parse.Regex;
-import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
 
@@ -18,17 +17,38 @@ class TypingGroup extends TextGroup {
 
 	var bounds:FlxRect;
 	var window:FlxSprite;
+	var nextPageIcon:FlxSprite;
+
+	var pageBreaks:Array<Int>;
 
 	var wordStarts:Array<Int> = [];
 	var wordLengths:Map<Int, Int> = [];
 
+	/**
+	 * Called each time a character is made visible
+	**/
 	public var letterCallback:() -> Void;
+
+	/**
+	 * Called each time the first character of a 'word' is made visible
+	**/
 	public var wordCallback:() -> Void;
+
+	public var pageCallback:() -> Void;
+
+	/**
+	 * Called when the text has finished being made visible
+	**/
 	public var finishCallback:() -> Void;
+
+	// Status variables, accessible from outside
+	public var waitingForConfirm(default, null):Bool = false;
+	public var finished(default, null):Bool = false;
 
 	public function new(box:FlxRect, text:String, ops:TypeOptions, fontSize:Int) {
 		options = ops;
 		bounds = box;
+		pageBreaks = [];
 		super(box.left, box.top, text, fontSize);
 	}
 
@@ -36,7 +56,13 @@ class TypingGroup extends TextGroup {
 		super.loadText(text);
 		position = 0;
 		elapsed = 0;
-		FlxArrayUtil.clearArray(wordStarts);
+		finished = false;
+		while (wordStarts.length > 0) {
+			wordStarts.pop();
+		}
+		while (pageBreaks.length > 0) {
+			pageBreaks.pop();
+		}
 
 		if (options.slice9 != null) {
 			var window9Slice = new FlxUI9SliceSprite(0, 0, AssetPaths.slice__png, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
@@ -52,16 +78,23 @@ class TypingGroup extends TextGroup {
 			c.x += options.margins;
 		}
 
-		organizeTextToRect();
+		buildPages();
 
 		// We want the preAdd stuff of the FlxSpriteGroup...
 		add(window);
 		// ...but we also want the backing to be at index zero
 		members.remove(window);
 		members.insert(0, window);
+
+		if (options.nextIconMaker != null) {
+			nextPageIcon = options.nextIconMaker();
+			add(nextPageIcon);
+			nextPageIcon.setPosition(bounds.right - 40, bounds.bottom - 40);
+			nextPageIcon.visible = false;
+		}
 	}
 
-	private function organizeTextToRect() {
+	private function buildPages() {
 		var wordMatcher = new EReg(Regex.WORD_REGEX, Regex.GLOBAL_MODE);
 		wordMatcher.map(renderText, (m) -> {
 			wordStarts.push(m.matchedPos().pos);
@@ -73,6 +106,13 @@ class TypingGroup extends TextGroup {
 			for (k in start...start + wordLengths[start]) {
 				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
 					shuffleCharactersToNextRow(start);
+					if (allChars[start].y + allChars[start].height > bounds.bottom - options.margins) {
+						// start new page
+						pageBreaks.push(start);
+						for (n in start...allChars.length) {
+							allChars[n].y = bounds.top + options.margins;
+						}
+					}
 					break;
 				}
 			}
@@ -88,7 +128,20 @@ class TypingGroup extends TextGroup {
 		for (i in begin...allChars.length) {
 			allChars[i].x = xCoord;
 			allChars[i].y += yCoordOffset;
+
 			xCoord += allChars[i].width + TextGroup.spacingMod;
+		}
+	}
+
+	private function checkForPageBreak() {
+		// TODO: Can optimize this so we only check the next known pageBreak mark
+		for (pageMark in pageBreaks) {
+			if (position == pageMark && !waitingForConfirm) {
+				waitingForConfirm = true;
+				if (nextPageIcon != null) {
+					nextPageIcon.visible = true;
+				}
+			}
 		}
 	}
 
@@ -100,26 +153,55 @@ class TypingGroup extends TextGroup {
 			return;
 		}
 
-		if (options.charsPerSecond <= 0) {
-			calcedTimePerChar = 0;
-		} else {
-			calcedTimePerChar = 1 / options.charsPerSecond;
+		calcedTimePerChar = options.getTimePerCharacter();
+
+		checkForPageBreak();
+
+		if (waitingForConfirm) {
+			if (options.checkPageConfirm(delta)) {
+				waitingForConfirm = false;
+				nextPageIcon.visible = false;
+				for (i in 0...position) {
+					// clear out previous characters
+					allChars[i].visible = false;
+				}
+				elapsed = calcedTimePerChar - delta;
+			} else {
+				return;
+			}
+		}
+
+		// TODO: Need to figure out how to add a final "pageBreak" at the end of all characters so we can
+		//       handle ending the type
+		if (position == allChars.length) {
+			position++;
+			visible = false;
+			finished = true;
+			if (finishCallback != null) {
+				finishCallback();
+			}
 		}
 
 		elapsed += delta;
-		while (elapsed > calcedTimePerChar && position < allChars.length) {
+		while (elapsed >= calcedTimePerChar && position < allChars.length) {
 			elapsed -= calcedTimePerChar;
 			allChars[position].visible = true;
 			position++;
+			if (position == allChars.length) {
+				waitingForConfirm = true;
+				if (nextPageIcon != null) {
+					nextPageIcon.visible = true;
+				}
+			}
 
 			// TODO: This should be done via map accesses instead of looping
 			for (fxRange in parser.effects) {
 				if (fxRange.startIndex == position - 1) {
-					fxRange.effect.begin(options);
+					fxRange.effect.begin(options.modOps);
 				}
 
 				if (fxRange.endIndex == position - 1) {
-					fxRange.effect.end(options);
+					fxRange.effect.end(options.modOps);
 				}
 			}
 
@@ -131,13 +213,6 @@ class TypingGroup extends TextGroup {
 				if (wordCallback != null) {
 					wordCallback();
 				}
-			}
-		}
-
-		if (position == allChars.length) {
-			position++;
-			if (finishCallback != null) {
-				finishCallback();
 			}
 		}
 	}

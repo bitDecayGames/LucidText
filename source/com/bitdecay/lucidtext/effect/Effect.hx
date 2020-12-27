@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.effect;
 
+import com.bitdecay.lucidtext.ModifiableOptions;
 import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters.PropSetterFunc;
 
@@ -34,6 +35,6 @@ interface Effect {
 	 */
 	public function apply(o:FlxText, i:Int):EffectUpdater;
 
-	public function begin(ops:TypeOptions):Void;
-	public function end(ops:TypeOptions):Void;
+	public function begin(ops:ModifiableOptions):Void;
+	public function end(ops:ModifiableOptions):Void;
 }

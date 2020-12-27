@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.input.keyboard.FlxKey;
 import com.bitdecay.lucidtext.TypeOptions;
 import flixel.math.FlxRect;
@@ -31,18 +32,30 @@ class PlayState extends FlxState {
 			]
 		];
 
-		var dialogMgr = new DialogManager(textMap, this, camera, FlxKey.SPACE);
-		add(dialogMgr);
+		// var dialogMgr = new DialogManager(textMap, this, camera, FlxKey.SPACE);
+		// add(dialogMgr);
 
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		options.nextIconMaker = () -> {
+			var nextPageIcon = new FlxSprite();
+			nextPageIcon.loadGraphic(AssetPaths.nextPage__png, true, 32, 32);
+			nextPageIcon.animation.add("play", [0, 1, 2, 3, 4, 1], 10);
+			nextPageIcon.animation.play("play");
+			return nextPageIcon;
+		};
+		options.checkPageConfirm = (delta) -> {
+			return FlxG.keys.justPressed.SPACE;
+		}
 
-		dialogMgr.loadDialog("first");
+		// dialogMgr.loadDialog("first");
 
-		// var text = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 200), "things will automatically be broken up and fitted to the provided text box (which is pretty cool, honestly)", options, 24);
-		// add(text);
+		helloText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100),
+			"things will automatically be broken up and fitted to the provided text box (which is pretty cool, honestly)", options, 24);
+		add(helloText);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+		FlxG.watch.addQuick("helloText Finished:", helloText.finished);
 	}
 }
