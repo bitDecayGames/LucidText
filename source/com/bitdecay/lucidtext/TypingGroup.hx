@@ -160,7 +160,9 @@ class TypingGroup extends TextGroup {
 		if (waitingForConfirm) {
 			if (options.checkPageConfirm(delta)) {
 				waitingForConfirm = false;
-				nextPageIcon.visible = false;
+				if (nextPageIcon != null) {
+					nextPageIcon.visible = false;
+				}
 				for (i in 0...position) {
 					// clear out previous characters
 					allChars[i].visible = false;
@@ -175,7 +177,7 @@ class TypingGroup extends TextGroup {
 		//       handle ending the type
 		if (position == allChars.length) {
 			position++;
-			visible = false;
+			// visible = false;
 			finished = true;
 			if (finishCallback != null) {
 				finishCallback();
@@ -196,11 +198,11 @@ class TypingGroup extends TextGroup {
 
 			// TODO: This should be done via map accesses instead of looping
 			for (fxRange in parser.effects) {
-				if (fxRange.startIndex == position - 1) {
+				if (fxRange.startIndex == position) {
 					fxRange.effect.begin(options.modOps);
 				}
 
-				if (fxRange.endIndex == position - 1) {
+				if (fxRange.endIndex == position) {
 					fxRange.effect.end(options.modOps);
 				}
 			}
