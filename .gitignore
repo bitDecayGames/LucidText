@@ -1,3 +1,9 @@
+# Build files
 export/
-test/bin/
+
+# Test output
 report/
+test/bin/
+
+# Directory for files generated from the VSCode Counter plugin
+.VSCodeCounter/
