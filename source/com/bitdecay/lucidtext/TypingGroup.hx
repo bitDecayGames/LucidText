@@ -102,16 +102,19 @@ class TypingGroup extends TextGroup {
 			return m.matched(0);
 		});
 
+		var yRowModTotal = 0.0;
 		for (start in wordStarts) {
 			for (k in start...start + wordLengths[start]) {
 				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
-					shuffleCharactersToNextRow(start);
+					yRowModTotal += shuffleCharactersToNextRow(start);
 					if (allChars[start].y + allChars[start].height > bounds.bottom - options.margins) {
 						// start new page
 						pageBreaks.push(start);
 						for (n in start...allChars.length) {
-							allChars[n].y = bounds.top + options.margins;
+							// reset any y we've added to bring things back to the top
+							allChars[n].y -= yRowModTotal;
 						}
+						yRowModTotal = 0.0;
 					}
 					break;
 				}
@@ -131,6 +134,7 @@ class TypingGroup extends TextGroup {
 
 			xCoord += allChars[i].width + TextGroup.spacingMod;
 		}
+		return yCoordOffset;
 	}
 
 	private function checkForPageBreak() {
@@ -148,6 +152,10 @@ class TypingGroup extends TextGroup {
 	override public function update(delta:Float) {
 		super.update(delta);
 
+		if (finished) {
+			return;
+		}
+
 		if (!effectUpdateSuccess) {
 			// wait till all effects are success before continuing
 			return;
@@ -162,6 +170,11 @@ class TypingGroup extends TextGroup {
 				waitingForConfirm = false;
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = false;
+				}
+				if (position == allChars.length) {
+					// no addition work if we are at the end of the string
+					// just leave things how they are
+					return;
 				}
 				for (i in 0...position) {
 					// clear out previous characters
@@ -182,6 +195,7 @@ class TypingGroup extends TextGroup {
 			if (finishCallback != null) {
 				finishCallback();
 			}
+			return;
 		}
 
 		elapsed += delta;
