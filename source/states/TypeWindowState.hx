@@ -1,5 +1,6 @@
 package states;
 
+import haxe.Timer;
 import flixel.FlxSprite;
 import com.bitdecay.lucidtext.TypeOptions;
 import flixel.math.FlxRect;
@@ -60,8 +61,9 @@ class TypeWindowState extends FlxState {
 		txt.letterCallback = letterBeepCallback;
 		txt.wordCallback = wordBeepCallback;
 		txt.finishCallback = () -> {
-			// add our 'response' text to the state
-			add(secondTxt);
+			Timer.delay(() -> {
+				add(secondTxt);
+			}, 500);
 		}
 
 		secondTxt.letterCallback = letterBeepCallback;
@@ -73,9 +75,5 @@ class TypeWindowState extends FlxState {
 		};
 		button.y = FlxG.height - button.height;
 		add(button);
-	}
-
-	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
 	}
 }

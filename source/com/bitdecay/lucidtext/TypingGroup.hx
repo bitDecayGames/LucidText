@@ -1,7 +1,5 @@
 package com.bitdecay.lucidtext;
 
-import flixel.text.FlxText;
-import flixel.FlxG;
 import openfl.geom.Rectangle;
 import flixel.addons.ui.FlxUI9SliceSprite;
 import com.bitdecay.lucidtext.parse.Regex;
@@ -192,7 +190,8 @@ class TypingGroup extends TextGroup {
 			elapsed -= calcedTimePerChar;
 			allChars[position].visible = true;
 
-			if (letterCallback != null) {
+			// TODO: Is this trim a performance concern?
+			if (StringTools.trim(allChars[position].text) != "" && letterCallback != null) {
 				letterCallback();
 			}
 

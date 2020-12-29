@@ -41,8 +41,4 @@ class TypeEffectsState extends FlxState {
 		button.y = FlxG.height - button.height;
 		add(button);
 	}
-
-	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
-	}
 }
