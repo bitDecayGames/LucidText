@@ -23,7 +23,7 @@ class TypeEffectsState extends FlxState {
 		options.modOps.charsPerSecond = 10;
 
 		var speedTxt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height/2 - 40),
-			"Text speed can be modified dynamically <faster>either to be typed at a much faster rate,</faster> <speed mod=10>(as fast as anybody could need)</speed> or <slower>to be typed slower</slower> <speed mod=0.25>(sluggish, even).</speed>",
+			"Text speed can be modified dynamically <faster>either to be typed at a much faster rate</faster> <speed mod=10>(as fast as anybody could need),</speed> or <slower>to be typed slower</slower> <speed mod=0.25>(sluggish, even).</speed>",
 			options, 24);
 		add(speedTxt);
 

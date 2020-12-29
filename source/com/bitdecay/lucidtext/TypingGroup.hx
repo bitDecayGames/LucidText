@@ -174,6 +174,7 @@ class TypingGroup extends TextGroup {
 				if (position == allChars.length) {
 					// no addition work if we are at the end of the string
 					// just leave things how they are
+					finished = true;
 					return;
 				}
 				for (i in 0...position) {
@@ -186,27 +187,18 @@ class TypingGroup extends TextGroup {
 			}
 		}
 
-		// TODO: Need to figure out how to add a final "pageBreak" at the end of all characters so we can
-		//       handle ending the type
-		if (position == allChars.length) {
-			position++;
-			// visible = false;
-			finished = true;
-			if (finishCallback != null) {
-				finishCallback();
-			}
-			return;
-		}
-
 		elapsed += delta;
 		while (elapsed >= calcedTimePerChar && position < allChars.length) {
 			elapsed -= calcedTimePerChar;
 			allChars[position].visible = true;
-			position++;
-			if (position == allChars.length) {
-				waitingForConfirm = true;
-				if (nextPageIcon != null) {
-					nextPageIcon.visible = true;
+
+			if (letterCallback != null) {
+				letterCallback();
+			}
+
+			if (wordLengths.exists(position)) {
+				if (wordCallback != null) {
+					wordCallback();
 				}
 			}
 
@@ -215,19 +207,24 @@ class TypingGroup extends TextGroup {
 				if (fxRange.startIndex == position) {
 					fxRange.effect.begin(options.modOps);
 				}
+			}
 
-				if (fxRange.endIndex == position) {
+			position++;
+
+			// TODO: This should be done via map accesses instead of looping
+			for (fxRange in parser.effects) {
+				if (fxRange.endIndex == position + 1) {
 					fxRange.effect.end(options.modOps);
 				}
 			}
 
-			if (letterCallback != null) {
-				letterCallback();
-			}
-			// our border image is our 0th position, so sub one to get proper string index
-			if (wordLengths.exists(position - 1)) {
-				if (wordCallback != null) {
-					wordCallback();
+			if (position == allChars.length) {
+				waitingForConfirm = true;
+				if (nextPageIcon != null) {
+					nextPageIcon.visible = true;
+				}
+				if (finishCallback != null) {
+					finishCallback();
 				}
 			}
 		}
