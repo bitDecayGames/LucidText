@@ -8,7 +8,7 @@ import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
 class EffectExamplesState extends FlxState {
-	var yCoord = 100.0;
+	var yCoord = 0.0;
 	var spacingBuffer = 20;
 
 	override public function create():Void {
@@ -23,10 +23,11 @@ class EffectExamplesState extends FlxState {
 
 		makeExampleTest("<scrub>Scrub Effect</scrub>");
 		makeExampleTest("<wave>Wave Effect</wave>");
-		makeExampleTest("<color rgb=0xAA2222>Color</color> <color rgb=0x222288>Effect</color>");
+		makeExampleTest("<color rgb=0xAA2222>Colored</color> <color rgb=0x222288>Text</color>");
 		makeExampleTest("<shake>Shake Effect</shake>");
-		makeExampleTest("Text of <smaller>smaller</smaller> size");
-		makeExampleTest("Text of <bigger>bigger</bigger> size");
+		makeExampleTest("Text of <smaller>smaller size</smaller>");
+		makeExampleTest("Text of <bigger>bigger size</bigger>");
+		makeExampleTest("<rainbow>Rainbow</rainbow> text");
 
 		var button = new FlxButton(0, 0, "Back");
 		button.onUp.callback = function() {

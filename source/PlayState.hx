@@ -50,7 +50,7 @@ class PlayState extends FlxState {
 		// dialogMgr.loadDialog("first");
 
 		helloText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100),
-			"things will automatically be broken up and fitted to the provided text box (which is pretty cool, honestly)", options, 24);
+			"<rainbow bright=0.9 offset=85 speed=0.5 reverse=true>things will automatically</rainbow> be broken up and fitted to the provided text box (which is pretty cool, honestly)", options, 24);
 		add(helloText);
 	}
 

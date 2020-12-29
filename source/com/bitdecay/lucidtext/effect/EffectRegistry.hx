@@ -2,6 +2,7 @@ package com.bitdecay.lucidtext.effect;
 
 import com.bitdecay.lucidtext.effect.builtin.Bigger;
 import com.bitdecay.lucidtext.effect.builtin.Color;
+import com.bitdecay.lucidtext.effect.builtin.Rainbow;
 import com.bitdecay.lucidtext.effect.builtin.Shake;
 import com.bitdecay.lucidtext.effect.builtin.Smaller;
 import com.bitdecay.lucidtext.effect.builtin.Scrub;
@@ -16,9 +17,9 @@ import com.bitdecay.lucidtext.effect.builtin.Pause;
  * Registry to hold all valid effects. New effects can be registered easily
 **/
 class EffectRegistry {
-	// TODO: Figure out how to get the formatter to not format this map
 	private static var registry:Map<String, () -> Effect> = [
 		"color" => () -> return new Color(),
+		"rainbow" => () -> return new Rainbow(),
 		"wave" => () -> return new Wave(),
 		"shake" => () -> return new Shake(),
 		"size" => () -> return new Size(),
