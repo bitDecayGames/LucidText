@@ -1,7 +1,7 @@
 package com.bitdecay.lucidtext.effect;
 
-import com.bitdecay.lucidtext.ModifiableOptions;
 import flixel.text.FlxText;
+import com.bitdecay.lucidtext.ModifiableOptions;
 import com.bitdecay.lucidtext.properties.Setters.PropSetterFunc;
 
 /**

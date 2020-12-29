@@ -1,10 +1,10 @@
 package com.bitdecay.lucidtext;
 
 import openfl.geom.Rectangle;
-import flixel.addons.ui.FlxUI9SliceSprite;
-import com.bitdecay.lucidtext.parse.Regex;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
+import flixel.addons.ui.FlxUI9SliceSprite;
+import com.bitdecay.lucidtext.parse.Regex;
 
 class TypingGroup extends TextGroup {
 	var options:TypeOptions;

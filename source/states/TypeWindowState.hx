@@ -1,16 +1,16 @@
 package states;
 
 import haxe.Timer;
+import flixel.FlxG;
+import flixel.FlxState;
 import flixel.FlxSprite;
-import com.bitdecay.lucidtext.TypeOptions;
 import flixel.math.FlxRect;
-import com.bitdecay.lucidtext.TypingGroup;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
-import flixel.FlxG;
-import misc.FlxTextFactory;
-import flixel.FlxState;
+import com.bitdecay.lucidtext.TypeOptions;
+import com.bitdecay.lucidtext.TypingGroup;
 import com.bitdecay.lucidtext.TextGroup;
+import misc.FlxTextFactory;
 
 class TypeWindowState extends FlxState {
 	override public function create():Void {
@@ -23,7 +23,7 @@ class TypeWindowState extends FlxState {
 
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 
-		var txt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height/2 - 40),
+		var txt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40),
 			"Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
 			options, 24);
 		add(txt);
@@ -41,7 +41,8 @@ class TypeWindowState extends FlxState {
 			return nextPageIcon;
 		};
 		var secondTxt = new TypingGroup(FlxRect.get(50, 200, 300, 250),
-			"Press <color rgb=0x3333FF>SPACE</color> when the arrow appears in the bottom right of this window to go to the next page. A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system.", secondOptions, 24);
+			"Press <color rgb=0x3333FF>SPACE</color> when the arrow appears in the bottom right of this window to go to the next page. A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system.",
+			secondOptions, 24);
 
 		var letterSound = FlxG.sound.load(AssetPaths.letter_blip__wav);
 		letterSound.volume = 0.05;

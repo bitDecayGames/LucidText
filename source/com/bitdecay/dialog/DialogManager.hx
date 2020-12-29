@@ -1,14 +1,14 @@
 package com.bitdecay.dialog;
 
-import com.bitdecay.lucidtext.TypeOptions;
-import flixel.math.FlxRect;
-import com.bitdecay.lucidtext.TypingGroup;
-import flixel.FlxBasic;
 import haxe.Timer;
 import flixel.FlxG;
+import flixel.FlxBasic;
 import flixel.FlxCamera;
-import flixel.input.keyboard.FlxKey;
 import flixel.FlxState;
+import flixel.math.FlxRect;
+import com.bitdecay.lucidtext.TypeOptions;
+import com.bitdecay.lucidtext.TypingGroup;
+import flixel.input.keyboard.FlxKey;
 
 class DialogManager extends FlxBasic {
 	static inline final FontSize = 10;

@@ -1,11 +1,9 @@
 package com.bitdecay.lucidtext;
 
-import flixel.util.FlxPool;
-import flixel.util.FlxArrayUtil;
-import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import flixel.text.FlxText;
 import flixel.group.FlxSpriteGroup;
 import com.bitdecay.lucidtext.parse.Parser;
+import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 
 /**
  * A group that holds all FlxText objects. This handles parsing the user

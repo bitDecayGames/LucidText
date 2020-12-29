@@ -1,8 +1,5 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
-import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
-import flixel.math.FlxPoint;
-import flixel.text.FlxText;
 import com.bitdecay.lucidtext.properties.Setters;
 
 /**
