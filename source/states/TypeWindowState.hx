@@ -54,7 +54,7 @@ class TypeWindowState extends FlxState {
 			letterSound.play();
 		}
 
-		var wordBeepCallback = () -> {
+		var wordBeepCallback = (word) -> {
 			wordSound.stop();
 			wordSound.play();
 		};

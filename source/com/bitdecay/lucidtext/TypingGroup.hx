@@ -30,7 +30,7 @@ class TypingGroup extends TextGroup {
 	/**
 	 * Called each time the first character of a 'word' is made visible
 	**/
-	public var wordCallback:() -> Void;
+	public var wordCallback:(word:String) -> Void;
 
 	public var pageCallback:() -> Void;
 
@@ -93,16 +93,28 @@ class TypingGroup extends TextGroup {
 	}
 
 	private function buildPages() {
-		var wordMatcher = new EReg(Regex.WORD_REGEX, Regex.GLOBAL_MODE);
-		wordMatcher.map(renderText, (m) -> {
-			wordStarts.push(m.matchedPos().pos);
-			wordLengths.set(m.matchedPos().pos, m.matchedPos().len);
+		// build things based on whole words (used for building pages)
+		var matcher = new EReg(Regex.WORD_REGEX, Regex.GLOBAL_MODE);
+		var continuousStarts:Array<Int> = [];
+		var continuousLengths:Map<Int, Int> = [];
+		matcher.map(renderText, (m) -> {
+			continuousStarts.push(m.matchedPos().pos);
+			continuousLengths.set(m.matchedPos().pos, m.matchedPos().len);
 			return m.matched(0);
 		});
 
+		var wordMatcher = new EReg(Regex.WORD_NO_PUNC_REGEX, Regex.GLOBAL_MODE);
+
 		var yRowModTotal = 0.0;
-		for (start in wordStarts) {
-			for (k in start...start + wordLengths[start]) {
+		for (start in continuousStarts) {
+			// match indivial words for nicer callback values
+			wordMatcher.map(renderText, (m) -> {
+				wordStarts.push(m.matchedPos().pos);
+				wordLengths.set(m.matchedPos().pos, m.matchedPos().len);
+				return m.matched(0);
+			});
+
+			for (k in start...start + continuousLengths[start]) {
 				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
 					yRowModTotal += shuffleCharactersToNextRow(start);
 					if (allChars[start].y + allChars[start].height > bounds.bottom - options.margins) {
@@ -197,7 +209,7 @@ class TypingGroup extends TextGroup {
 
 			if (wordLengths.exists(position)) {
 				if (wordCallback != null) {
-					wordCallback();
+					wordCallback(renderText.substr(position, wordLengths.get(position)));
 				}
 			}
 

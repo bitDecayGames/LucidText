@@ -21,8 +21,8 @@ class TextGroup extends FlxSpriteGroup {
 	private var activeEffects:Array<EffectUpdater> = new Array<EffectUpdater>();
 	var allChars:Array<FlxText>;
 
-	var rawText:String;
-	var renderText:String;
+	public var rawText(default, null):String;
+	public var renderText(default, null):String;
 
 	var fontSize:Int;
 

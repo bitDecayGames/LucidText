@@ -13,4 +13,6 @@ class Regex {
 	public static inline var TAG_REGEX = "<(\\/?)(\\w+)\\s?(.*?)\\s?(/?)>";
 
 	public static inline var WORD_REGEX = "\\S+";
+
+	public static inline var WORD_NO_PUNC_REGEX = "[A-Za-z-_]+";
 }
