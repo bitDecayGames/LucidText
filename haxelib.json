@@ -1,0 +1,15 @@
+{
+	"name": "lucidtext",
+	"url" : "https://github.com/bitDecayGames/LucidText",
+	"license": "MIT",
+	"tags": ["text"],
+	"description": "Flixel library providing flexible text display options",
+	"version": "0.1.0",
+	"classPath": "source/",
+	"releasenote": "Initial alpha",
+	"contributors": ["MondayHopscotch"],
+	"dependencies": {
+	  "flixel": "4.8.1"
+	},
+	"main": "Main"
+  }
