@@ -76,7 +76,7 @@ class Parser {
 			throw 'error parsing ${results.originalText}:${openTag.position}->${closeTag.position} - no registered effect with name \'${openTag.tag}\'';
 			return;
 		}
-		var fx = new EffectRange(openTag.position, closeTag.position, EffectRegistry.get(openTag.tag)());
+		var fx = new EffectRange(openTag.position, closeTag.position, fxMaker());
 
 		var defaults = EffectRegistry.getDefaults(openTag.tag);
 		if (defaults != null) {

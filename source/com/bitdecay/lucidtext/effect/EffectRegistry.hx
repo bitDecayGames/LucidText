@@ -13,11 +13,12 @@ import com.bitdecay.lucidtext.effect.builtin.Faster;
 import com.bitdecay.lucidtext.effect.builtin.Wave;
 import com.bitdecay.lucidtext.effect.builtin.Pause;
 
+typedef EffectMaker = () -> Effect;
 /**
  * Registry to hold all valid effects. New effects can be registered easily
 **/
 class EffectRegistry {
-	private static var registry:Map<String, () -> Effect> = [
+	private static var registry:Map<String, EffectMaker> = [
 		"color" => () -> return new Color(),
 		"rainbow" => () -> return new Rainbow(),
 		"wave" => () -> return new Wave(),
@@ -34,9 +35,9 @@ class EffectRegistry {
 
 	private static var defaults:Map<String, Dynamic> = [];
 
-	public static function register(name:String, makerFunc:() -> Effect) {
+	public static function register(name:String, makerFunc:EffectMaker) {
 		if (registry.exists(name)) {
-			trace('lucidtext effect ${name} (${registry.get(name)}) being overwritten by ${makerFunc}');
+			throw 'effect already exists with name \'${name}\'';
 		}
 		registry.set(name, makerFunc);
 	}
