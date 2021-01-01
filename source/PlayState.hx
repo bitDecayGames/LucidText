@@ -1,6 +1,6 @@
 package;
 
-import com.bitdecay.dialog.DialogOptions;
+import com.bitdecay.lucidtext.dialog.DialogOptions;
 import flixel.FlxSprite;
 import flixel.input.keyboard.FlxKey;
 import com.bitdecay.lucidtext.TypeOptions;
@@ -11,7 +11,7 @@ import misc.FlxTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 import com.bitdecay.lucidtext.TypingGroup;
-import com.bitdecay.dialog.DialogManager;
+import com.bitdecay.lucidtext.dialog.DialogManager;
 
 class PlayState extends FlxState {
 	var helloText:TypingGroup;

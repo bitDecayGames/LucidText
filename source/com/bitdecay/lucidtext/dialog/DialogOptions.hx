@@ -1,4 +1,4 @@
-package com.bitdecay.dialog;
+package com.bitdecay.lucidtext.dialog;
 
 import flixel.input.keyboard.FlxKey;
 
