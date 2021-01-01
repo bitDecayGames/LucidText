@@ -13,7 +13,6 @@ class TypingGroup extends TextGroup {
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
 
-	var bounds:FlxRect;
 	var window:FlxSprite;
 	var nextPageIcon:FlxSprite;
 
@@ -43,11 +42,10 @@ class TypingGroup extends TextGroup {
 	public var waitingForConfirm(default, null):Bool = false;
 	public var finished(default, null):Bool = false;
 
-	public function new(box:FlxRect, text:String, ops:TypeOptions, fontSize:Int) {
+	public function new(text:String, ops:TypeOptions) {
 		options = ops;
-		bounds = box;
 		pageBreaks = [];
-		super(box.left, box.top, text, fontSize);
+		super(options.bounds.left, options.bounds.top, text, options.fontSize);
 	}
 
 	override public function loadText(text:String) {
@@ -62,14 +60,6 @@ class TypingGroup extends TextGroup {
 			pageBreaks.pop();
 		}
 
-		if (options.slice9 != null) {
-			var window9Slice = new FlxUI9SliceSprite(0, 0, AssetPaths.slice__png, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
-			window9Slice.resize(bounds.width, bounds.height);
-			window = window9Slice;
-		} else {
-			window = new FlxSprite(options.windowAsset);
-		}
-
 		for (c in allChars) {
 			c.visible = false;
 			c.y += options.margins;
@@ -78,16 +68,27 @@ class TypingGroup extends TextGroup {
 
 		buildPages();
 
-		// We want the preAdd stuff of the FlxSpriteGroup...
-		add(window);
-		// ...but we also want the backing to be at index zero
-		members.remove(window);
-		members.insert(0, window);
+		if (options.windowAsset != null) {
+			if (options.slice9 != null) {
+				var window9Slice = new FlxUI9SliceSprite(0, 0, options.windowAsset, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
+				window9Slice.resize(options.bounds.width, options.bounds.height);
+				window = window9Slice;
+			} else {
+				window = new FlxSprite(options.windowAsset);
+			}
+
+			// We want the preAdd stuff of the FlxSpriteGroup...
+			add(window);
+			// ...but we also want the backing to be at index zero
+			// so it renders underneath all the text objects
+			members.remove(window);
+			members.insert(0, window);
+		}
 
 		if (options.nextIconMaker != null) {
 			nextPageIcon = options.nextIconMaker();
 			add(nextPageIcon);
-			nextPageIcon.setPosition(bounds.right - 40, bounds.bottom - 40);
+			nextPageIcon.setPosition(options.bounds.right - 40, options.bounds.bottom - 40);
 			nextPageIcon.visible = false;
 		}
 	}
@@ -115,9 +116,9 @@ class TypingGroup extends TextGroup {
 			});
 
 			for (k in start...start + continuousLengths[start]) {
-				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
+				if (allChars[k].x + allChars[k].width > options.bounds.right - options.margins) {
 					yRowModTotal += shuffleCharactersToNextRow(start);
-					if (allChars[start].y + allChars[start].height > bounds.bottom - options.margins) {
+					if (allChars[start].y + allChars[start].height > options.bounds.bottom - options.margins) {
 						// start new page
 						pageBreaks.push(start);
 						for (n in start...allChars.length) {

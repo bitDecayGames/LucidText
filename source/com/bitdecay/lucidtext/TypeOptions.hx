@@ -1,10 +1,12 @@
 package com.bitdecay.lucidtext;
 
+import flixel.math.FlxRect;
 import flixel.FlxSprite;
 
 typedef CheckConfirmFunc = (Float) -> Bool;
 
 class TypeOptions {
+	public var bounds:FlxRect;
 	public var windowAsset:String;
 	public var slice9:Array<Int> = null;
 	public var margins:Float = 10.0;
@@ -24,7 +26,8 @@ class TypeOptions {
 
 	public var modOps:ModifiableOptions;
 
-	public function new(windowAsset:String, slice9:Array<Int> = null, margins:Float = 10, fontSize:Int = 16, ?modOps:ModifiableOptions) {
+	public function new(bounds:FlxRect, windowAsset:String = null, slice9:Array<Int> = null, margins:Float = 10, fontSize:Int = 16, ?modOps:ModifiableOptions) {
+		this.bounds = bounds;
 		this.windowAsset = windowAsset;
 		this.slice9 = slice9;
 		this.margins = margins;

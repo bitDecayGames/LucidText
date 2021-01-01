@@ -51,14 +51,12 @@ class DialogManager extends FlxBasic {
 			dialogOptions = new DialogOptions();
 		}
 
-		// Position the text to be roughly centered toward the top of the screen
-
-		if (typeOptions != null) {
-			typeOptions = typeOpts;
-		} else {
-			typeOptions = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		if (typeOpts == null) {
+			typeOpts = new TypeOptions(new FlxRect(20, 30, FlxG.width - 40, 100));
 		}
-		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100), "", typeOptions, 24);
+		typeOptions = typeOpts;
+
+		typeText = new TypingGroup("", typeOptions);
 		typeText.scrollFactor.set(0, 0);
 		typeText.cameras = [_camera];
 		_parentState.add(typeText);
