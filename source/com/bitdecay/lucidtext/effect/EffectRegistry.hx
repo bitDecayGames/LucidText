@@ -2,6 +2,7 @@ package com.bitdecay.lucidtext.effect;
 
 import com.bitdecay.lucidtext.effect.builtin.Bigger;
 import com.bitdecay.lucidtext.effect.builtin.Color;
+import com.bitdecay.lucidtext.effect.builtin.Fade;
 import com.bitdecay.lucidtext.effect.builtin.Rainbow;
 import com.bitdecay.lucidtext.effect.builtin.Shake;
 import com.bitdecay.lucidtext.effect.builtin.Smaller;
@@ -14,12 +15,14 @@ import com.bitdecay.lucidtext.effect.builtin.Wave;
 import com.bitdecay.lucidtext.effect.builtin.Pause;
 
 typedef EffectMaker = () -> Effect;
+
 /**
  * Registry to hold all valid effects. New effects can be registered easily
 **/
 class EffectRegistry {
 	private static var registry:Map<String, EffectMaker> = [
 		"color" => () -> return new Color(),
+		"fade" => () -> return new Fade(),
 		"rainbow" => () -> return new Rainbow(),
 		"wave" => () -> return new Wave(),
 		"shake" => () -> return new Shake(),

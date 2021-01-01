@@ -1,5 +1,6 @@
 package;
 
+import com.bitdecay.dialog.DialogOptions;
 import flixel.FlxSprite;
 import flixel.input.keyboard.FlxKey;
 import com.bitdecay.lucidtext.TypeOptions;
@@ -32,8 +33,8 @@ class PlayState extends FlxState {
 			]
 		];
 
-		// var dialogMgr = new DialogManager(textMap, this, camera, FlxKey.SPACE);
-		// add(dialogMgr);
+		var dialogOpts = new DialogOptions();
+		dialogOpts.progressionKey = FlxKey.SPACE;
 
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 		options.nextIconMaker = () -> {
@@ -47,15 +48,17 @@ class PlayState extends FlxState {
 			return FlxG.keys.justPressed.SPACE;
 		}
 
+		// var dialogMgr = new DialogManager(textMap, this, camera, dialogOpts, options);
+		// add(dialogMgr);
+
 		// dialogMgr.loadDialog("first");
 
-		helloText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100),
-			"<rainbow bright=0.9 offset=85 speed=0.5 reverse=true>things will automatically</rainbow> be broken up and fitted to the provided text box (which is pretty cool, honestly)", options, 24);
+		helloText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100), "<fade>THIS FADES OVER TIME</fade>", options, 24);
 		add(helloText);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		FlxG.watch.addQuick("helloText Finished:", helloText.finished);
+		// FlxG.watch.addQuick("helloText Finished:", helloText.finished);
 	}
 }

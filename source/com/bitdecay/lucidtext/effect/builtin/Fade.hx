@@ -7,28 +7,29 @@ import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
 /**
- * Allows setting the color of characters.
- *
- * Currently only supports colors as integer, most usefully
- * in the hexidecimal form 0xRRGGBB
+ * Fades out the characters
 **/
-class Color implements Effect {
-	public var rgb:Int = 0xFF000000;
-	public var alpha:Int = 1;
+class Fade implements Effect {
+	public var time:Float = 1.0;
 
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropSetterFunc> {
 		return [
-			'rgb' => Setters.setInt,
-			'alpha' => Setters.setFloat,
+			'time' => Setters.setFloat,
 		];
 	}
 
 	public function apply(o:FlxText, i:Int):EffectUpdater {
-		o.color = rgb;
-		o.alpha = FlxMath.bound(alpha, 0, 1);
-		return null;
+		var total = time;
+		var remaining = time;
+		return (delta) -> {
+			if (o.visible) {
+				remaining -= delta;
+				o.alpha = remaining / total;
+			}
+			return true;
+		}
 	}
 
 	public function begin(ops:ModifiableOptions) {}

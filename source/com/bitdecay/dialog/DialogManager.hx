@@ -23,10 +23,9 @@ class DialogManager extends FlxBasic {
 	static inline final NextPageInputDelayMs = 500;
 
 	var dialogMap:Map<String, Array<String>>;
-	var progressionKey:FlxKey;
 
 	public var typeText:TypingGroup;
-	public var opts:TypeOptions;
+	public var typeOptions:TypeOptions;
 
 	var textItems:Array<String>;
 	var currentIndex:Int = 0;
@@ -34,30 +33,32 @@ class DialogManager extends FlxBasic {
 	var fastTyping:Bool = false;
 	var canManuallyTriggerNextPage:Bool;
 
-	// Optional callbacks to enable custom sound solutions
-	var onTypingBegin:() -> Void;
-	var onTypingEnd:() -> Void;
-	var onTypingSpeedUp:() -> Void;
-
 	// Keep references to the timers to reset them whenever a new page of text starts
 	// Initialize them to real timers to avoid the need to check for null
 	var autoProgressTimer:Timer = new Timer(1000);
 	var manuallyProgressTimer:Timer = new Timer(1000);
 
-	public function new(_dialogMap:Map<String, Array<String>>, _parentState:FlxState, _camera:FlxCamera, ?_progressionKey:FlxKey = FlxKey.NONE,
-			?_onTypingBegin:() -> Void = null, ?_onTypingEnd:() -> Void = null, ?_onTypingSpeedUp:() -> Void = null) {
+	var dialogOptions:DialogOptions;
+
+	public function new(_dialogMap:Map<String, Array<String>>, _parentState:FlxState, _camera:FlxCamera, ?dialogOpts:DialogOptions, ?typeOpts:TypeOptions) {
 		super();
 
 		dialogMap = _dialogMap;
-		progressionKey = _progressionKey;
-		onTypingBegin = _onTypingBegin;
-		onTypingEnd = _onTypingEnd;
-		onTypingSpeedUp = _onTypingSpeedUp;
+
+		if (dialogOptions != null) {
+			dialogOptions = dialogOpts;
+		} else {
+			dialogOptions = new DialogOptions();
+		}
 
 		// Position the text to be roughly centered toward the top of the screen
 
-		opts = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
-		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100), "", opts, 24);
+		if (typeOptions != null) {
+			typeOptions = typeOpts;
+		} else {
+			typeOptions = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		}
+		typeText = new TypingGroup(new FlxRect(20, 30, FlxG.width - 40, 100), "", typeOptions, 24);
 		typeText.scrollFactor.set(0, 0);
 		typeText.cameras = [_camera];
 		_parentState.add(typeText);
@@ -89,8 +90,8 @@ class DialogManager extends FlxBasic {
 		typeText.finishCallback = () -> {
 			typing = false;
 
-			if (onTypingEnd != null) {
-				onTypingEnd();
+			if (dialogOptions.onTypingEnd != null) {
+				dialogOptions.onTypingEnd();
 			}
 
 			// After NextPageDelayMs, the next page of text will be loaded
@@ -104,8 +105,8 @@ class DialogManager extends FlxBasic {
 			}, NextPageInputDelayMs);
 		};
 
-		if (onTypingBegin != null) {
-			onTypingBegin();
+		if (dialogOptions.onTypingBegin != null) {
+			dialogOptions.onTypingBegin();
 		}
 	}
 
@@ -134,16 +135,16 @@ class DialogManager extends FlxBasic {
 		if (typeText.waitingForConfirm) {}
 
 		// Update loop exclusively handles user input
-		if (progressionKey != FlxKey.NONE) {
-			if (typing && !fastTyping && FlxG.keys.anyJustPressed([progressionKey])) {
+		if (dialogOptions.progressionKey != FlxKey.NONE) {
+			if (typing && !fastTyping && FlxG.keys.anyJustPressed([dialogOptions.progressionKey])) {
 				fastTyping = true;
-				opts.modOps.charsPerSecond *= 2;
-				if (onTypingSpeedUp != null) {
-					onTypingSpeedUp();
+				typeOptions.modOps.charsPerSecond *= 2;
+				if (dialogOptions.onTypingSpeedUp != null) {
+					dialogOptions.onTypingSpeedUp();
 				}
 			}
 
-			if (canManuallyTriggerNextPage && FlxG.keys.anyJustPressed([progressionKey])) {
+			if (canManuallyTriggerNextPage && FlxG.keys.anyJustPressed([dialogOptions.progressionKey])) {
 				continueToNextItem();
 			}
 		}

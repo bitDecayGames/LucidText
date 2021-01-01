@@ -8,8 +8,9 @@ import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
 class EffectExamplesState extends FlxState {
-	var yCoord = 0.0;
-	var spacingBuffer = 20;
+	var xCoord = 20.0;
+	var yCoord = 10.0;
+	var spacingBuffer = 10;
 
 	override public function create():Void {
 		super.create();
@@ -23,11 +24,12 @@ class EffectExamplesState extends FlxState {
 
 		makeExampleTest("<scrub>Scrub Effect</scrub>");
 		makeExampleTest("<wave>Wave Effect</wave>");
-		makeExampleTest("<color rgb=0xAA2222>Colored</color> <color rgb=0x222288>Text</color>");
+		makeExampleTest("<color rgb=0xFF2222>Colored</color> text and <color alpha=0.2>alpha</color>");
 		makeExampleTest("<shake>Shake Effect</shake>");
 		makeExampleTest("Text of <smaller>smaller size</smaller>");
 		makeExampleTest("Text of <bigger>bigger size</bigger>");
 		makeExampleTest("<rainbow>Rainbow</rainbow> text");
+		makeExampleTest("<fade time=7>Fading text</fade>");
 
 		var button = new FlxButton(0, 0, "Back");
 		button.onUp.callback = function() {
@@ -38,9 +40,13 @@ class EffectExamplesState extends FlxState {
 	}
 
 	private function makeExampleTest(text:String) {
-		var lucid = new TextGroup(30, yCoord, text, 24);
+		var lucid = new TextGroup(xCoord, yCoord, text, 24);
 		add(lucid);
 		yCoord += lucid.height + spacingBuffer;
+		if (yCoord > FlxG.height - 50) {
+			yCoord = 10;
+			xCoord += 100;
+		}
 	}
 
 	override public function update(elapsed:Float):Void {

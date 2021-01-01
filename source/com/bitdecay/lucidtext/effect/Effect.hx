@@ -6,6 +6,9 @@ import com.bitdecay.lucidtext.properties.Setters.PropSetterFunc;
 
 /**
  * A function that takes in a delta time and returns true if the text should continue typing, false otherwise
+ *
+ * NOTE: For the sake of web builds, all exposed 'UserProperties' must have a default value assigned in the
+ * field declaration so the javascript sees the property correctly when using reflection
 **/
 typedef EffectUpdater = (Float) -> Bool;
 
