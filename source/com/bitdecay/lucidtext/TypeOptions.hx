@@ -10,7 +10,7 @@ class TypeOptions {
 	public var windowAsset:String;
 	public var slice9:Array<Int> = null;
 	public var margins:Float = 10.0;
-	public var fontSize:Int = 16;
+	public var fontSize:Int = 24;
 
 	/**
 	 * A function to check for user confirmation of page
@@ -26,18 +26,29 @@ class TypeOptions {
 
 	public var modOps:ModifiableOptions;
 
-	public function new(bounds:FlxRect, windowAsset:String = null, slice9:Array<Int> = null, margins:Float = 10, fontSize:Int = 16, ?modOps:ModifiableOptions) {
+	public function new(bounds:FlxRect, windowAsset:String = null, slice9:Array<Int> = null, ?margins:Float, ?fntSize:Int, ?modOps:ModifiableOptions) {
 		this.bounds = bounds;
 		this.windowAsset = windowAsset;
 		this.slice9 = slice9;
-		this.margins = margins;
-		this.fontSize = fontSize;
+
+		if (margins != null) {
+			this.margins = margins;
+		}
+
+		if (fntSize != null) {
+			this.fontSize = fntSize;
+		}
+
 		if (modOps == null) {
 			modOps = new ModifiableOptions();
 		}
 		this.modOps = modOps;
 
 		checkPageConfirm = getDelayConfirmFunc(2);
+	}
+
+	public function clone():TypeOptions {
+		return new TypeOptions(bounds.copyTo(new FlxRect()), windowAsset, slice9, margins, fontSize, modOps == null ? null : modOps.clone());
 	}
 
 	public function getTimePerCharacter():Float {

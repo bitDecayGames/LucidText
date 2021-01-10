@@ -6,4 +6,8 @@ class ModifiableOptions {
 	public function new(charPerSec:Float = 20.0) {
 		charsPerSecond = charPerSec;
 	}
+
+	public function clone():ModifiableOptions {
+		return new ModifiableOptions(charsPerSecond);
+	}
 }

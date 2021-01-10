@@ -45,7 +45,7 @@ class DialogManager extends FlxBasic {
 
 		dialogMap = _dialogMap;
 
-		if (dialogOptions != null) {
+		if (dialogOpts != null) {
 			dialogOptions = dialogOpts;
 		} else {
 			dialogOptions = new DialogOptions();

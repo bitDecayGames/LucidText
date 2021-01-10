@@ -21,14 +21,13 @@ class TypeWindowState extends FlxState {
 		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
 		FlxG.autoPause = false;
 
-		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		var options = new TypeOptions(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40), AssetPaths.slice__png, [4, 4, 12, 12]);
 
-		var txt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40),
-			"Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
-			options, 24);
+		var txt = new TypingGroup("Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
+			options);
 		add(txt);
 
-		var secondOptions = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		var secondOptions = new TypeOptions(FlxRect.get(50, 200, 300, 250), AssetPaths.slice__png, [4, 4, 12, 12]);
 
 		secondOptions.checkPageConfirm = (delta) -> {
 			return FlxG.keys.justPressed.SPACE;
@@ -40,9 +39,8 @@ class TypeWindowState extends FlxState {
 			nextPageIcon.animation.play("play");
 			return nextPageIcon;
 		};
-		var secondTxt = new TypingGroup(FlxRect.get(50, 200, 300, 250),
-			"Press <color rgb=0x3333FF>SPACE</color> when the arrow appears in the bottom right of this window to go to the next page. A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system.",
-			secondOptions, 24);
+		var secondTxt = new TypingGroup("Press <color rgb=0x3333FF>SPACE</color> when the arrow appears in the bottom right of this window to go to the next page. A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system.",
+			secondOptions);
 
 		var letterSound = FlxG.sound.load(AssetPaths.letter_blip__wav);
 		letterSound.volume = 0.05;
