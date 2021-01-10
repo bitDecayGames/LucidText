@@ -33,10 +33,10 @@ class PlayState extends FlxState {
 			]
 		];
 
-		var dialogOpts = new DialogOptions();
+		var dialogOpts = new DialogOptions(new FlxRect(20, 30, FlxG.width - 40, 100));
 		dialogOpts.progressionKey = FlxKey.SPACE;
 
-		var options = new TypeOptions(new FlxRect(20, 30, FlxG.width - 40, 100), AssetPaths.slice__png, [4, 4, 12, 12]);
+		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 		options.nextIconMaker = () -> {
 			var nextPageIcon = new FlxSprite();
 			nextPageIcon.loadGraphic(AssetPaths.nextPage__png, true, 32, 32);
@@ -52,13 +52,9 @@ class PlayState extends FlxState {
 		// add(dialogMgr);
 
 		// dialogMgr.loadDialog("first");
-
-		helloText = new TypingGroup("<fade>THIS FADES OVER TIME</fade>", options);
-		add(helloText);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		// FlxG.watch.addQuick("helloText Finished:", helloText.finished);
 	}
 }

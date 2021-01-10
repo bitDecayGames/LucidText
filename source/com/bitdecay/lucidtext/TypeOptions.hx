@@ -6,7 +6,6 @@ import flixel.FlxSprite;
 typedef CheckConfirmFunc = (Float) -> Bool;
 
 class TypeOptions {
-	public var bounds:FlxRect;
 	public var windowAsset:String;
 	public var slice9:Array<Int> = null;
 	public var margins:Float = 10.0;
@@ -26,8 +25,7 @@ class TypeOptions {
 
 	public var modOps:ModifiableOptions;
 
-	public function new(bounds:FlxRect, windowAsset:String = null, slice9:Array<Int> = null, ?margins:Float, ?fntSize:Int, ?modOps:ModifiableOptions) {
-		this.bounds = bounds;
+	public function new(windowAsset:String = null, slice9:Array<Int> = null, ?margins:Float, ?fntSize:Int, ?modOps:ModifiableOptions) {
 		this.windowAsset = windowAsset;
 		this.slice9 = slice9;
 
@@ -48,7 +46,7 @@ class TypeOptions {
 	}
 
 	public function clone():TypeOptions {
-		return new TypeOptions(bounds.copyTo(new FlxRect()), windowAsset, slice9, margins, fontSize, modOps == null ? null : modOps.clone());
+		return new TypeOptions(windowAsset, slice9, margins, fontSize, modOps == null ? null : modOps.clone());
 	}
 
 	public function getTimePerCharacter():Float {

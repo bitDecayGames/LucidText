@@ -48,15 +48,16 @@ class DialogManager extends FlxBasic {
 		if (dialogOpts != null) {
 			dialogOptions = dialogOpts;
 		} else {
-			dialogOptions = new DialogOptions();
+			dialogOptions = new DialogOptions(new FlxRect(20, 30, FlxG.width - 40, 100));
 		}
 
 		if (typeOpts == null) {
-			typeOpts = new TypeOptions(new FlxRect(20, 30, FlxG.width - 40, 100));
+			// Likely not a great default, but it will suffice
+			typeOpts = new TypeOptions();
 		}
 		typeOptions = typeOpts;
 
-		typeText = new TypingGroup("", typeOptions);
+		typeText = new TypingGroup(dialogOptions.window, "", typeOptions);
 		typeText.scrollFactor.set(0, 0);
 		typeText.cameras = [_camera];
 		_parentState.add(typeText);

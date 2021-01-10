@@ -7,6 +7,7 @@ import flixel.addons.ui.FlxUI9SliceSprite;
 import com.bitdecay.lucidtext.parse.Regex;
 
 class TypingGroup extends TextGroup {
+	var bounds:FlxRect;
 	var options:TypeOptions;
 
 	var position:Int = 0;
@@ -42,10 +43,11 @@ class TypingGroup extends TextGroup {
 	public var waitingForConfirm(default, null):Bool = false;
 	public var finished(default, null):Bool = false;
 
-	public function new(text:String, ops:TypeOptions) {
+	public function new(bounds:FlxRect, text:String, ops:TypeOptions) {
+		this.bounds = bounds;
 		options = ops;
 		pageBreaks = [];
-		super(options.bounds.left, options.bounds.top, text, options.fontSize);
+		super(bounds.left, bounds.top, text, options.fontSize);
 	}
 
 	override public function loadText(text:String) {
@@ -71,7 +73,7 @@ class TypingGroup extends TextGroup {
 		if (options.windowAsset != null) {
 			if (options.slice9 != null) {
 				var window9Slice = new FlxUI9SliceSprite(0, 0, options.windowAsset, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
-				window9Slice.resize(options.bounds.width, options.bounds.height);
+				window9Slice.resize(bounds.width, bounds.height);
 				window = window9Slice;
 			} else {
 				window = new FlxSprite(options.windowAsset);
@@ -88,7 +90,7 @@ class TypingGroup extends TextGroup {
 		if (options.nextIconMaker != null) {
 			nextPageIcon = options.nextIconMaker();
 			add(nextPageIcon);
-			nextPageIcon.setPosition(options.bounds.right - 40, options.bounds.bottom - 40);
+			nextPageIcon.setPosition(bounds.right - 40, bounds.bottom - 40);
 			nextPageIcon.visible = false;
 		}
 	}
@@ -116,9 +118,9 @@ class TypingGroup extends TextGroup {
 			});
 
 			for (k in start...start + continuousLengths[start]) {
-				if (allChars[k].x + allChars[k].width > options.bounds.right - options.margins) {
+				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
 					yRowModTotal += shuffleCharactersToNextRow(start);
-					if (allChars[start].y + allChars[start].height > options.bounds.bottom - options.margins) {
+					if (allChars[start].y + allChars[start].height > bounds.bottom - options.margins) {
 						// start new page
 						pageBreaks.push(start);
 						for (n in start...allChars.length) {
