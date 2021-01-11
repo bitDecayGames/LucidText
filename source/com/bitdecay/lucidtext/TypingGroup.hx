@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext;
 
+import com.bitdecay.lucidtext.parse.TagLocation;
 import openfl.geom.Rectangle;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
@@ -33,6 +34,11 @@ class TypingGroup extends TextGroup {
 	public var wordCallback:(word:String) -> Void;
 
 	public var pageCallback:() -> Void;
+
+	/**
+	 * Called each time a tag is encountered
+	**/
+	public var tagCallback:(tag:TagLocation) -> Void;
 
 	/**
 	 * Called when the text has finished being made visible
@@ -188,6 +194,9 @@ class TypingGroup extends TextGroup {
 					// no addition work if we are at the end of the string
 					// just leave things how they are
 					finished = true;
+					if (finishCallback != null) {
+						finishCallback();
+					}
 					return;
 				}
 				for (i in 0...position) {
@@ -218,8 +227,11 @@ class TypingGroup extends TextGroup {
 
 			// TODO: This should be done via map accesses instead of looping
 			for (fxRange in parser.effects) {
-				if (fxRange.startIndex == position) {
+				if (fxRange.startTag.position == position) {
 					fxRange.effect.begin(options.modOps);
+					if (tagCallback != null) {
+						tagCallback(fxRange.startTag);
+					}
 				}
 			}
 
@@ -227,8 +239,11 @@ class TypingGroup extends TextGroup {
 
 			// TODO: This should be done via map accesses instead of looping
 			for (fxRange in parser.effects) {
-				if (fxRange.endIndex == position + 1) {
+				if (fxRange.endTag.position == position + 1) {
 					fxRange.effect.end(options.modOps);
+					if (tagCallback != null) {
+						tagCallback(fxRange.endTag);
+					}
 				}
 			}
 
@@ -236,9 +251,6 @@ class TypingGroup extends TextGroup {
 				waitingForConfirm = true;
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
-				}
-				if (finishCallback != null) {
-					finishCallback();
 				}
 			}
 		}
