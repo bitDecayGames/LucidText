@@ -12,7 +12,7 @@ import com.bitdecay.lucidtext.TypingGroup;
 import com.bitdecay.lucidtext.TextGroup;
 import misc.FlxTextFactory;
 
-class TypeWindowState extends FlxState {
+class TypeCallbackState extends FlxState {
 	override public function create():Void {
 		super.create();
 		bgColor = FlxColor.WHITE;

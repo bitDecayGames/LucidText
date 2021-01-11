@@ -21,7 +21,6 @@ class TypeEffectsState extends FlxState {
 
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
 		options.fontSize = 24;
-		trace('so the font size is ${options.fontSize}');
 		options.modOps.charsPerSecond = 10;
 
 		var speedTxt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40),

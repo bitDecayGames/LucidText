@@ -19,7 +19,7 @@ class MainMenuState extends FlxState {
 		var menuItems = [
 			"Samples" => () -> FlxG.switchState(new EffectExamplesState()),
 			"Spacing" => () -> FlxG.switchState(new SpacingCompareState()),
-			"Type Callbacks" => () -> FlxG.switchState(new TypeWindowState()),
+			"Type Callbacks" => () -> FlxG.switchState(new TypeCallbackState()),
 			"Type Pacing" => () -> FlxG.switchState(new TypeEffectsState()),
 		];
 
