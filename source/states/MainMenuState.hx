@@ -1,5 +1,6 @@
 package states;
 
+import flixel.math.FlxRect;
 import flixel.FlxObject;
 import com.bitdecay.lucidtext.TextGroup;
 import flixel.FlxState;
@@ -13,7 +14,7 @@ class MainMenuState extends FlxState {
 	override public function create():Void {
 		super.create();
 
-		_txtTitle = new TextGroup(0, 100, "<wave><bigger>LucidText</bigger></wave>", 24);
+		_txtTitle = new TextGroup(FlxRect.get(0, 100, FlxG.width, 100), "<wave><bigger>LucidText</bigger></wave>", 24);
 		add(_txtTitle);
 
 		var menuItems = [

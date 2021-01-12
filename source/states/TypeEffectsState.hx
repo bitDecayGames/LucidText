@@ -30,8 +30,8 @@ class TypeEffectsState extends FlxState {
 
 		var pauseOps = options.clone();
 		pauseOps.fontSize = 30;
-		var pauseText = new TypingGroup(FlxRect.get(20, 50, FlxG.width - 40, FlxG.height / 2 - 20),
-			"Pauses<pause /> can also be added<pause /> for dramatic<pause /> impact", pauseOps);
+		var pauseText = new TypingGroup(FlxRect.get(20, 300, FlxG.width - 40, 100), "Pauses<pause /> can also be added<pause /> for dramatic<pause /> impact",
+			pauseOps);
 
 		speedTxt.finishCallback = () -> {
 			add(pauseText);

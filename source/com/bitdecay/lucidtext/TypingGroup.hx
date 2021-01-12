@@ -8,7 +8,6 @@ import flixel.addons.ui.FlxUI9SliceSprite;
 import com.bitdecay.lucidtext.parse.Regex;
 
 class TypingGroup extends TextGroup {
-	var bounds:FlxRect;
 	var options:TypeOptions;
 
 	var position:Int = 0;
@@ -19,9 +18,6 @@ class TypingGroup extends TextGroup {
 	var nextPageIcon:FlxSprite;
 
 	var pageBreaks:Array<Int>;
-
-	var wordStarts:Array<Int> = [];
-	var wordLengths:Map<Int, Int> = [];
 
 	/**
 	 * Called each time a character is made visible
@@ -53,7 +49,7 @@ class TypingGroup extends TextGroup {
 		this.bounds = bounds;
 		options = ops;
 		pageBreaks = [];
-		super(bounds.left, bounds.top, text, options.fontSize);
+		super(bounds, text, options.fontSize, ops.margins);
 	}
 
 	override public function loadText(text:String) {
@@ -102,58 +98,17 @@ class TypingGroup extends TextGroup {
 	}
 
 	private function buildPages() {
-		// build things based on whole words (used for building pages)
-		var matcher = new EReg(Regex.WORD_REGEX, Regex.GLOBAL_MODE);
-		var continuousStarts:Array<Int> = [];
-		var continuousLengths:Map<Int, Int> = [];
-		matcher.map(renderText, (m) -> {
-			continuousStarts.push(m.matchedPos().pos);
-			continuousLengths.set(m.matchedPos().pos, m.matchedPos().len);
-			return m.matched(0);
-		});
-
-		var wordMatcher = new EReg(Regex.WORD_NO_PUNC_REGEX, Regex.GLOBAL_MODE);
-
-		var yRowModTotal = 0.0;
-		for (start in continuousStarts) {
-			// match indivial words for nicer callback values
-			wordMatcher.map(renderText, (m) -> {
-				wordStarts.push(m.matchedPos().pos);
-				wordLengths.set(m.matchedPos().pos, m.matchedPos().len);
-				return m.matched(0);
-			});
-
-			for (k in start...start + continuousLengths[start]) {
-				if (allChars[k].x + allChars[k].width > bounds.right - options.margins) {
-					yRowModTotal += shuffleCharactersToNextRow(start);
-					if (allChars[start].y + allChars[start].height > bounds.bottom - options.margins) {
-						// start new page
-						pageBreaks.push(start);
-						for (n in start...allChars.length) {
-							// reset any y we've added to bring things back to the top
-							allChars[n].y -= yRowModTotal;
-						}
-						yRowModTotal = 0.0;
-					}
-					break;
+		for (i in 0...allChars.length) {
+			if (allChars[i].y + allChars[i].height > bounds.bottom - margins) {
+				// start new page
+				pageBreaks.push(i);
+				var yOffset = allChars[i].y - (y + margins);
+				for (n in i...allChars.length) {
+					// reset any y we've added to bring things back to the top
+					allChars[n].y -= yOffset;
 				}
 			}
 		}
-	}
-
-	private function shuffleCharactersToNextRow(begin:Int) {
-		var xCoord = x + options.margins;
-		// this likely isn't a great value to use, we want the "base" line size for the font
-		// Namely, if  line break happens on a 'bigger' or 'smaller' character, this value
-		// is not correct.
-		var yCoordOffset = allChars[begin].height;
-		for (i in begin...allChars.length) {
-			allChars[i].x = xCoord;
-			allChars[i].y += yCoordOffset;
-
-			xCoord += allChars[i].width + TextGroup.spacingMod;
-		}
-		return yCoordOffset;
 	}
 
 	private function checkForPageBreak() {

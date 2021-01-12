@@ -1,5 +1,6 @@
 package states;
 
+import flixel.math.FlxRect;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -40,7 +41,7 @@ class EffectExamplesState extends FlxState {
 	}
 
 	private function makeExampleTest(text:String) {
-		var lucid = new TextGroup(xCoord, yCoord, text, 24);
+		var lucid = new TextGroup(FlxRect.get(xCoord, yCoord, FlxG.width, 100), text, 24);
 		add(lucid);
 		yCoord += lucid.height + spacingBuffer;
 		if (yCoord > FlxG.height - 50) {

@@ -42,8 +42,8 @@ class ParserTest {
 
 		var fx = parser.effects[0];
 		Assert.isType(fx.effect, Pause);
-		Assert.areEqual(5, fx.startIndex);
-		Assert.areEqual(5, fx.endIndex);
+		Assert.areEqual(5, fx.startTag.position);
+		Assert.areEqual(5, fx.endTag.position);
 	}
 
 	@Test
@@ -56,13 +56,13 @@ class ParserTest {
 
 		var fx = parser.effects[0];
 		Assert.isType(fx.effect, Pause);
-		Assert.areEqual(2, fx.startIndex);
-		Assert.areEqual(2, fx.endIndex);
+		Assert.areEqual(2, fx.startTag.position);
+		Assert.areEqual(2, fx.endTag.position);
 
 		fx = parser.effects[1];
 		Assert.isType(fx.effect, Pause);
-		Assert.areEqual(6, fx.startIndex);
-		Assert.areEqual(6, fx.endIndex);
+		Assert.areEqual(6, fx.startTag.position);
+		Assert.areEqual(6, fx.endTag.position);
 	}
 
 	@Test

@@ -52,8 +52,7 @@ class TypeCallbackState extends FlxState {
 		var callbackOps = secondOptions.clone();
 		callbackOps.fontSize = 16;
 		var tagCallBackTxt = new TypingGroup(FlxRect.get(FlxG.width / 2 + 40, 175, 250, 130),
-			"Callbacks can also be used when <color rgb=004488>effects start</color> and when <color rgb=220055>effects end</color>.",
-			callbackOps);
+			"Callbacks can also be used when <color rgb=004488>effects start</color> and when <color rgb=220055>effects end</color>.", callbackOps);
 		tagCallBackTxt.tagCallback = (tag) -> {
 			if (!tag.close) {
 				wordSound.stop();

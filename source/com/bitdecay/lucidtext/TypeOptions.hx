@@ -8,7 +8,7 @@ typedef CheckConfirmFunc = (Float) -> Bool;
 class TypeOptions {
 	public var windowAsset:String;
 	public var slice9:Array<Int> = null;
-	public var margins:Float = 10.0;
+	public var margins:Float = 5.0;
 	public var fontSize:Int = 24;
 
 	/**

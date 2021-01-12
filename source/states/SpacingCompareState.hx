@@ -1,5 +1,6 @@
 package states;
 
+import flixel.math.FlxRect;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -35,7 +36,7 @@ class SpacingCompareState extends FlxState {
 		var textRef = FlxTextFactory.make('Welcome to LucidText! size ${size} (FlxText)', 30, yCoord, size);
 		add(textRef);
 		yCoord += textRef.height;
-		var lucid = new TextGroup(30, yCoord, 'Welcome to <wave>LucidText!</wave> size ${size} (Lucid)', size);
+		var lucid = new TextGroup(FlxRect.get(30, yCoord, FlxG.width, 100), 'Welcome to <wave>LucidText!</wave> size ${size} (Lucid)', size);
 		add(lucid);
 		return yCoord + lucid.height;
 	}
