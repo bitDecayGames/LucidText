@@ -17,8 +17,6 @@ class TypingGroup extends TextGroup {
 	var window:FlxSprite;
 	var nextPageIcon:FlxSprite;
 
-	var pageBreaks:Array<Int>;
-
 	/**
 	 * Called each time a character is made visible
 	**/
@@ -100,14 +98,26 @@ class TypingGroup extends TextGroup {
 	private function buildPages() {
 		for (i in 0...allChars.length) {
 			if (allChars[i].y + allChars[i].height > bounds.bottom - margins) {
-				// start new page
-				pageBreaks.push(i);
-				var yOffset = allChars[i].y - (y + margins);
-				for (n in i...allChars.length) {
-					// reset any y we've added to bring things back to the top
-					allChars[n].y -= yOffset;
+				newPage(i);
+				continue;
+			}
+
+			for (pageIndex in pageBreaks) {
+				if (i == pageIndex) {
+					newPage(i);
+					break;
 				}
 			}
+		}
+	}
+
+	private function newPage(index:Int) {
+		// start new page
+		pageBreaks.push(index);
+		var yOffset = allChars[index].y - (y + margins);
+		for (n in index...allChars.length) {
+			// reset any y we've added to bring things back to the top
+			allChars[n].y -= yOffset;
 		}
 	}
 

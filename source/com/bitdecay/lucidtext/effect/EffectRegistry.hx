@@ -13,6 +13,7 @@ import com.bitdecay.lucidtext.effect.builtin.Slower;
 import com.bitdecay.lucidtext.effect.builtin.Faster;
 import com.bitdecay.lucidtext.effect.builtin.Wave;
 import com.bitdecay.lucidtext.effect.builtin.Pause;
+import com.bitdecay.lucidtext.effect.builtin.Page;
 
 typedef EffectMaker = () -> Effect;
 
@@ -34,6 +35,7 @@ class EffectRegistry {
 		"slower" => () -> return new Slower(),
 		"faster" => () -> return new Faster(),
 		"pause" => () -> return new Pause(),
+		"page" => () -> return new Page(),
 	];
 
 	private static var defaults:Map<String, Dynamic> = [];

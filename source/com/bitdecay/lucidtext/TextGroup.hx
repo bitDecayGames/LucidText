@@ -35,6 +35,7 @@ class TextGroup extends FlxSpriteGroup {
 
 	var wordStarts:Array<Int> = [];
 	var wordLengths:Map<Int, Int> = [];
+	var pageBreaks:Array<Int>;
 
 	public function new(bounds:FlxRect, text:String, fontSize:Int, margins:Float = 0.0) {
 		super(bounds.left, bounds.top);
@@ -114,12 +115,28 @@ class TextGroup extends FlxSpriteGroup {
 				return m.matched(0);
 			});
 
+			var widthWrap = false;
+			var forcedWrap = false;
+
 			for (k in start...start + continuousLengths[start]) {
 				if (allChars[k].text == " ") {
 					// don't let spaces cause line breaks
 					continue;
 				}
-				if (allChars[k].x + allChars[k].width > bounds.right - margins) {
+
+				widthWrap = allChars[k].x + allChars[k].width > bounds.right - margins;
+
+				// not terribly efficient, but will suffice for now
+				forcedWrap = false;
+				for (fx in parser.effects) {
+					if (fx.impacts(k) && fx.startTag.tag == "page") {
+						pageBreaks.push(k);
+						forcedWrap = true;
+						break;
+					}
+				}
+
+				if (widthWrap || forcedWrap) {
 					yRowModTotal += shuffleCharactersToNextRow(start);
 					break;
 				}
