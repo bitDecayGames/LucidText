@@ -4,7 +4,7 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 
 ## Table of Contents
 
-* [DesignPrincipals](#design-principals)
+* [Design Principals](#design-principals)
 * [Tagging](#tagging)
 * [Custom Tags](#custom-tags)
 * [Testing](#testing)
@@ -18,11 +18,13 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 	* This library is designed to allow a user to customize in-game text without needing to touch the code.
 	* This is achieved by expecting styling directives to be part of the text strings in the form of HTML-style tags. See [Tagging](#tagging) for more information.
 * Effects
-	* An effect is a change made to one or more character in a string
-	* There are two main types of Effects:
-		1. One time change such as `color` or `size`
-		1. Actively updated Effects such as `wave` and `shake`
-	* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
+	* An effect can be anything that occurs when a position in a string is reached
+		* A few examples of Effects:
+			1. One time change such as `color` or `size`
+			1. Actively updated Effects such as `wave` and `shake`
+			1. Specialty effects such as `pause` which are used internally for temporal effects
+		* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
+	* Effects can be used to do anything!
 
 ### Tagging
 
@@ -46,12 +48,17 @@ Which would render as:
 
 ![LucidTest](assets/images/lucid_options.gif?raw=true "LucidText")
 
+#### **Two kinds of tags**
+
+The majority of tags are intended to apply an effect to range of characters, such as the `wave` effect used in the title image. Tags can be applied to a singular position in a string, as well. These are currently used for certain specialty effects, namely `page` and `pause`, which apply to a position in the string as opposed to a range of characters. These are written like HTML void elements: `<page/>` and `<pause/>` respectively.
+
 ### Custom Tags
 
 If the built-in tags are insufficient for a project's needs, custom tags can be eaily added:
 
 1. Create a class that implements the `Effect` interface
 1. Register the effect with via the `EffectRegistry.register(...)` function
+1. Any text loaded after registering an effect can use the tag thereafter
 
 ### Testing
 
