@@ -26,7 +26,7 @@ class Pause implements Effect {
 		}
 
 		if (enforcer != i) {
-			throw 'the \'pause\' tag at position ${i} should be a void tag: <pause />. If slow typing is intended, adjust the type speed';
+			throw 'the \'pause\' tag at position ${i} should be a void tag: <pause/>. If slow typing is intended, adjust the type speed';
 		}
 
 		var countdown = t;

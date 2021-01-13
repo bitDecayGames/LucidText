@@ -46,7 +46,7 @@ class TypeCallbackState extends FlxState {
 			return nextPageIcon;
 		};
 		var secondTxt = new TypingGroup(FlxRect.get(40, 200, 300, 250),
-			"Press <color rgb=0x3333FF>SPACE</color> when the arrow appears in the bottom right of this window to go to the next page. <page />A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system.",
+			"Press <color rgb=0x3333FF>SPACE</color> when the arrow appears in the bottom right of this window to go to the next page.<page/>A fancy thing called <scrub>callbacks</scrub> can be used to attach behavior to various parts of the text system.",
 			secondOptions);
 
 		var callbackOps = secondOptions.clone();
