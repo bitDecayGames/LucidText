@@ -12,6 +12,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  *       are parsed.
 **/
 class Page implements Effect {
+	var enforcer:Int = -1;
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropSetterFunc> {
@@ -19,6 +20,15 @@ class Page implements Effect {
 	}
 
 	public function apply(o:FlxText, i:Int):EffectUpdater {
+		if (enforcer == -1) {
+			enforcer = i;
+			return null;
+		}
+
+		if (enforcer != i) {
+			throw 'the \'page\' tag at position ${i} should be a void tag: <page />';
+		}
+
 		return null;
 	}
 

@@ -11,6 +11,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  *       pauses once that character has been rendered
 **/
 class Pause implements Effect {
+	private var enforcer:Int = -1;
 	private var t:Float = 1.0;
 
 	public function new() {}
@@ -20,6 +21,15 @@ class Pause implements Effect {
 	}
 
 	public function apply(o:FlxText, i:Int):EffectUpdater {
+		if (enforcer == -1) {
+			enforcer = i;
+			return null;
+		}
+
+		if (enforcer != i) {
+			throw 'the \'pause\' tag at position ${i} should be a void tag: <pause />. If slow typing is intended, adjust the type speed';
+		}
+
 		var countdown = t;
 		return (delta) -> {
 			if (!o.visible) {

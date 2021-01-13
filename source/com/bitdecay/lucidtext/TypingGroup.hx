@@ -46,7 +46,6 @@ class TypingGroup extends TextGroup {
 	public function new(bounds:FlxRect, text:String, ops:TypeOptions) {
 		this.bounds = bounds;
 		options = ops;
-		pageBreaks = [];
 		super(bounds, text, options.fontSize, ops.margins);
 	}
 
