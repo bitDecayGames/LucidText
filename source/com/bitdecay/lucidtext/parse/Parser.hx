@@ -65,7 +65,7 @@ class Parser {
 		#if lucid_debug
 		for (fx in effects) {
 			trace("Effect: " + fx.effect);
-			trace("   applies to range    : " + fx.startIndex + " -> " + fx.endIndex);
+			trace("   applies to range    : " + fx.startTag.position + " -> " + fx.endTag.position);
 		}
 		#end
 	}

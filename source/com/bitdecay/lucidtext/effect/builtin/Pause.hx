@@ -23,7 +23,6 @@ class Pause implements Effect {
 	public function apply(o:FlxText, i:Int):EffectUpdater {
 		if (enforcer == -1) {
 			enforcer = i;
-			return null;
 		}
 
 		if (enforcer != i) {
