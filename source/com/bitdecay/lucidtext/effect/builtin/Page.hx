@@ -13,6 +13,7 @@ import com.bitdecay.lucidtext.properties.Setters;
 **/
 class Page implements Effect {
 	var enforcer:Int = -1;
+
 	public function new() {}
 
 	public function getUserProperties():Map<String, PropSetterFunc> {
