@@ -4,10 +4,10 @@ import flixel.text.FlxText;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * Allows setting the size of characters relative to their current size
-**/
+@description("Allows setting the size of characters relative to their current size")
 class Size implements Effect {
+	@description("Scalar to modify the base size")
+	@range(0.1, 10)
 	public var mod:Float = 1.0;
 
 	public function new() {}

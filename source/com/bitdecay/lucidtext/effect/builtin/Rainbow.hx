@@ -9,10 +9,19 @@ import com.bitdecay.lucidtext.properties.Setters;
 /**
  * Applies a rainbow effect
 **/
+@description("Causes characters to cycle colors")
 class Rainbow implements Effect {
+	@description("Brightness")
+	@range(0.0, 1.0)
 	public var bright:Float = 1.0;
+
+	@description("How fast the rainbow effect should cycle")
 	public var speed:Float = 1;
+
+	@description("Amount of hue offset between adjacent characters")
 	public var offset:Int = 20;
+
+	@description("Set to true to reverse the hue cycle")
 	public var reverse:Bool = false;
 
 	public function new() {}

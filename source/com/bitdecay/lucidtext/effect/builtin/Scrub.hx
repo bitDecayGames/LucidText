@@ -5,15 +5,24 @@ import flixel.text.FlxText;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * A circular motion for the affected characters
-**/
+@description("A circular motion for the affected characters")
 class Scrub implements Effect {
+	@description("Height in pixels for the effect")
 	public var height:Float = 8.0;
+
+	@description("Cycle speed")
 	public var speed:Float = 10.0;
+
+	@description("Cycle offset between adjacent characters")
 	public var offset:Float = 0.1;
+
+	@description("Set to true to reverse the cycle")
 	public var reverse:Bool = false;
+
+	@description("Scalar for how much the effect moves in on the y axis")
 	public var y_mod:Float = 1.0;
+
+	@description("Scalar for how much the effect moves in on the x axis")
 	public var x_mod:Float = 1.0;
 
 	public function new() {}

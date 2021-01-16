@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext.effect;
 
+import haxe.rtti.Meta;
 import com.bitdecay.lucidtext.effect.builtin.Bigger;
 import com.bitdecay.lucidtext.effect.builtin.Color;
 import com.bitdecay.lucidtext.effect.builtin.Fade;
@@ -39,6 +40,53 @@ class EffectRegistry {
 	];
 
 	private static var defaults:Map<String, Dynamic> = [];
+
+	/**
+	 * Prints all currently registered effects to console based on the available annotations
+	**/
+	public static function dumpToConsole() {
+		for (key => value in registry) {
+			trace('${["┌ ", [for (i in 0...key.length) '─'].join(""), " ┐"].join("")}');
+			trace('│ ${key} │');
+			trace('${["└ ", [for (i in 0...key.length) '─'].join(""), " ┘"].join("")}');
+
+			var concrete = value();
+			var clazz = Type.getClass(concrete);
+			var meta = Meta.getFields(clazz);
+			var clazzMeta = Meta.getType(clazz);
+			var clazzFields = Reflect.fields(clazzMeta);
+			var clazzFieldCount = clazzFields.length;
+			var props = concrete.getUserProperties();
+			var propCount = Lambda.count(props);
+			var num = 0;
+
+			for (f in clazzFields) {
+				num++;
+				trace('  ${num == clazzFieldCount && propCount == 0 ? "└" : "├"} ${f}: ${Reflect.field(clazzMeta, f)}');
+			}
+
+			if (propCount > 0) {
+				var i = 0;
+				trace('  └ parameters');
+				for (key => _ in props) {
+					i++;
+					trace('     ${i == propCount ? "└" : "├"} ${key}');
+					var fieldMeta = Reflect.field(meta, key);
+					if (fieldMeta != null) {
+						var fieldMetas = Reflect.fields(fieldMeta);
+						var fieldMetaCount = fieldMetas.length;
+						var k = 0;
+						for (f in fieldMetas) {
+							k++;
+							trace('     ${i == propCount ? " " : "│"}  ${k == fieldMetaCount ? "└" : "├"} ${f}: ${Reflect.field(fieldMeta, f)}');
+						}
+					}
+				}
+			}
+
+			trace('');
+		}
+	}
 
 	public static function register(name:String, makerFunc:EffectMaker) {
 		if (registry.exists(name)) {

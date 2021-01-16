@@ -6,10 +6,9 @@ import com.bitdecay.lucidtext.ModifiableOptions;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * Fades out the characters
-**/
+@description("Fades out the characters")
 class Fade implements Effect {
+	@description("Seconds to fade over")
 	public var time:Float = 1.0;
 
 	public function new() {}

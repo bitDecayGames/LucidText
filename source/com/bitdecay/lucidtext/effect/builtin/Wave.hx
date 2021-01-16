@@ -2,9 +2,7 @@ package com.bitdecay.lucidtext.effect.builtin;
 
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * A sine wave motion for the affected characters
-**/
+@description("A sine wave motion for the affected characters")
 class Wave extends Scrub {
 	public function new() {
 		super();

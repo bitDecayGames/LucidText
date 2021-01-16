@@ -7,6 +7,7 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 * [Design Principals](#design-principals)
 * [Tagging](#tagging)
 * [Custom Tags](#custom-tags)
+* [Discoverability](#discoverability)
 * [Testing](#testing)
 * [Formatting](#formatting)
 
@@ -59,6 +60,27 @@ If the built-in tags are insufficient for a project's needs, custom tags can be 
 1. Create a class that implements the `Effect` interface
 1. Register the effect with via the `EffectRegistry.register(...)` function
 1. Any text loaded after registering an effect can use the tag thereafter
+
+### Discoverability
+
+One of the hardest parts of using a library like this is knowing what the available options are. To combat this, the current state of the `EffectRegistry` can be dumped.
+
+By calling `EffectRegistry.dumpToConsole()` will look at the annotations on each registered effect and print out the available information to console. A snippet of this output looks like this:
+
+```
+┌ ───── ┐
+│ color │
+└ ───── ┘
+  └ description: [Allows setting the color of characters]
+  └ parameters
+     ├ rgb
+     │  └ description: [Color integer formatted as `0xRRGGBB`]
+     └ alpha
+        ├ range: [0,1]
+        └ description: [Float value controlling transparency]
+```
+
+This might be better accomplished by a documentation generator in the future.
 
 ### Testing
 

@@ -4,12 +4,11 @@ import flixel.text.FlxText;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * Allows setting the typing speed as a scalar of the current options
-**/
+@description("Allows setting the typing speed as a scalar of the current options")
 class Speed implements Effect {
 	private var restoreSpeed:Float = 0.0;
 
+	@description("Scalar of how much to modify the base typing speed")
 	public var mod:Float = 1.0;
 
 	public function new() {}

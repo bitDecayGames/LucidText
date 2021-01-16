@@ -6,11 +6,12 @@ import flixel.math.FlxPoint;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * Adds shake to the affected characters
- */
+@description("Adds shake to the affected characters")
 class Shake implements Effect {
+	@description("Distance in pixels away from the starting position the character can move")
 	public var dist:Float = 3;
+
+	@description("Number of shakes per second")
 	public var perSec:Int = 30;
 
 	public function new() {}

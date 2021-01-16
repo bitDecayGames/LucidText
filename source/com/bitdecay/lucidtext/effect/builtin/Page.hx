@@ -11,6 +11,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  *       of a word. It works best when placed after a space due to how words
  *       are parsed.
 **/
+@description("No-op tag that is used for creating page breaks in typing text")
 class Page implements Effect {
 	var enforcer:Int = -1;
 

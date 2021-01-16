@@ -12,8 +12,13 @@ import com.bitdecay.lucidtext.properties.Setters;
  * Currently only supports colors as integer, most usefully
  * in the hexidecimal form 0xRRGGBB
 **/
+@description("Allows setting the color of characters")
 class Color implements Effect {
+	@description("Color integer formatted as `0xRRGGBB`")
 	public var rgb:Int = 0xFF000000;
+
+	@description("Float value controlling transparency")
+	@range(0.0, 1.0)
 	public var alpha:Int = 1;
 
 	public function new() {}
