@@ -4,14 +4,14 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 
 ## Table of Contents
 
-* [Design Principles](#design-principals)
+* [Design Principles](#design-principles)
 * [Tagging](#tagging)
 * [Custom Tags](#custom-tags)
 * [Discoverability](#discoverability)
 * [Testing](#testing)
 * [Formatting](#formatting)
 
-### Design Principals
+### Design Principles
 
 #### **Foundational Concepts**
 
