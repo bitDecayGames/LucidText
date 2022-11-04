@@ -9,7 +9,7 @@
 	"releasenote": "Initial alpha",
 	"contributors": ["MondayHopscotch"],
 	"dependencies": {
-	  "flixel": "4.8.1",
+	  "flixel": "4.10.0",
 	  "flixel-ui": "2.3.3"
 	},
 	"main": "Main"

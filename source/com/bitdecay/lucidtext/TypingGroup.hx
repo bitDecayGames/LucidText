@@ -1,11 +1,9 @@
 package com.bitdecay.lucidtext;
 
 import com.bitdecay.lucidtext.parse.TagLocation;
-import openfl.geom.Rectangle;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
-import flixel.addons.ui.FlxUI9SliceSprite;
-import com.bitdecay.lucidtext.parse.Regex;
+import flixel.addons.display.FlxSliceSprite;
 
 class TypingGroup extends TextGroup {
 	var options:TypeOptions;
@@ -14,7 +12,7 @@ class TypingGroup extends TextGroup {
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
 
-	var window:FlxSprite;
+	public var window:FlxSprite;
 	var nextPageIcon:FlxSprite;
 
 	/**
@@ -71,8 +69,15 @@ class TypingGroup extends TextGroup {
 
 		if (options.windowAsset != null) {
 			if (options.slice9 != null) {
-				var window9Slice = new FlxUI9SliceSprite(0, 0, options.windowAsset, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
-				window9Slice.resize(bounds.width, bounds.height);
+				var sliceRect = FlxRect.get(
+					options.slice9[0],
+					options.slice9[1],
+					options.slice9[2],
+					options.slice9[3]
+				);
+				var window9Slice = new FlxSliceSprite(options.windowAsset, sliceRect, bounds.width, bounds.height);
+				window9Slice.x = bounds.x;
+				window9Slice.y = bounds.y;
 				window = window9Slice;
 			} else {
 				window = new FlxSprite(options.windowAsset);
@@ -113,7 +118,7 @@ class TypingGroup extends TextGroup {
 	private function newPage(index:Int) {
 		// start new page
 		pageBreaks.push(index);
-		var yOffset = allChars[index].y - (y + margins);
+		var yOffset = allChars[index].y - (bounds.y + margins);
 		for (n in index...allChars.length) {
 			// reset any y we've added to bring things back to the top
 			allChars[n].y -= yOffset;
