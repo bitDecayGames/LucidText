@@ -22,6 +22,7 @@ class MainMenuState extends FlxState {
 			"Spacing" => () -> FlxG.switchState(new SpacingCompareState()),
 			"Type Callbacks" => () -> FlxG.switchState(new TypeCallbackState()),
 			"Type Pacing" => () -> FlxG.switchState(new TypeEffectsState()),
+			"Load Test" => () -> FlxG.switchState(new LoadState()),
 		];
 
 		var yCoord = FlxG.height / 2;

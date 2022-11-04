@@ -1,7 +1,8 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
+import flixel.text.FlxBitmapText;
 import flixel.math.FlxMath;
-import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
 import com.bitdecay.lucidtext.ModifiableOptions;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
@@ -30,7 +31,7 @@ class Color implements Effect {
 		];
 	}
 
-	public function apply(o:FlxText, i:Int):EffectUpdater {
+	public function apply(o:FlxBitmapText, i:Int):EffectUpdater {
 		o.color = rgb;
 		o.alpha = FlxMath.bound(alpha, 0, 1);
 		return null;

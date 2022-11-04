@@ -6,7 +6,7 @@ import com.bitdecay.lucidtext.TypingGroup;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
-import misc.FlxTextFactory;
+import misc.FlxBitmapTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
@@ -15,8 +15,8 @@ class TypeEffectsState extends FlxState {
 		super.create();
 		bgColor = FlxColor.WHITE;
 
-		FlxTextFactory.defaultColor = FlxColor.BLACK;
-		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
+		FlxBitmapTextFactory.defaultColor = FlxColor.BLACK;
+		TextGroup.textMakerFunc = FlxBitmapTextFactory.makeSimple;
 		FlxG.autoPause = false;
 
 		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);

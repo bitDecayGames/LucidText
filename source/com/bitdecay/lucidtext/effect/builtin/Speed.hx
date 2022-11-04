@@ -1,6 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
-import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
@@ -17,7 +17,7 @@ class Speed implements Effect {
 		return ["mod" => Setters.setFloat];
 	}
 
-	public function apply(o:FlxText, i:Int):EffectUpdater {
+	public function apply(o:FlxBitmapText, i:Int):EffectUpdater {
 		return null;
 	}
 

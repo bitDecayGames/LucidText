@@ -1,7 +1,7 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
 import flixel.FlxG;
-import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
 import flixel.math.FlxPoint;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
@@ -23,7 +23,7 @@ class Shake implements Effect {
 		];
 	}
 
-	public function apply(o:FlxText, i:Int):EffectUpdater {
+	public function apply(o:FlxBitmapText, i:Int):EffectUpdater {
 		var offset = FlxPoint.get();
 		var tempPosition = FlxPoint.get();
 

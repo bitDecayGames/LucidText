@@ -47,6 +47,8 @@
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
 
+	<!-- <config:hxtelemetry host="192.168.1.165" allocations="true" /> -->
+
 	<!--In case you want to use nape with flixel-->
 	<!--<haxelib name="nape-haxe4" />-->
 

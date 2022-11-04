@@ -4,7 +4,7 @@ import flixel.math.FlxRect;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
-import misc.FlxTextFactory;
+import misc.FlxBitmapTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
@@ -13,9 +13,9 @@ class SpacingCompareState extends FlxState {
 		super.create();
 		bgColor = FlxColor.WHITE;
 
-		// FlxTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
-		FlxTextFactory.defaultColor = FlxColor.BLACK;
-		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
+		// FlxBitmapTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
+		FlxBitmapTextFactory.defaultColor = FlxColor.BLACK;
+		TextGroup.textMakerFunc = FlxBitmapTextFactory.makeSimple;
 
 		FlxG.autoPause = false;
 
@@ -33,12 +33,12 @@ class SpacingCompareState extends FlxState {
 	}
 
 	private function makeSpacingTest(size:Int, yCoord:Float) {
-		var textRef = FlxTextFactory.make('Welcome to LucidText! size ${size} (FlxText)', 30, yCoord, size);
+		var textRef = FlxBitmapTextFactory.make('Welcome to LucidText! size ${size} (FlxBitmapText)', 30, yCoord, size);
 		add(textRef);
 		yCoord += textRef.height;
 		var lucid = new TextGroup(FlxRect.get(30, yCoord, FlxG.width, 100), 'Welcome to <wave>LucidText!</wave> size ${size} (Lucid)', size);
 		add(lucid);
-		return yCoord + lucid.height;
+		return yCoord + lucid.height + 15;
 	}
 
 	override public function update(elapsed:Float):Void {

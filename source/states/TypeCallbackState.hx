@@ -10,15 +10,15 @@ import flixel.util.FlxColor;
 import com.bitdecay.lucidtext.TypeOptions;
 import com.bitdecay.lucidtext.TypingGroup;
 import com.bitdecay.lucidtext.TextGroup;
-import misc.FlxTextFactory;
+import misc.FlxBitmapTextFactory;
 
 class TypeCallbackState extends FlxState {
 	override public function create():Void {
 		super.create();
 		bgColor = FlxColor.WHITE;
 
-		FlxTextFactory.defaultColor = FlxColor.BLACK;
-		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
+		FlxBitmapTextFactory.defaultColor = FlxColor.BLACK;
+		TextGroup.textMakerFunc = FlxBitmapTextFactory.makeSimple;
 		FlxG.autoPause = false;
 
 		var letterSound = FlxG.sound.load(AssetPaths.letter_blip__wav);
