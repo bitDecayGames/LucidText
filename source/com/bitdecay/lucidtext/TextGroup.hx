@@ -163,6 +163,11 @@ class TextGroup extends FlxSpriteGroup {
 	private function shuffleCharactersToNextRow(lineBreakPos:Int) {
 		lineBreaks.push(lineBreakPos);
 
+		// sort our breaks to makes sure previously added page-breaks are taken into account
+		lineBreaks.sort((a, b) -> {
+			return a - b;
+		});
+
 		var start = 0;
 		var end = lineBreakPos;
 		var endIndex = lineBreaks.indexOf(lineBreakPos);

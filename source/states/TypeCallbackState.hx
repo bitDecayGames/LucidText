@@ -26,14 +26,14 @@ class TypeCallbackState extends FlxState {
 		var wordSound = FlxG.sound.load(AssetPaths.word_blip__wav);
 		wordSound.volume = 0.2;
 
-		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 4, 4]);
 
 		var txt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40),
 			"Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",
 			options);
 		add(txt);
 
-		var secondOptions = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
+		var secondOptions = options.clone();
 
 		secondOptions.checkPageConfirm = (delta) -> {
 			return FlxG.keys.justPressed.SPACE;
