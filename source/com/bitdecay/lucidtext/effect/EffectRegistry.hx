@@ -2,6 +2,7 @@ package com.bitdecay.lucidtext.effect;
 
 import haxe.rtti.Meta;
 import com.bitdecay.lucidtext.effect.builtin.Bigger;
+import com.bitdecay.lucidtext.effect.builtin.Callback;
 import com.bitdecay.lucidtext.effect.builtin.Color;
 import com.bitdecay.lucidtext.effect.builtin.Fade;
 import com.bitdecay.lucidtext.effect.builtin.Rainbow;
@@ -23,6 +24,7 @@ typedef EffectMaker = () -> Effect;
 **/
 class EffectRegistry {
 	private static var registry:Map<String, EffectMaker> = [
+		"cb" => () -> return new Callback(),
 		"color" => () -> return new Color(),
 		"fade" => () -> return new Fade(),
 		"rainbow" => () -> return new Rainbow(),

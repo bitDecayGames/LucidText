@@ -1,10 +1,10 @@
 package com.bitdecay.lucidtext;
 
+import flixel.math.FlxPoint;
+import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxRect;
-import flixel.FlxSprite;
 import com.bitdecay.lucidtext.parse.Regex;
 import flixel.text.FlxBitmapText;
-import flixel.group.FlxGroup;
 import com.bitdecay.lucidtext.pool.LucidPooledText;
 import com.bitdecay.lucidtext.parse.Parser;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
@@ -13,11 +13,13 @@ import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
  * A group that holds all FlxBitmapText objects. This handles parsing the user
  * string and applying all effects to the appropriate characters
 **/
-class TextGroup extends FlxTypedGroup<FlxSprite> {
+class TextGroup extends FlxSpriteGroup {
+	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxBitmapText;
+	public static var defaultScrollFactor:FlxPoint = null;
+
 	var bounds:FlxRect;
 	var margins:Float = 0.0;
 
-	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxBitmapText;
 
 	var parser:Parser;
 
@@ -42,6 +44,10 @@ class TextGroup extends FlxTypedGroup<FlxSprite> {
 		this.bounds = bounds;
 		this.fontSize = fontSize;
 		this.margins = margins;
+
+		if (TextGroup.defaultScrollFactor != null) {
+			scrollFactor.copyFrom(TextGroup.defaultScrollFactor);
+		}
 
 		allChars = new Array<FlxBitmapText>();
 		loadText(text);

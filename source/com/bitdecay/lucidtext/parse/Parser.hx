@@ -84,7 +84,9 @@ class Parser {
 			Options.setAll(fx.effect, defaults);
 		}
 
+		// TODO: Should we do this parsing somewhere else potentially?
 		var options = Options.parse(openTag.options);
+		openTag.parsedOptions = options;
 		Options.setAll(fx.effect, options);
 		effects.push(fx);
 	}

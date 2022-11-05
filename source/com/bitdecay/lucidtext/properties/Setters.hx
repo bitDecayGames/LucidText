@@ -37,6 +37,14 @@ class Setters {
 		}
 	}
 
+	public static function setString(obj:Dynamic, propName:String, val:String) {
+		if (val == null) {
+			return;
+		}
+		var fx:haxe.DynamicAccess<Dynamic> = obj;
+		fx.set(propName, val);
+	}
+
 	public static function setBoolDefault(defVal:String) {
 		return (obj, prop, s) -> {
 			setBool(obj, prop, defVal);
@@ -52,6 +60,12 @@ class Setters {
 	public static function setFloatDefault(defVal:String) {
 		return (obj, prop, s) -> {
 			setFloat(obj, prop, defVal);
+		};
+	}
+
+	public static function setStringDefault(defVal:String) {
+		return (obj, prop, s) -> {
+			setString(obj, prop, defVal);
 		};
 	}
 }

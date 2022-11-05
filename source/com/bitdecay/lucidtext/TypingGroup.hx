@@ -210,6 +210,8 @@ class TypingGroup extends TextGroup {
 			for (fxRange in parser.effects) {
 				if (fxRange.endTag.position == position + 1) {
 					fxRange.effect.end(options.modOps);
+					// TODO: We can double-call singular tags (like `<pause />`). We should
+					//    figure out a way to ensure we only invoke the callback once
 					if (tagCallback != null) {
 						tagCallback(fxRange.endTag);
 					}

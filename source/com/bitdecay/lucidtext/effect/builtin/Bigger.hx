@@ -2,9 +2,7 @@ package com.bitdecay.lucidtext.effect.builtin;
 
 import com.bitdecay.lucidtext.properties.Setters;
 
-/**
- * Sets characters to be 50% bigger than their current size
-**/
+@description("Sets characters to be 50% bigger than their current size")
 class Bigger extends Size {
 	public function new() {
 		super();
