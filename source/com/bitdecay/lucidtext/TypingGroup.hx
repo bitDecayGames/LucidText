@@ -61,8 +61,6 @@ class TypingGroup extends TextGroup {
 
 		for (c in allChars) {
 			c.visible = false;
-			c.y += options.margins;
-			c.x += options.margins;
 		}
 
 		buildPages();
