@@ -91,12 +91,12 @@ class TypingGroup extends TextGroup {
 
 		if (nextPageIcon == null && options.nextIconMaker != null) {
 			nextPageIcon = options.nextIconMaker();
-			add(nextPageIcon);
 		}
 
 		if (nextPageIcon != null) {
 			nextPageIcon.setPosition(bounds.right - margins[3] - nextPageIcon.width, bounds.bottom - margins[1] - nextPageIcon.height);
 			nextPageIcon.visible = false;
+			add(nextPageIcon);
 		}
 	}
 
