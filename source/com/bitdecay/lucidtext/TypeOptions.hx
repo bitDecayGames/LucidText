@@ -8,7 +8,7 @@ typedef CheckConfirmFunc = (Float) -> Bool;
 class TypeOptions {
 	public var windowAsset:String;
 	public var slice9:Array<Int> = null;
-	public var margins:Float = 5.0;
+	public var margins:Array<Float> = [0, 0, 0, 0];
 	public var fontSize:Int = 24;
 
 	/**
@@ -25,7 +25,7 @@ class TypeOptions {
 
 	public var modOps:ModifiableOptions;
 
-	public function new(windowAsset:String = null, slice9:Array<Int> = null, ?margins:Float, ?fntSize:Int, ?modOps:ModifiableOptions) {
+	public function new(windowAsset:String = null, slice9:Array<Int> = null, ?margins:Array<Float>, ?fntSize:Int, ?modOps:ModifiableOptions) {
 		this.windowAsset = windowAsset;
 		this.slice9 = slice9;
 

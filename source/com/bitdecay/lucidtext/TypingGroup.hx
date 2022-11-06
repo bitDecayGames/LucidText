@@ -89,17 +89,20 @@ class TypingGroup extends TextGroup {
 			members.insert(0, window);
 		}
 
-		if (options.nextIconMaker != null) {
+		if (nextPageIcon == null && options.nextIconMaker != null) {
 			nextPageIcon = options.nextIconMaker();
 			add(nextPageIcon);
-			nextPageIcon.setPosition(bounds.right - 40, bounds.bottom - 40);
+		}
+
+		if (nextPageIcon != null) {
+			nextPageIcon.setPosition(bounds.right - margins[3] - nextPageIcon.width, bounds.bottom - margins[1] - nextPageIcon.height);
 			nextPageIcon.visible = false;
 		}
 	}
 
 	private function buildPages() {
 		for (i in 0...allChars.length) {
-			if (allChars[i].y + allChars[i].height > bounds.bottom - margins) {
+			if (allChars[i].y + allChars[i].height > bounds.bottom - margins[1]) {
 				newPage(i);
 				continue;
 			}
@@ -116,7 +119,7 @@ class TypingGroup extends TextGroup {
 	private function newPage(index:Int) {
 		// start new page
 		pageBreaks.push(index);
-		var yOffset = allChars[index].y - (bounds.y + margins);
+		var yOffset = allChars[index].y - (bounds.y + margins[0]);
 		for (n in index...allChars.length) {
 			// reset any y we've added to bring things back to the top
 			allChars[n].y -= yOffset;

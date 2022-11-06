@@ -17,8 +17,8 @@ class TextGroup extends FlxSpriteGroup {
 	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxBitmapText;
 	public static var defaultScrollFactor:FlxPoint = null;
 
-	var bounds:FlxRect;
-	var margins:Float = 0.0;
+	public var bounds:FlxRect;
+	public var margins:Array<Float>;
 
 
 	var parser:Parser;
@@ -39,11 +39,23 @@ class TextGroup extends FlxSpriteGroup {
 	var lineBreaks:Array<Int> = [];
 	var pageBreaks:Array<Int> = [];
 
-	public function new(bounds:FlxRect, text:String, fontSize:Int, margins:Float = 0.0) {
+	// creates a new text group
+	// note that margins should be provided in the format [top, bottom, left, right]. If fewer than four are
+	// provided, they will be filled with zeroes
+	public function new(bounds:FlxRect, text:String, fontSize:Int, margins:Array<Float> = null) {
 		super();
 		this.bounds = bounds;
 		this.fontSize = fontSize;
-		this.margins = margins;
+
+		if (margins != null) {
+			this.margins = margins;
+		} else {
+			this.margins = [];
+		}
+
+		while (this.margins.length < 4) {
+			this.margins.push(0);
+		}
 
 		if (TextGroup.defaultScrollFactor != null) {
 			scrollFactor.copyFrom(TextGroup.defaultScrollFactor);
@@ -75,8 +87,8 @@ class TextGroup extends FlxSpriteGroup {
 		parser.parse();
 		renderText = parser.getStrippedText();
 
-		var x = bounds.x + margins;
-		var y = bounds.y + margins;
+		var x = bounds.x + margins[2];
+		var y = bounds.y + margins[0];
 		for (i in 0...renderText.length) {
 			if (textMakerFunc == null) {
 				textMakerFunc = (text, x, y, fontSize) -> {
@@ -151,7 +163,7 @@ class TextGroup extends FlxSpriteGroup {
 					continue;
 				}
 
-				if (allChars[k].x + allChars[k].width > bounds.right - margins) {
+				if (allChars[k].x + allChars[k].width > bounds.right - margins[3]) {
 					// mark 'k' as a line break so we can use that data for figuring out line spacing
 					shuffleCharactersToNextRow(start);
 					break;
@@ -192,7 +204,7 @@ class TextGroup extends FlxSpriteGroup {
 		yCoordOffset = heightTotal / (end-start);
 
 
-		var xCoord = bounds.x + margins;
+		var xCoord = bounds.x + margins[2];
 		// this likely isn't a great value to use, we want the "base" line size for the font
 		// Namely, if  line break happens on a 'bigger' or 'smaller' character, this value
 		// is not correct.
