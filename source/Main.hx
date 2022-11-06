@@ -1,10 +1,14 @@
 package;
 
+#if lucid_debug
 import com.bitdecay.lucidtext.effect.EffectRegistry;
+#end
+
 import openfl.display.FPS;
+import openfl.display.Sprite;
+
 import flixel.FlxG;
 import flixel.FlxGame;
-import openfl.display.Sprite;
 import states.MainMenuState;
 
 class Main extends Sprite {
