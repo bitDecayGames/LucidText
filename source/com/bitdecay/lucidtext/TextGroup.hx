@@ -80,6 +80,12 @@ class TextGroup extends FlxSpriteGroup {
 		while (allChars.length > 0) {
 			allChars.pop();
 		}
+		while (wordStarts.length > 0) {
+			wordStarts.pop();
+		}
+		while (pageBreaks.length > 0) {
+			pageBreaks.pop();
+		}
 
 		rawText = text;
 

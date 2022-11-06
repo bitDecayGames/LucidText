@@ -52,12 +52,6 @@ class TypingGroup extends TextGroup {
 		position = 0;
 		elapsed = 0;
 		finished = false;
-		while (wordStarts.length > 0) {
-			wordStarts.pop();
-		}
-		while (pageBreaks.length > 0) {
-			pageBreaks.pop();
-		}
 
 		for (c in allChars) {
 			c.visible = false;
