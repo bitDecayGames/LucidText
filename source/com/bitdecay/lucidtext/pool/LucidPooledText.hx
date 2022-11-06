@@ -1,7 +1,6 @@
 package com.bitdecay.lucidtext.pool;
 
 import flixel.text.FlxBitmapText;
-import flixel.text.FlxBitmapText;
 import flixel.util.FlxPool;
 
 class LucidPooledText extends FlxBitmapText implements IFlxPooled {

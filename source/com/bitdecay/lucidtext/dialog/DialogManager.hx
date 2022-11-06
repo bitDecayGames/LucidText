@@ -6,9 +6,10 @@ import flixel.FlxBasic;
 import flixel.FlxCamera;
 import flixel.FlxState;
 import flixel.math.FlxRect;
+import flixel.input.keyboard.FlxKey;
+
 import com.bitdecay.lucidtext.TypeOptions;
 import com.bitdecay.lucidtext.TypingGroup;
-import flixel.input.keyboard.FlxKey;
 
 class DialogManager extends FlxBasic {
 	static inline final FontSize = 10;

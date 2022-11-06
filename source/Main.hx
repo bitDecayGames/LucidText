@@ -1,5 +1,6 @@
 package;
 
+import com.bitdecay.lucidtext.effect.EffectRegistry;
 import openfl.display.FPS;
 import flixel.FlxG;
 import flixel.FlxGame;
@@ -16,5 +17,9 @@ class Main extends Sprite {
 
 		fps.visible = false;
 		addChild(fps);
+
+		#if lucid_debug
+		EffectRegistry.dumpToConsole();
+		#end
 	}
 }

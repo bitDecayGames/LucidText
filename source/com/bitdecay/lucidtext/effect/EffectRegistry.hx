@@ -47,7 +47,23 @@ class EffectRegistry {
 	 * Prints all currently registered effects to console based on the available annotations
 	**/
 	public static function dumpToConsole() {
+		var sortedKeys:Array<String> = [];
 		for (key => value in registry) {
+			sortedKeys.push(key);
+		}
+		sortedKeys.sort((a, b) -> {
+			if (a < b) {
+				return -1;
+			  }
+			  else if (a > b) {
+				return 1;
+			  } else {
+				return 0;
+			  }
+		});
+		for (key in sortedKeys) {
+			var value = registry.get(key);
+
 			trace('${["┌ ", [for (i in 0...key.length) '─'].join(""), " ┐"].join("")}');
 			trace('│ ${key} │');
 			trace('${["└ ", [for (i in 0...key.length) '─'].join(""), " ┘"].join("")}');

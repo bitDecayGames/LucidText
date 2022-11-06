@@ -1,7 +1,6 @@
 package com.bitdecay.lucidtext.parse;
 
 import com.bitdecay.lucidtext.parse.TextParser;
-import com.bitdecay.lucidtext.effect.Effect;
 import com.bitdecay.lucidtext.effect.EffectRange;
 import com.bitdecay.lucidtext.effect.EffectRegistry;
 
@@ -35,6 +34,8 @@ class Parser {
 
 		effects = new Array<EffectRange>();
 
+		var accountedCloseTags:Array<Int> = [];
+
 		for (i in 0...rawTags.length) {
 			if (rawTags[i].void) {
 				if (rawTags[i].close) {
@@ -43,15 +44,16 @@ class Parser {
 				buildTagRange(rawTags[i], rawTags[i]);
 				continue;
 			}
-			if (rawTags[i].close) {
+			if (rawTags[i].close && !accountedCloseTags.contains(i)) {
 				// we only scan for opening tags in the top loop
 				// TODO: We want to throw in the case where we have a closing tag with no opening tag. Not sure where that logic should live
-				// throw 'error parsing  ${originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
+				throw 'error parsing  ${results.originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
 				continue;
 			}
 			for (k in i + 1...rawTags.length) {
 				if (rawTags[k].tag == rawTags[i].tag) {
 					if (rawTags[k].close) {
+						accountedCloseTags.push(k);
 						buildTagRange(rawTags[i], rawTags[k]);
 						break;
 					} else {
