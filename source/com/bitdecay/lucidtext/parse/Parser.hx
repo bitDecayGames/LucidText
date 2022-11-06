@@ -29,6 +29,7 @@ class Parser {
 			trace("   raw pos   : " + tag.rawPosition);
 			trace("   with opts : " + tag.options);
 			trace("   closer    : " + tag.close);
+			trace("   void      : " + tag.void);
 		}
 		#end
 

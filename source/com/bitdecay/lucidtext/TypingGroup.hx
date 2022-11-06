@@ -1,5 +1,6 @@
 package com.bitdecay.lucidtext;
 
+import com.bitdecay.lucidtext.effect.EffectRange;
 import com.bitdecay.lucidtext.parse.TagLocation;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
@@ -9,6 +10,8 @@ class TypingGroup extends TextGroup {
 	var options:TypeOptions;
 
 	var position:Int = 0;
+	var newPosition = false;
+
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
 
@@ -41,6 +44,9 @@ class TypingGroup extends TextGroup {
 	public var waitingForConfirm(default, null):Bool = false;
 	public var finished(default, null):Bool = false;
 
+	var fxByStart:Map<Int, Array<EffectRange>> = [];
+	var fxByEnd:Map<Int, Array<EffectRange>> = [];
+
 	public function new(bounds:FlxRect, text:String, ops:TypeOptions) {
 		this.bounds = bounds;
 		options = ops;
@@ -49,6 +55,8 @@ class TypingGroup extends TextGroup {
 
 	override public function loadText(text:String) {
 		super.loadText(text);
+		setupTagMaps();
+		newPosition = true;
 		position = 0;
 		elapsed = 0;
 		finished = false;
@@ -94,6 +102,25 @@ class TypingGroup extends TextGroup {
 		}
 	}
 
+	private function setupTagMaps() {
+		fxByStart.clear();
+		fxByEnd.clear();
+
+		for (range in parser.effects) {
+			var startPos = range.startTag.position;
+			var endPos = range.endTag.position;
+			if (!fxByStart.exists(startPos)) {
+				fxByStart.set(startPos, []);
+			}
+			if (!fxByEnd.exists(endPos)) {
+				fxByEnd.set(endPos, []);
+			}
+
+			fxByStart.get(startPos).push(range);
+			fxByEnd.get(endPos).push(range);
+		}
+	}
+
 	private function buildPages() {
 		for (i in 0...allChars.length) {
 			if (allChars[i].y + allChars[i].height > bounds.bottom - margins[1]) {
@@ -133,11 +160,26 @@ class TypingGroup extends TextGroup {
 	}
 
 	override public function update(delta:Float) {
-		super.update(delta);
-
 		if (finished) {
 			return;
 		}
+
+		if (newPosition) {
+			// handle void tags immediately upon reaching the position
+			if (fxByStart.exists(position)) {
+				for (fxRange in fxByStart.get(position)) {
+					if (fxRange.startTag.void) {
+						fxRange.effect.begin(options.modOps);
+						if (tagCallback != null) {
+							tagCallback(fxRange.startTag);
+						}
+					}
+				}
+			}
+			newPosition = false;
+		}
+
+		super.update(delta);
 
 		if (!effectUpdateSuccess) {
 			// wait till all effects are success before continuing
@@ -145,7 +187,9 @@ class TypingGroup extends TextGroup {
 		}
 
 		calcedTimePerChar = options.getTimePerCharacter();
-
+		elapsed -= options.modOps.delay;
+		options.modOps.delay = 0;
+		
 		checkForPageBreak();
 
 		if (waitingForConfirm) {
@@ -189,26 +233,31 @@ class TypingGroup extends TextGroup {
 				}
 			}
 
-			// TODO: This should be done via map accesses instead of looping
-			for (fxRange in parser.effects) {
-				if (fxRange.startTag.position == position) {
-					fxRange.effect.begin(options.modOps);
-					if (tagCallback != null) {
-						tagCallback(fxRange.startTag);
+			if (fxByStart.exists(position)) {
+				for (fxRange in fxByStart.get(position)) {
+					if (!fxRange.startTag.void) {
+						// only handle non-void tags here
+						fxRange.effect.begin(options.modOps);
+						if (tagCallback != null) {
+							tagCallback(fxRange.startTag);
+						}
 					}
 				}
 			}
 
 			position++;
+			newPosition = true;
 
-			// TODO: This should be done via map accesses instead of looping
-			for (fxRange in parser.effects) {
-				if (fxRange.endTag.position == position + 1) {
-					fxRange.effect.end(options.modOps);
-					// TODO: We can double-call singular tags (like `<pause />`). We should
-					//    figure out a way to ensure we only invoke the callback once
-					if (tagCallback != null) {
-						tagCallback(fxRange.endTag);
+			if (fxByEnd.exists(position)) {
+				for (fxRange in fxByEnd.get(position)) {
+					if (!fxRange.endTag.void) {
+						fxRange.effect.begin(options.modOps);
+						// TODO: We can double-call singular tags (like `<pause />`). We should
+						//    figure out a way to ensure we only invoke the callback once
+						// DOES THIS STILL HAPPEN NOW THAT VOID TAGS ARE ACCOUNTED FOR?
+						if (tagCallback != null) {
+							tagCallback(fxRange.endTag);
+						}
 					}
 				}
 			}
