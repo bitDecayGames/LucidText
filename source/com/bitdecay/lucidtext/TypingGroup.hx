@@ -10,7 +10,7 @@ class TypingGroup extends TextGroup {
 	var options:TypeOptions;
 
 	var position:Int = 0;
-	var newPosition = false;
+	var checkInitialChar = false;
 
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
@@ -56,7 +56,7 @@ class TypingGroup extends TextGroup {
 	override public function loadText(text:String) {
 		super.loadText(text);
 		setupTagMaps();
-		newPosition = true;
+		checkInitialChar = true;
 		position = 0;
 		elapsed = 0;
 		finished = false;
@@ -128,18 +128,20 @@ class TypingGroup extends TextGroup {
 				continue;
 			}
 
-			for (pageIndex in pageBreaks) {
-				if (i == pageIndex) {
-					newPage(i);
+			for (charIndex in pageBreaks) {
+				if (i == charIndex) {
+					newPage(i, false);
 					break;
 				}
 			}
 		}
 	}
 
-	private function newPage(index:Int) {
+	private function newPage(index:Int, push:Bool = true) {
 		// start new page
-		pageBreaks.push(index);
+		if (push) {
+			pageBreaks.push(index);
+		}
 		var yOffset = allChars[index].y - (bounds.y + margins[0]);
 		for (n in index...allChars.length) {
 			// reset any y we've added to bring things back to the top
@@ -147,7 +149,7 @@ class TypingGroup extends TextGroup {
 		}
 	}
 
-	private function checkForPageBreak() {
+	private function checkForPageBreak():Bool {
 		// TODO: Can optimize this so we only check the next known pageBreak mark
 		for (pageMark in pageBreaks) {
 			if (position == pageMark && !waitingForConfirm) {
@@ -155,8 +157,10 @@ class TypingGroup extends TextGroup {
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 
 	override public function update(delta:Float) {
@@ -164,8 +168,8 @@ class TypingGroup extends TextGroup {
 			return;
 		}
 
-		if (newPosition) {
-			// handle void tags immediately upon reaching the position
+		if (checkInitialChar) {
+			// We need to do this check once up front
 			if (fxByStart.exists(position)) {
 				for (fxRange in fxByStart.get(position)) {
 					if (fxRange.startTag.void) {
@@ -176,7 +180,7 @@ class TypingGroup extends TextGroup {
 					}
 				}
 			}
-			newPosition = false;
+			checkInitialChar = false;
 		}
 
 		super.update(delta);
@@ -189,8 +193,6 @@ class TypingGroup extends TextGroup {
 		calcedTimePerChar = options.getTimePerCharacter();
 		elapsed -= options.modOps.delay;
 		options.modOps.delay = 0;
-		
-		checkForPageBreak();
 
 		if (waitingForConfirm) {
 			if (options.checkPageConfirm(delta)) {
@@ -211,10 +213,9 @@ class TypingGroup extends TextGroup {
 					// clear out previous characters
 					allChars[i].visible = false;
 				}
-				elapsed = calcedTimePerChar - delta;
-			} else {
-				return;
 			}
+
+			return;
 		}
 
 		elapsed += delta;
@@ -246,18 +247,17 @@ class TypingGroup extends TextGroup {
 			}
 
 			position++;
-			newPosition = true;
 
 			if (fxByEnd.exists(position)) {
 				for (fxRange in fxByEnd.get(position)) {
 					if (!fxRange.endTag.void) {
+						fxRange.effect.end(options.modOps);
+					} else {
+						// this explicitly handles void tags as we hit new positions rather than as we 'leave' them
 						fxRange.effect.begin(options.modOps);
-						// TODO: We can double-call singular tags (like `<pause />`). We should
-						//    figure out a way to ensure we only invoke the callback once
-						// DOES THIS STILL HAPPEN NOW THAT VOID TAGS ARE ACCOUNTED FOR?
-						if (tagCallback != null) {
-							tagCallback(fxRange.endTag);
-						}
+					}
+					if (tagCallback != null) {
+						tagCallback(fxRange.endTag);
 					}
 				}
 			}
@@ -267,6 +267,11 @@ class TypingGroup extends TextGroup {
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
 				}
+				return;
+			}
+
+			if (checkForPageBreak()) {
+				return;
 			}
 		}
 	}

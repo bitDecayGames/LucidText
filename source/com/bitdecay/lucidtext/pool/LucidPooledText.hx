@@ -10,7 +10,7 @@ class LucidPooledText extends FlxBitmapText implements IFlxPooled {
 
 	var _inPool:Bool = false;
 
-	public static inline function get(X:Float = 0, Y:Float = 0, str:String, fontSize:Int):FlxBitmapText
+	public static inline function get(X:Float = 0, Y:Float = 0, str:String, fontSize:Int = 0):FlxBitmapText
 	{
 		var txt = _pool.get();
 		txt.x = X;
@@ -19,7 +19,7 @@ class LucidPooledText extends FlxBitmapText implements IFlxPooled {
 
 		// cheeky abuse of the getter to get it to update the pixels
 		txt.width;
-		if (fontSize != null) {
+		if (fontSize > 0) {
 			var scale = 1.0 * fontSize / txt.height;
 			txt.scale.set(scale, scale);
 		}
