@@ -53,7 +53,7 @@ class TypeOptions {
 		if (modOps.charsPerSecond <= 0) {
 			return 0;
 		} else {
-			return 1 / modOps.charsPerSecond;
+			return 1 / (modOps.charsPerSecond * modOps.speedMultiplier);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.bitdecay.lucidtext;
 
 class ModifiableOptions {
+	public var speedMultiplier:Float = 1.0;
 	public var charsPerSecond:Float = 20.0;
 
 	// if set, adds a one-time delay to the typing timer and is then cleared

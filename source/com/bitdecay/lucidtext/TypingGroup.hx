@@ -154,6 +154,7 @@ class TypingGroup extends TextGroup {
 		for (pageMark in pageBreaks) {
 			if (position == pageMark && !waitingForConfirm) {
 				waitingForConfirm = true;
+				pageCallback();
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
 				}
@@ -264,6 +265,7 @@ class TypingGroup extends TextGroup {
 
 			if (position == allChars.length) {
 				waitingForConfirm = true;
+				pageCallback();
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
 				}
