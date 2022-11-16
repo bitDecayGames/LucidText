@@ -45,10 +45,11 @@ class Parser {
 				buildTagRange(rawTags[i], rawTags[i]);
 				continue;
 			}
-			if (rawTags[i].close && !accountedCloseTags.contains(i)) {
+			if (rawTags[i].close) {
+				if (!accountedCloseTags.contains(i)) {
+					throw 'error parsing  ${results.originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
+				}
 				// we only scan for opening tags in the top loop
-				// TODO: We want to throw in the case where we have a closing tag with no opening tag. Not sure where that logic should live
-				throw 'error parsing  ${results.originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
 				continue;
 			}
 			for (k in i + 1...rawTags.length) {
