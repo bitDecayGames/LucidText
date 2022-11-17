@@ -191,9 +191,7 @@ class TypingGroup extends TextGroup {
 			return;
 		}
 
-		calcedTimePerChar = options.getTimePerCharacter();
-		elapsed -= options.modOps.delay;
-		options.modOps.delay = 0;
+		updateTimings();
 
 		if (waitingForConfirm) {
 			if (options.checkPageConfirm(delta)) {
@@ -263,6 +261,10 @@ class TypingGroup extends TextGroup {
 				}
 			}
 
+			// This can change between characters (such as with a <pause/> tag).
+			// So we need to update this after each round of callbacks
+			updateTimings();
+
 			if (position == allChars.length) {
 				waitingForConfirm = true;
 				pageCallback();
@@ -276,5 +278,11 @@ class TypingGroup extends TextGroup {
 				return;
 			}
 		}
+	}
+
+	function updateTimings() {
+		calcedTimePerChar = options.getTimePerCharacter();
+		elapsed -= options.modOps.delay;
+		options.modOps.delay = 0;
 	}
 }
