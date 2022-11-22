@@ -4,21 +4,11 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 
 ## Table of Contents
 
-* [Design Principles](#design-principles)
 * [Tagging](#tagging)
 * [Custom Tags](#custom-tags)
 * [Discoverability](#discoverability)
 * [Testing](#testing)
 * [Formatting](#formatting)
-
-### Design Principles
-
-#### **Foundational Concepts**
-
-* User Input
-	* This library is designed to allow a user to customize in-game text without needing to touch the code.
-	* This is achieved by expecting styling directives to be part of the text strings in the form of HTML-style tags. See [Tagging](#tagging) for more information.
-
 
 ### Tagging
 
@@ -46,19 +36,21 @@ Which would render as:
 
 #### **Two kinds of tags**
 
-* Effects, which fall into two broad categories: `Visual` and `Functional`
-	* Visual Effects cover anything that affects a given set of characters' appearance in a string
-		* A few examples of Visual Effects:
-			1. One time change such as `color` or `size`
-			1. Actively updated Effects such as `wave` and `shake`
-		* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
-	* Functional Effects cover anything that impacts the process with how characters are added to the screen at a specific point in the string.
-		* Functional Effects are generally used in `TypingGroup`, with notable examples being:
-			1. `pause`: Imparts a delay when typing
-			2. `page`: Forces a page break in a given string
-			3. `cb`: Used as a generally callback to aid in running code at specific points during a string's typing
-	
-	* Custom Effects can be be added and used to do anything! See [Custom Tags](#custom-tags)
+Effects, which fall into two broad categories: `Visual` and `Functional`
+
+* Visual Effects cover anything that affects a given set of characters' appearance in a string
+	* A few examples of Visual Effects:
+		1. One time change such as `color` or `size`
+		1. Actively updated Effects such as `wave` and `shake`
+	* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
+* Functional Effects cover anything that impacts the process with how characters are added to the screen at a specific point in the string.
+	* Functional Effects are generally used in `TypingGroup`, with notable examples being:
+		1. `pause`: Imparts a delay when typing
+		2. `page`: Forces a page break in a given string
+		3. `cb`: Used as a generally callback to aid in running code at specific points during a string's typing
+	* These are written as HTML void elements. Examples: `<page/>` and `<pause/>`
+
+* Custom Effects can be be added and used to do anything! See [Custom Tags](#custom-tags)
 
 ### Custom Tags
 
