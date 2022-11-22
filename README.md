@@ -4,44 +4,25 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 
 ## Table of Contents
 
-* [Design Principles](#design-principles)
 * [Tagging](#tagging)
 * [Custom Tags](#custom-tags)
 * [Discoverability](#discoverability)
 * [Testing](#testing)
 * [Formatting](#formatting)
 
-### Design Principles
-
-#### **Foundational Concepts**
-
-* User Input
-	* This library is designed to allow a user to customize in-game text without needing to touch the code.
-	* This is achieved by expecting styling directives to be part of the text strings in the form of HTML-style tags. See [Tagging](#tagging) for more information.
-* Effects
-	* An effect can be anything that occurs when a position in a string is reached
-		* A few examples of Effects:
-			1. One time change such as `color` or `size`
-			1. Actively updated Effects such as `wave` and `shake`
-			1. Specialty effects such as `pause` which are used internally for temporal effects
-		* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
-	* Effects can be used to do anything!
-
 ### Tagging
 
-Tags follow an HTML style and are contained directly in the input strings.
-
-The title image at the top of this readme is created by specifying:
+This library is designed to allow a user to customize in-game text without needing to touch the code. This is achieved through styling directives embedded directly in the input text as HTML-style tags. The title image at the top of this readme is created by specifying:
 
 `Welcome to <wave>LucidText!</wave>`
 
-This library comes with various generic style tags, a few of which are:
+This library comes with various built-in tags, a few of which are:
 
 * `wave` - A sine wave that moves through the text
 * `color` - Set the color of the text
 * `shake` - Adds a random shake to the text
 
-Tags can also have various options set. The `wave`, for example, effect has `speed` and `height` (among others). Using these options looks like:
+Tags can also have various attributes that can be set. The `wave`, for example, effect has `speed` and `height` (among others). Using these attributes looks like:
 ```
 Welcome to <wave height=30 speed=5>LucidText!</wave>
 ```
@@ -51,7 +32,21 @@ Which would render as:
 
 #### **Two kinds of tags**
 
-The majority of tags are intended to apply an effect to range of characters, such as the `wave` effect used in the title image. Tags can be applied to a singular position in a string, as well. These are currently used for certain specialty effects, namely `page` and `pause`, which apply to a position in the string as opposed to a range of characters. These are written like HTML void elements: `<page/>` and `<pause/>` respectively.
+Effects, which fall into two broad categories: `Visual` and `Functional`
+
+* Visual Effects cover anything that affects a given set of characters' appearance in a string
+	* A few examples of Visual Effects:
+		1. One time change such as `color` or `size`
+		1. Actively updated Effects such as `wave` and `shake`
+	* Any effects involving motion should avoid using the `FlxTween` engine as that causes strange behavior if the user attempts to move the text object while the tween is active
+* Functional Effects cover anything that impacts the process with how characters are added to the screen at a specific point in the string.
+	* Functional Effects are generally used in `TypingGroup`, with notable examples being:
+		1. `pause`: Imparts a delay when typing
+		2. `page`: Forces a page break in a given string
+		3. `cb`: Used as a generally callback to aid in running code at specific points during a string's typing
+	* These are written as HTML void elements. Examples: `<page/>` and `<pause/>`
+
+* Custom Effects can be be added and used to do anything! See [Custom Tags](#custom-tags)
 
 ### Custom Tags
 
