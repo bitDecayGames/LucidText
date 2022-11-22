@@ -12,15 +12,11 @@ LucidText is a HaxeFlixel library designed to give easy access to juicy text in 
 
 ### Tagging
 
-This library is designed to allow a user to customize in-game text without needing to touch the code. This is achieved through styling directives embedded in the in the form of HTML-style tags.
-
-Tags follow an HTML style and are contained directly in the input strings.
-
-The title image at the top of this readme is created by specifying:
+This library is designed to allow a user to customize in-game text without needing to touch the code. This is achieved through styling directives embedded directly in the input text as HTML-style tags. The title image at the top of this readme is created by specifying:
 
 `Welcome to <wave>LucidText!</wave>`
 
-This library comes with various generic style tags, a few of which are:
+This library comes with various built-in tags, a few of which are:
 
 * `wave` - A sine wave that moves through the text
 * `color` - Set the color of the text
