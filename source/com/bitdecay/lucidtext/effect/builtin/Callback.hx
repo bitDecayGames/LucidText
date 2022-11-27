@@ -6,6 +6,7 @@ import com.bitdecay.lucidtext.properties.Setters;
 
 @description("Non-visual effect to allow easy use of tag callbacks function for programmatic interaction")
 class Callback implements Effect {
+	@:keep
 	@description("Just a value that code can watch for to perform arbitrary actions")
 	public var val:String = "";
 
