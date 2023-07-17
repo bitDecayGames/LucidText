@@ -67,7 +67,7 @@ class TextGroup extends FlxSpriteGroup {
 
 	public function put() {
 		for (text in allChars) {
-			if (Std.is(text, LucidPooledText)) {
+			if (Std.isOfType(text, LucidPooledText)) {
 				cast(text, LucidPooledText).put();
 			}
 		}

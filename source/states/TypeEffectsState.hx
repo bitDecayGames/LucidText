@@ -19,9 +19,9 @@ class TypeEffectsState extends FlxState {
 		TextGroup.textMakerFunc = FlxBitmapTextFactory.makeSimple;
 		FlxG.autoPause = false;
 
-		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 12, 12]);
-		options.fontSize = 24;
-		options.modOps.charsPerSecond = 10;
+		var sliceCoords = [4, 4, 4, 4];
+		var margins:Array<Float> = [14, 8, 8, 8];
+		var options = new TypeOptions(AssetPaths.slice__png, sliceCoords, margins);
 
 		var speedTxt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40),
 			"Text speed can be modified dynamically <faster>either to be typed at a much faster rate</faster> <speed mod=10>(as fast as anybody could need),</speed> or <slower>to be typed slower</slower> <speed mod=0.25>(sluggish, even).</speed>",

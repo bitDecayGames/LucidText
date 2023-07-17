@@ -43,7 +43,7 @@ class Shake implements Effect {
 
 			// then calculate our new offset and add it to the working temp position
 			offset.set(FlxG.random.float(0, dist), 0);
-			offset.rotate(FlxPoint.weak(), FlxG.random.int(0, 360));
+			offset.pivotDegrees(FlxPoint.weak(), FlxG.random.int(0, 360));
 			tempPosition.addPoint(offset);
 
 			// set our position

@@ -1,15 +1,16 @@
 package states;
 
-import haxe.Timer;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
+
 import com.bitdecay.lucidtext.TypeOptions;
 import com.bitdecay.lucidtext.TypingGroup;
 import com.bitdecay.lucidtext.TextGroup;
+
 import misc.FlxBitmapTextFactory;
 
 class TypeCallbackState extends FlxState {
@@ -26,7 +27,9 @@ class TypeCallbackState extends FlxState {
 		var wordSound = FlxG.sound.load(AssetPaths.word_blip__wav);
 		wordSound.volume = 0.2;
 
-		var options = new TypeOptions(AssetPaths.slice__png, [4, 4, 4, 4]);
+		var sliceCoords = [4, 4, 4, 4];
+		var margins:Array<Float> = [14, 8, 8, 8];
+		var options = new TypeOptions(AssetPaths.slice__png, sliceCoords, margins);
 
 		var txt = new TypingGroup(FlxRect.get(20, 20, FlxG.width - 40, FlxG.height / 2 - 40),
 			"Welcome to <wave>LucidText!!</wave> This is a <scrub>fairly long</scrub> piece of text to exhibit the very cool ability to do word wrapping and typing. <smaller>Patent pending</smaller>",

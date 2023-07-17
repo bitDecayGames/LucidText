@@ -45,7 +45,7 @@
 	<haxelib name="flixel-addons" />
 
 	<!--In case you want to use the ui package-->
-	<haxelib name="flixel-ui" />
+	<!-- <haxelib name="flixel-ui" /> -->
 
 	<!-- <config:hxtelemetry host="192.168.1.165" allocations="true" /> -->
 
