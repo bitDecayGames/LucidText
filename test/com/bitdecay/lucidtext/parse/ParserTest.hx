@@ -1,11 +1,13 @@
 package com.bitdecay.lucidtext.parse;
 
+import com.bitdecay.lucidtext.effect.builtin.Shake;
+import com.bitdecay.lucidtext.effect.builtin.Bigger;
+import massive.munit.Assert;
+
 import com.bitdecay.lucidtext.effect.builtin.Pause;
-import massive.haxe.log.Log;
 import com.bitdecay.lucidtext.effect.builtin.Scrub;
 import com.bitdecay.lucidtext.effect.EffectRegistry;
 import com.bitdecay.lucidtext.effect.builtin.Wave;
-import massive.munit.Assert;
 import com.bitdecay.lucidtext.parse.Parser;
 
 class ParserTest {
@@ -76,15 +78,35 @@ class ParserTest {
 		Assert.isTrue(StringTools.contains(except, "shake"));
 	}
 
-	// TODO: This should be an error situation
-	// @Test
-	// public function testMissingOpenTag() {
-	// 	var text = "</shake>Shaking";
-	// 	var parser = new Parser(text);
-	// 	var except = Assert.throws(String, parser.parse);
-	// 	Assert.isTrue(StringTools.contains(except, "found closing tag with no opening tag"), 'got except: ${except}');
-	// 	Assert.isTrue(StringTools.contains(except, "/shake"), 'got except: ${except}');
-	// }
+	@Test
+	public function testMissingOpenTag() {
+		var text = "</shake>Shaking";
+		var parser = new Parser(text);
+		var except = Assert.throws(String, parser.parse);
+		Assert.isTrue(StringTools.contains(except, "found closing tag with no opening tag"), 'got except: ${except}');
+		Assert.isTrue(StringTools.contains(except, "/shake"), 'got except: ${except}');
+	}
+
+	@Test
+	public function testOffsetTagg() {
+		var text = "<bigger>big and <shake>shaking</bigger> interlaced</shake>";
+		var parser = new Parser(text);
+		parser.parse();
+
+		Assert.areEqual(2, parser.effects.length);
+
+		var fx = parser.effects[0];
+		Assert.isType(fx.effect, Bigger);
+		Assert.areEqual("bigger", fx.startTag.tag);
+		Assert.areEqual(0, fx.startTag.position);
+		Assert.areEqual(15, fx.endTag.position);
+
+		fx = parser.effects[1];
+		Assert.isType(fx.effect, Shake);
+		Assert.areEqual("shake", fx.startTag.tag);
+		Assert.areEqual(8, fx.startTag.position);
+		Assert.areEqual(26, fx.endTag.position);
+	}
 
 	@Test
 	public function testBadTagThrows() {

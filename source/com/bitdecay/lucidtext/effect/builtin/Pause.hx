@@ -1,6 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
-import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
@@ -23,27 +23,13 @@ class Pause implements Effect {
 		return ["t" => Setters.setFloat];
 	}
 
-	public function apply(o:FlxText, i:Int):EffectUpdater {
-		if (enforcer == -1) {
-			enforcer = i;
-		}
-
-		if (enforcer != i) {
-			throw 'the \'pause\' tag at position ${i} should be a void tag: <pause/>. If slow typing is intended, adjust the type speed';
-		}
-
-		var countdown = t;
-		return (delta) -> {
-			if (!o.visible) {
-				return true;
-			}
-
-			countdown -= delta;
-			return countdown <= 0;
-		}
+	public function apply(o:FlxBitmapText, i:Int):EffectUpdater {
+		return null;
 	}
 
-	public function begin(ops:ModifiableOptions) {}
+	public function begin(ops:ModifiableOptions) {
+		ops.delay = t;
+	}
 
 	public function end(ops:ModifiableOptions) {}
 }

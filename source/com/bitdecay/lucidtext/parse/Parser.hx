@@ -1,7 +1,6 @@
 package com.bitdecay.lucidtext.parse;
 
 import com.bitdecay.lucidtext.parse.TextParser;
-import com.bitdecay.lucidtext.effect.Effect;
 import com.bitdecay.lucidtext.effect.EffectRange;
 import com.bitdecay.lucidtext.effect.EffectRegistry;
 
@@ -30,10 +29,13 @@ class Parser {
 			trace("   raw pos   : " + tag.rawPosition);
 			trace("   with opts : " + tag.options);
 			trace("   closer    : " + tag.close);
+			trace("   void      : " + tag.void);
 		}
 		#end
 
 		effects = new Array<EffectRange>();
+
+		var accountedCloseTags:Array<Int> = [];
 
 		for (i in 0...rawTags.length) {
 			if (rawTags[i].void) {
@@ -44,14 +46,16 @@ class Parser {
 				continue;
 			}
 			if (rawTags[i].close) {
+				if (!accountedCloseTags.contains(i)) {
+					throw 'error parsing  ${results.originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
+				}
 				// we only scan for opening tags in the top loop
-				// TODO: We want to throw in the case where we have a closing tag with no opening tag. Not sure where that logic should live
-				// throw 'error parsing  ${originalText}:${rawTags[i].position} - found closing tag with no opening tag \'${rawTags[i].tag}\'';
 				continue;
 			}
 			for (k in i + 1...rawTags.length) {
 				if (rawTags[k].tag == rawTags[i].tag) {
 					if (rawTags[k].close) {
+						accountedCloseTags.push(k);
 						buildTagRange(rawTags[i], rawTags[k]);
 						break;
 					} else {
@@ -84,7 +88,9 @@ class Parser {
 			Options.setAll(fx.effect, defaults);
 		}
 
+		// TODO: Should we do this parsing somewhere else potentially?
 		var options = Options.parse(openTag.options);
+		openTag.parsedOptions = options;
 		Options.setAll(fx.effect, options);
 		effects.push(fx);
 	}

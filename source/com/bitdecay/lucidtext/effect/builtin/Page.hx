@@ -1,6 +1,6 @@
 package com.bitdecay.lucidtext.effect.builtin;
 
-import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 import com.bitdecay.lucidtext.properties.Setters;
 
@@ -11,7 +11,7 @@ import com.bitdecay.lucidtext.properties.Setters;
  *       of a word. It works best when placed after a space due to how words
  *       are parsed.
 **/
-@description("No-op tag that is used for creating page breaks in typing text")
+@description("Non-visual tag that is used for creating page breaks in typing text")
 class Page implements Effect {
 	var enforcer:Int = -1;
 
@@ -21,7 +21,7 @@ class Page implements Effect {
 		return [];
 	}
 
-	public function apply(o:FlxText, i:Int):EffectUpdater {
+	public function apply(o:FlxBitmapText, i:Int):EffectUpdater {
 		if (enforcer == -1) {
 			enforcer = i;
 			return null;

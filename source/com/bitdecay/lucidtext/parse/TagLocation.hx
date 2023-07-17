@@ -5,6 +5,7 @@ class TagLocation {
 	public var rawPosition:Int;
 	public var tag:String;
 	public var options:String;
+	public var parsedOptions:Dynamic = null;
 	public var close:Bool;
 	public var void:Bool;
 

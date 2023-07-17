@@ -4,7 +4,7 @@ import flixel.math.FlxRect;
 import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
 import flixel.FlxG;
-import misc.FlxTextFactory;
+import misc.FlxBitmapTextFactory;
 import flixel.FlxState;
 import com.bitdecay.lucidtext.TextGroup;
 
@@ -17,9 +17,9 @@ class EffectExamplesState extends FlxState {
 		super.create();
 		bgColor = FlxColor.WHITE;
 
-		// FlxTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
-		FlxTextFactory.defaultColor = FlxColor.BLACK;
-		TextGroup.textMakerFunc = FlxTextFactory.makeSimple;
+		// FlxBitmapTextFactory.defaultFont = AssetPaths.Brain_Slab_8__ttf;
+		FlxBitmapTextFactory.defaultColor = FlxColor.BLACK;
+		TextGroup.textMakerFunc = FlxBitmapTextFactory.makeSimple;
 
 		FlxG.autoPause = false;
 

@@ -1,30 +1,31 @@
 package com.bitdecay.lucidtext;
 
+import flixel.math.FlxPoint;
+import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxRect;
 import com.bitdecay.lucidtext.parse.Regex;
-import flixel.text.FlxText;
-import flixel.group.FlxSpriteGroup;
+import flixel.text.FlxBitmapText;
+import com.bitdecay.lucidtext.pool.LucidPooledText;
 import com.bitdecay.lucidtext.parse.Parser;
 import com.bitdecay.lucidtext.effect.Effect.EffectUpdater;
 
 /**
- * A group that holds all FlxText objects. This handles parsing the user
+ * A group that holds all FlxBitmapText objects. This handles parsing the user
  * string and applying all effects to the appropriate characters
 **/
 class TextGroup extends FlxSpriteGroup {
-	// It seems that there is a 2-pixel buffer on each side, so we will shave off 4 pixels of each
-	// letter to account for that tested and working with various fonts and font sizes
-	public static inline var spacingMod = -4;
+	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxBitmapText;
+	public static var defaultScrollFactor:FlxPoint = null;
 
-	var bounds:FlxRect;
-	var margins:Float = 0.0;
+	public var bounds:FlxRect;
+	public var margins:Array<Float>;
 
-	public static var textMakerFunc:(text:String, x:Float, y:Float, size:Int) -> FlxText;
 
 	var parser:Parser;
 
+
 	private var activeEffects:Array<EffectUpdater> = new Array<EffectUpdater>();
-	var allChars:Array<FlxText>;
+	var allChars:Array<FlxBitmapText>;
 
 	public var rawText(default, null):String;
 	public var renderText(default, null):String;
@@ -35,16 +36,42 @@ class TextGroup extends FlxSpriteGroup {
 
 	var wordStarts:Array<Int> = [];
 	var wordLengths:Map<Int, Int> = [];
+	var lineBreaks:Array<Int> = [];
 	var pageBreaks:Array<Int> = [];
 
-	public function new(bounds:FlxRect, text:String, fontSize:Int, margins:Float = 0.0) {
-		super(bounds.left, bounds.top);
+	// creates a new text group
+	// note that margins should be provided in the format [top, bottom, left, right]. If fewer than four are
+	// provided, they will be filled with zeroes
+	public function new(bounds:FlxRect, text:String, fontSize:Int, margins:Array<Float> = null) {
+		super();
 		this.bounds = bounds;
 		this.fontSize = fontSize;
-		this.margins = margins;
 
-		allChars = new Array<FlxText>();
+		if (margins != null) {
+			this.margins = margins;
+		} else {
+			this.margins = [];
+		}
+
+		while (this.margins.length < 4) {
+			this.margins.push(0);
+		}
+
+		if (TextGroup.defaultScrollFactor != null) {
+			scrollFactor.copyFrom(TextGroup.defaultScrollFactor);
+		}
+
+		allChars = new Array<FlxBitmapText>();
 		loadText(text);
+	}
+
+	public function put() {
+		for (text in allChars) {
+			if (Std.isOfType(text, LucidPooledText)) {
+				cast(text, LucidPooledText).put();
+			}
+		}
+		kill();
 	}
 
 	public function loadText(text:String) {
@@ -53,6 +80,12 @@ class TextGroup extends FlxSpriteGroup {
 		while (allChars.length > 0) {
 			allChars.pop();
 		}
+		while (wordStarts.length > 0) {
+			wordStarts.pop();
+		}
+		while (pageBreaks.length > 0) {
+			pageBreaks.pop();
+		}
 
 		rawText = text;
 
@@ -60,15 +93,16 @@ class TextGroup extends FlxSpriteGroup {
 		parser.parse();
 		renderText = parser.getStrippedText();
 
-		var x = 0.0;
+		var x = bounds.x + margins[2];
+		var y = bounds.y + margins[0];
 		for (i in 0...renderText.length) {
 			if (textMakerFunc == null) {
 				textMakerFunc = (text, x, y, fontSize) -> {
-					return new FlxText(x, y, text, fontSize);
+					return LucidPooledText.get(x, y, text, fontSize);
 				}
 			}
 
-			var letter = textMakerFunc(renderText.charAt(i), x + margins, 0 + margins, fontSize);
+			var letter = textMakerFunc(renderText.charAt(i), x, y, fontSize);
 			// autoSize is why all the alignment works, so we need this enabled for this lib to work
 			letter.autoSize = true;
 
@@ -85,7 +119,12 @@ class TextGroup extends FlxSpriteGroup {
 			}
 
 			// Adjust spacing only after all effects are applied
-			x += letter.width + spacingMod;
+			if (letter.text == " ") {
+				x += letter.font.spaceWidth * letter.scale.x;
+			} else {
+				// the charAdvance gives a much more accurate size of the charcter
+				x += letter.font.getCharAdvance(letter.text.charCodeAt(0)) * letter.scale.x;
+			}
 
 			allChars.push(letter);
 			add(letter);
@@ -130,7 +169,8 @@ class TextGroup extends FlxSpriteGroup {
 					continue;
 				}
 
-				if (allChars[k].x + allChars[k].width > bounds.right - margins) {
+				if (allChars[k].x + allChars[k].width > bounds.right - margins[3]) {
+					// mark 'k' as a line break so we can use that data for figuring out line spacing
 					shuffleCharactersToNextRow(start);
 					break;
 				}
@@ -138,14 +178,45 @@ class TextGroup extends FlxSpriteGroup {
 		}
 	}
 
-	private function shuffleCharactersToNextRow(begin:Int) {
-		var xCoord = x + margins;
+	private function shuffleCharactersToNextRow(lineBreakPos:Int) {
+		lineBreaks.push(lineBreakPos);
+
+		// sort our breaks to makes sure previously added page-breaks are taken into account
+		lineBreaks.sort((a, b) -> {
+			return a - b;
+		});
+
+		var start = 0;
+		var end = lineBreakPos;
+		var endIndex = lineBreaks.indexOf(lineBreakPos);
+		if (endIndex > 0) {
+			start = lineBreaks[endIndex-1];
+		}
+
+		if (end <= start) {
+			// a single word is longer than our field, can't really handle this
+			return 0.0;
+		}
+
+		var yCoordOffset = 0.0;
+
+		// TODO: We need to figure out the best way to handle this. It seems as though the best option
+		// is _ACTUALLY_ to build a row, then retro-actively look at its max height and space it accordingly
+		// to fit nicely
+		var heightTotal = 0.0;
+		for (i in start...end) {
+			heightTotal += allChars[i].height * allChars[i].scale.y;
+		}
+		yCoordOffset = heightTotal / (end-start);
+
+
+		var xCoord = bounds.x + margins[2];
 		// this likely isn't a great value to use, we want the "base" line size for the font
 		// Namely, if  line break happens on a 'bigger' or 'smaller' character, this value
 		// is not correct.
-		var yCoordOffset = allChars[begin].height;
-		var xCoordOffset = allChars[begin].x - xCoord;
-		for (i in begin...allChars.length) {
+		// var yCoordOffset = allChars[lineBreakPos].height;
+		var xCoordOffset = allChars[lineBreakPos].x - xCoord;
+		for (i in lineBreakPos...allChars.length) {
 			for (pb in pageBreaks) {
 				if (i == pb) {
 					// reset our x coord as we added a line break for this

@@ -1,20 +1,21 @@
 package com.bitdecay.lucidtext;
 
+import com.bitdecay.lucidtext.effect.EffectRange;
 import com.bitdecay.lucidtext.parse.TagLocation;
-import openfl.geom.Rectangle;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
-import flixel.addons.ui.FlxUI9SliceSprite;
-import com.bitdecay.lucidtext.parse.Regex;
+import flixel.addons.display.FlxSliceSprite;
 
 class TypingGroup extends TextGroup {
 	var options:TypeOptions;
 
 	var position:Int = 0;
+	var checkInitialChar = false;
+
 	var elapsed:Float = 0.0;
 	var calcedTimePerChar:Float = 0.0;
 
-	var window:FlxSprite;
+	public var window:FlxSprite;
 	var nextPageIcon:FlxSprite;
 
 	/**
@@ -43,6 +44,9 @@ class TypingGroup extends TextGroup {
 	public var waitingForConfirm(default, null):Bool = false;
 	public var finished(default, null):Bool = false;
 
+	var fxByStart:Map<Int, Array<EffectRange>> = [];
+	var fxByEnd:Map<Int, Array<EffectRange>> = [];
+
 	public function new(bounds:FlxRect, text:String, ops:TypeOptions) {
 		this.bounds = bounds;
 		options = ops;
@@ -51,28 +55,29 @@ class TypingGroup extends TextGroup {
 
 	override public function loadText(text:String) {
 		super.loadText(text);
+		setupTagMaps();
+		checkInitialChar = true;
 		position = 0;
 		elapsed = 0;
 		finished = false;
-		while (wordStarts.length > 0) {
-			wordStarts.pop();
-		}
-		while (pageBreaks.length > 0) {
-			pageBreaks.pop();
-		}
 
 		for (c in allChars) {
 			c.visible = false;
-			c.y += options.margins;
-			c.x += options.margins;
 		}
 
 		buildPages();
 
 		if (options.windowAsset != null) {
 			if (options.slice9 != null) {
-				var window9Slice = new FlxUI9SliceSprite(0, 0, options.windowAsset, new Rectangle(0, 0, 50, 50), [4, 4, 12, 12]);
-				window9Slice.resize(bounds.width, bounds.height);
+				var sliceRect = FlxRect.get(
+					options.slice9[0],
+					options.slice9[1],
+					options.slice9[2],
+					options.slice9[3]
+				);
+				var window9Slice = new FlxSliceSprite(options.windowAsset, sliceRect, bounds.width, bounds.height);
+				window9Slice.x = bounds.x;
+				window9Slice.y = bounds.y;
 				window = window9Slice;
 			} else {
 				window = new FlxSprite(options.windowAsset);
@@ -86,67 +91,109 @@ class TypingGroup extends TextGroup {
 			members.insert(0, window);
 		}
 
-		if (options.nextIconMaker != null) {
+		if (nextPageIcon == null && options.nextIconMaker != null) {
 			nextPageIcon = options.nextIconMaker();
-			add(nextPageIcon);
-			nextPageIcon.setPosition(bounds.right - 40, bounds.bottom - 40);
+		}
+
+		if (nextPageIcon != null) {
+			nextPageIcon.setPosition(bounds.right - margins[3] - nextPageIcon.width, bounds.bottom - margins[1] - nextPageIcon.height);
 			nextPageIcon.visible = false;
+			add(nextPageIcon);
+		}
+	}
+
+	private function setupTagMaps() {
+		fxByStart.clear();
+		fxByEnd.clear();
+
+		for (range in parser.effects) {
+			var startPos = range.startTag.position;
+			var endPos = range.endTag.position;
+			if (!fxByStart.exists(startPos)) {
+				fxByStart.set(startPos, []);
+			}
+			if (!fxByEnd.exists(endPos)) {
+				fxByEnd.set(endPos, []);
+			}
+
+			fxByStart.get(startPos).push(range);
+			fxByEnd.get(endPos).push(range);
 		}
 	}
 
 	private function buildPages() {
 		for (i in 0...allChars.length) {
-			if (allChars[i].y + allChars[i].height > bounds.bottom - margins) {
+			if (allChars[i].y + allChars[i].height > bounds.bottom - margins[1]) {
 				newPage(i);
 				continue;
 			}
 
-			for (pageIndex in pageBreaks) {
-				if (i == pageIndex) {
-					newPage(i);
+			for (charIndex in pageBreaks) {
+				if (i == charIndex) {
+					newPage(i, false);
 					break;
 				}
 			}
 		}
 	}
 
-	private function newPage(index:Int) {
+	private function newPage(index:Int, push:Bool = true) {
 		// start new page
-		pageBreaks.push(index);
-		var yOffset = allChars[index].y - (y + margins);
+		if (push) {
+			pageBreaks.push(index);
+		}
+		var yOffset = allChars[index].y - (bounds.y + margins[0]);
 		for (n in index...allChars.length) {
 			// reset any y we've added to bring things back to the top
 			allChars[n].y -= yOffset;
 		}
 	}
 
-	private function checkForPageBreak() {
+	private function checkForPageBreak():Bool {
 		// TODO: Can optimize this so we only check the next known pageBreak mark
 		for (pageMark in pageBreaks) {
 			if (position == pageMark && !waitingForConfirm) {
 				waitingForConfirm = true;
+				if (pageCallback != null) {
+					pageCallback();
+				}
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 
 	override public function update(delta:Float) {
-		super.update(delta);
-
 		if (finished) {
 			return;
 		}
+
+		if (checkInitialChar) {
+			// We need to do this check once up front
+			if (fxByStart.exists(position)) {
+				for (fxRange in fxByStart.get(position)) {
+					if (fxRange.startTag.void) {
+						fxRange.effect.begin(options.modOps);
+						if (tagCallback != null) {
+							tagCallback(fxRange.startTag);
+						}
+					}
+				}
+			}
+			checkInitialChar = false;
+		}
+
+		super.update(delta);
 
 		if (!effectUpdateSuccess) {
 			// wait till all effects are success before continuing
 			return;
 		}
 
-		calcedTimePerChar = options.getTimePerCharacter();
-
-		checkForPageBreak();
+		updateTimings();
 
 		if (waitingForConfirm) {
 			if (options.checkPageConfirm(delta)) {
@@ -167,10 +214,9 @@ class TypingGroup extends TextGroup {
 					// clear out previous characters
 					allChars[i].visible = false;
 				}
-				elapsed = calcedTimePerChar - delta;
-			} else {
-				return;
 			}
+
+			return;
 		}
 
 		elapsed += delta;
@@ -189,34 +235,58 @@ class TypingGroup extends TextGroup {
 				}
 			}
 
-			// TODO: This should be done via map accesses instead of looping
-			for (fxRange in parser.effects) {
-				if (fxRange.startTag.position == position) {
-					fxRange.effect.begin(options.modOps);
-					if (tagCallback != null) {
-						tagCallback(fxRange.startTag);
+			if (fxByStart.exists(position)) {
+				for (fxRange in fxByStart.get(position)) {
+					if (!fxRange.startTag.void) {
+						// only handle non-void tags here
+						fxRange.effect.begin(options.modOps);
+						if (tagCallback != null) {
+							tagCallback(fxRange.startTag);
+						}
 					}
 				}
 			}
 
 			position++;
 
-			// TODO: This should be done via map accesses instead of looping
-			for (fxRange in parser.effects) {
-				if (fxRange.endTag.position == position + 1) {
-					fxRange.effect.end(options.modOps);
+			if (fxByEnd.exists(position)) {
+				for (fxRange in fxByEnd.get(position)) {
+					if (!fxRange.endTag.void) {
+						fxRange.effect.end(options.modOps);
+					} else {
+						// this explicitly handles void tags as we hit new positions rather than as we 'leave' them
+						fxRange.effect.begin(options.modOps);
+					}
 					if (tagCallback != null) {
 						tagCallback(fxRange.endTag);
 					}
 				}
 			}
 
+			// This can change between characters (such as with a <pause/> tag).
+			// So we need to update this after each round of callbacks
+			updateTimings();
+
 			if (position == allChars.length) {
 				waitingForConfirm = true;
+				if (pageCallback != null) {
+					pageCallback();
+				}
 				if (nextPageIcon != null) {
 					nextPageIcon.visible = true;
 				}
+				return;
+			}
+
+			if (checkForPageBreak()) {
+				return;
 			}
 		}
+	}
+
+	function updateTimings() {
+		calcedTimePerChar = options.getTimePerCharacter();
+		elapsed -= options.modOps.delay;
+		options.modOps.delay = 0;
 	}
 }

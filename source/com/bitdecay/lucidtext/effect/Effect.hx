@@ -1,6 +1,6 @@
 package com.bitdecay.lucidtext.effect;
 
-import flixel.text.FlxText;
+import flixel.text.FlxBitmapText;
 import com.bitdecay.lucidtext.ModifiableOptions;
 import com.bitdecay.lucidtext.properties.Setters.PropSetterFunc;
 
@@ -26,17 +26,17 @@ interface Effect {
 	public function getUserProperties():Map<String, PropSetterFunc>;
 
 	/**
-	 * Applies the effect to the given FlxText object
+	 * Applies the effect to the given FlxBitmapText object
 	 *
-	 * @param o The FlxText object to apply the effect to
-	 * @param i The index of the given FlxText, useful for effects
+	 * @param o The FlxBitmapText object to apply the effect to
+	 * @param i The index of the given FlxBitmapText, useful for effects
 	 *          that need to apply differently to each letter
 	 *          (Such as a sine wave through a word)
 	 *
 	 * @return An EffectUpdater to be updated, or `null`
 	 *         if no updates are needed for the effect
 	 */
-	public function apply(o:FlxText, i:Int):EffectUpdater;
+	public function apply(o:FlxBitmapText, i:Int):EffectUpdater;
 
 	public function begin(ops:ModifiableOptions):Void;
 	public function end(ops:ModifiableOptions):Void;

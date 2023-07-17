@@ -1,16 +1,29 @@
 package;
 
-import flixel.FlxGame;
+#if lucid_debug
+import com.bitdecay.lucidtext.effect.EffectRegistry;
+#end
+
+import openfl.display.FPS;
 import openfl.display.Sprite;
+
+import flixel.FlxG;
+import flixel.FlxGame;
 import states.MainMenuState;
 
 class Main extends Sprite {
+	public static var fps = new FPS();
 	public function new() {
 		super();
-		#if debug
-		addChild(new FlxGame(0, 0, PlayState, 1, 60, 60, true, false));
-		#else
-		addChild(new FlxGame(0, 0, MainMenuState, 1, 60, 60, true, false));
+
+		FlxG.autoPause = false;
+		addChild(new FlxGame(MainMenuState, 60, 60, true, false));
+
+		fps.visible = false;
+		addChild(fps);
+
+		#if lucid_debug
+		EffectRegistry.dumpToConsole();
 		#end
 	}
 }

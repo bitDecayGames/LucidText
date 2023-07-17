@@ -1,7 +1,7 @@
 package com.bitdecay.lucidtext.parse;
 
-import massive.haxe.log.Log;
 import massive.munit.Assert;
+
 import com.bitdecay.lucidtext.parse.TextParser;
 
 class TextParserTest {
